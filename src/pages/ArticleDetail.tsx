@@ -141,13 +141,21 @@ const ArticleDetail = () => {
           </header>
 
           {/* Featured image */}
-          <div className={`w-full h-64 md:h-96 rounded-lg mb-8 overflow-hidden ${article.image}`}>
-            {article.image.includes("text-") && (
-              <div className="w-full h-full flex items-center justify-center">
-                <span>🐳</span>
-              </div>
-            )}
-          </div>
+          {article.image.startsWith('/') || article.image.startsWith('http') ? (
+            <img 
+              src={article.image} 
+              alt={article.title}
+              className="w-full h-64 md:h-96 rounded-lg mb-8 object-cover"
+            />
+          ) : (
+            <div className={`w-full h-64 md:h-96 rounded-lg mb-8 overflow-hidden ${article.image}`}>
+              {article.image.includes("text-") && (
+                <div className="w-full h-full flex items-center justify-center">
+                  <span>🐳</span>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Article content */}
           {loading ? (
