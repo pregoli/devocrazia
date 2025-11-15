@@ -2,6 +2,7 @@ import { Moon, Sun, BookOpen, Menu, X } from "lucide-react";
 import { Button } from "./ui/button";
 import { useTheme } from "./ThemeProvider";
 import { useState } from "react";
+import { NavLink } from "./NavLink";
 
 const Header = () => {
   const { theme, setTheme } = useTheme();
@@ -11,22 +12,22 @@ const Header = () => {
     <header className="border-b border-border bg-background sticky top-0 z-50">
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
+          <NavLink to="/" className="flex items-center gap-2">
             <BookOpen className="h-6 w-6 text-primary" />
             <span className="text-xl font-bold text-foreground">Devocrazia</span>
-          </div>
+          </NavLink>
 
           <div className="flex items-center gap-6">
             <nav className="hidden md:flex items-center gap-6">
-              <a href="#" className="text-foreground hover:text-primary transition-colors">
+              <NavLink to="/" className="text-foreground hover:text-primary transition-colors">
                 Home
-              </a>
+              </NavLink>
               <a href="#" className="text-foreground hover:text-primary transition-colors">
                 Articles
               </a>
-              <a href="#" className="text-foreground hover:text-primary transition-colors">
+              <NavLink to="/about" className="text-foreground hover:text-primary transition-colors">
                 About
-              </a>
+              </NavLink>
               <a href="#" className="text-foreground hover:text-primary transition-colors">
                 Contact
               </a>
@@ -54,15 +55,15 @@ const Header = () => {
 
         {mobileMenuOpen && (
           <nav className="md:hidden flex flex-col gap-4 pt-4 pb-2 border-t border-border/50 mt-4">
-            <a href="#" className="text-foreground hover:text-primary transition-colors">
+            <NavLink to="/" className="text-foreground hover:text-primary transition-colors">
               Home
-            </a>
+            </NavLink>
             <a href="#" className="text-foreground hover:text-primary transition-colors">
               Articles
             </a>
-            <a href="#" className="text-foreground hover:text-primary transition-colors">
+            <NavLink to="/about" className="text-foreground hover:text-primary transition-colors">
               About
-            </a>
+            </NavLink>
             <a href="#" className="text-foreground hover:text-primary transition-colors">
               Contact
             </a>
