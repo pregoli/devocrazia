@@ -1,7 +1,9 @@
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Badge } from "./ui/badge";
+import { Link } from "react-router-dom";
 
 interface ArticleCardProps {
+  slug: string;
   category: string;
   categoryColor: string;
   title: string;
@@ -14,6 +16,7 @@ interface ArticleCardProps {
 }
 
 const ArticleCard = ({
+  slug,
   category,
   categoryColor,
   title,
@@ -25,7 +28,10 @@ const ArticleCard = ({
   tags,
 }: ArticleCardProps) => {
   return (
-    <div className="border-t border-border/50 dark:border-border/80 pt-6 pb-6 hover:opacity-95 transition-opacity">
+    <Link 
+      to={`/articles/${slug}`}
+      className="block border-t border-border/50 dark:border-border/80 pt-6 pb-6 hover:opacity-95 transition-opacity"
+    >
       <div className="flex flex-col sm:flex-row gap-6">
         <div className={`w-full sm:w-44 h-44 flex-shrink-0 rounded-md ${image}`} />
 
@@ -67,7 +73,7 @@ const ArticleCard = ({
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

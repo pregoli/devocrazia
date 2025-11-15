@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, Link } from "react-router-dom";
 import { Search } from "lucide-react";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
@@ -291,13 +291,14 @@ const Articles = () => {
             </div>
           ) : (
             paginatedArticles.map((article, index) => (
-              <article
+              <Link
                 key={article.id}
-                className={`${
+                to={`/articles/${article.slug}`}
+                className={`block ${
                   index > 0 ? "border-t border-border/50 dark:border-border/80 pt-6" : ""
                 }`}
               >
-                <div className="flex flex-col sm:flex-row gap-6">
+                <div className="flex flex-col sm:flex-row gap-6 hover:opacity-90 transition-opacity">
                   <div
                     className={`w-full sm:w-44 h-44 flex-shrink-0 rounded-md ${article.image}`}
                   />
@@ -310,7 +311,7 @@ const Articles = () => {
                       {article.category}
                     </Badge>
 
-                    <h2 className="font-bold text-xl text-foreground leading-tight hover:text-primary cursor-pointer transition-colors">
+                    <h2 className="font-bold text-xl text-foreground leading-tight hover:text-primary transition-colors">
                       {article.title}
                     </h2>
 
@@ -339,7 +340,7 @@ const Articles = () => {
                     </div>
                   </div>
                 </div>
-              </article>
+              </Link>
             ))
           )}
         </div>
