@@ -17,7 +17,7 @@ const About = () => {
               <img
                 src={authorAvatar}
                 alt="Alex Doe"
-                className="w-40 h-40 md:w-full md:aspect-[3/4] object-cover rounded-full md:rounded-md shadow-md"
+                className="w-40 h-40 md:w-80 md:h-auto object-cover rounded-full md:rounded-md shadow-md"
               />
             </div>
 
