@@ -23,7 +23,7 @@ const ArticleCard = ({
   image,
 }: ArticleCardProps) => {
   return (
-    <div className="border-t border-border/30 pt-6 pb-6 hover:opacity-95 transition-opacity">
+    <div className="border-t border-border/50 dark:border-border/80 pt-6 pb-6 hover:opacity-95 transition-opacity">
       <div className="flex flex-col sm:flex-row gap-6">
         <div className={`w-full sm:w-44 h-44 flex-shrink-0 rounded-md ${image}`} />
 
