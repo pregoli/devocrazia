@@ -22,9 +22,9 @@ const Header = () => {
               <NavLink to="/" className="text-foreground hover:text-primary transition-colors">
                 Home
               </NavLink>
-              <a href="#" className="text-foreground hover:text-primary transition-colors">
+              <NavLink to="/articles" className="text-foreground hover:text-primary transition-colors">
                 Articles
-              </a>
+              </NavLink>
               <NavLink to="/about" className="text-foreground hover:text-primary transition-colors">
                 About
               </NavLink>
@@ -58,9 +58,9 @@ const Header = () => {
             <NavLink to="/" className="text-foreground hover:text-primary transition-colors">
               Home
             </NavLink>
-            <a href="#" className="text-foreground hover:text-primary transition-colors">
+            <NavLink to="/articles" className="text-foreground hover:text-primary transition-colors">
               Articles
-            </a>
+            </NavLink>
             <NavLink to="/about" className="text-foreground hover:text-primary transition-colors">
               About
             </NavLink>

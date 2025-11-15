@@ -36,8 +36,8 @@ const Index = () => {
               </div>
 
               <div className="flex justify-center pt-8">
-                <Button variant="default" size="lg">
-                  Load More Articles
+                <Button variant="default" size="lg" asChild>
+                  <a href="/articles">Load More Articles</a>
                 </Button>
               </div>
             </div>
