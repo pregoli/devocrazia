@@ -25,10 +25,10 @@ const Categories = () => {
           <Link
             key={category.name}
             to={`/articles?category=${encodeURIComponent(category.name)}`}
-            className="flex items-center justify-between py-2 hover:text-primary cursor-pointer transition-colors"
+            className="flex items-center justify-between py-2 cursor-pointer transition-colors group"
           >
-            <span className="text-card-foreground">{category.name}</span>
-            <span className="text-muted-foreground text-sm">{category.count}</span>
+            <span className="text-card-foreground group-hover:text-primary transition-colors">{category.name}</span>
+            <span className="text-muted-foreground text-sm group-hover:text-primary transition-colors">{category.count}</span>
           </Link>
         ))}
       </div>
