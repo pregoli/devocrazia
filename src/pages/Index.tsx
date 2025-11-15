@@ -62,7 +62,7 @@ const Index = () => {
             <div className="space-y-6">
               <h2 className="text-3xl font-bold text-foreground">Latest Articles</h2>
 
-              <div className="space-y-4">
+              <div className="space-y-0">
                 {articles.map((article, index) => (
                   <ArticleCard key={index} {...article} />
                 ))}
