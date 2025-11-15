@@ -1,14 +1,20 @@
 import { Card } from "./ui/card";
-
-const categories = [
-  { name: "JavaScript", count: 12 },
-  { name: "Cloud", count: 7 },
-  { name: "DevOps", count: 5 },
-  { name: "UI/UX Design", count: 9 },
-  { name: "Databases", count: 4 },
-];
+import { articles } from "@/data/articles";
+import { useMemo } from "react";
 
 const Categories = () => {
+  const categories = useMemo(() => {
+    const categoryMap = new Map<string, number>();
+    
+    articles.forEach((article) => {
+      const count = categoryMap.get(article.category) || 0;
+      categoryMap.set(article.category, count + 1);
+    });
+
+    return Array.from(categoryMap.entries())
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => b.count - a.count);
+  }, []);
   return (
     <Card className="p-6 space-y-4">
       <h3 className="font-bold text-xl text-card-foreground">Categories</h3>
