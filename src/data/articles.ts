@@ -24,7 +24,7 @@ export const articles: Article[] = [
       "Learn how TOON offers a more token-efficient alternative to JSON when sending structured data to LLMs. This article breaks down real-world use cases, conversion methods, and best practices for optimizing AI workflows.",
     authorName: "Paolo Regoli",
     date: "2025-11-15",
-    image: "bg-gradient-to-br from-slate-100 to-white",
+    image: "/images/json-vs-toon.png",
     tags: ["AI", "Optimization"],
     readTime: 7,
   },
