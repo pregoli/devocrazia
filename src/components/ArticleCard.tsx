@@ -1,6 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Badge } from "./ui/badge";
-import { Card } from "./ui/card";
 
 interface ArticleCardProps {
   category: string;
@@ -24,11 +23,11 @@ const ArticleCard = ({
   image,
 }: ArticleCardProps) => {
   return (
-    <Card className="overflow-hidden hover:shadow-sm transition-shadow border-0 border-t border-border/50">
-      <div className="flex flex-col sm:flex-row gap-6 p-0">
-        <div className={`w-full sm:w-44 h-44 flex-shrink-0 ${image}`} />
+    <div className="border-t border-border/30 pt-6 pb-6 hover:opacity-95 transition-opacity">
+      <div className="flex flex-col sm:flex-row gap-6">
+        <div className={`w-full sm:w-44 h-44 flex-shrink-0 rounded-md ${image}`} />
 
-        <div className="flex-1 space-y-3 p-6 pl-0 sm:pr-6">
+        <div className="flex-1 space-y-3">
           <Badge
             className={`${categoryColor} text-white text-xs font-semibold uppercase tracking-wider rounded-sm`}
             variant="secondary"
@@ -36,7 +35,7 @@ const ArticleCard = ({
             {category}
           </Badge>
 
-          <h3 className="font-bold text-xl text-card-foreground leading-tight hover:text-primary cursor-pointer transition-colors">
+          <h3 className="font-bold text-xl text-foreground leading-tight hover:text-primary cursor-pointer transition-colors">
             {title}
           </h3>
 
@@ -48,13 +47,13 @@ const ArticleCard = ({
               <AvatarFallback>{authorName[0]}</AvatarFallback>
             </Avatar>
             <div className="text-sm">
-              <p className="font-medium text-card-foreground">{authorName}</p>
+              <p className="font-medium text-foreground">{authorName}</p>
               <p className="text-muted-foreground text-xs">{date}</p>
             </div>
           </div>
         </div>
       </div>
-    </Card>
+    </div>
   );
 };
 
