@@ -24,7 +24,7 @@ const ArticleCard = ({
   image,
 }: ArticleCardProps) => {
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-shadow border-border">
+    <Card className="overflow-hidden hover:shadow-sm transition-shadow border-0 border-t border-border/50">
       <div className="flex flex-col sm:flex-row gap-6 p-0">
         <div className={`w-full sm:w-44 h-44 flex-shrink-0 ${image}`} />
 

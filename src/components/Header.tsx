@@ -14,29 +14,31 @@ const Header = () => {
             <span className="text-xl font-bold text-foreground">Devocrazia</span>
           </div>
 
-          <nav className="hidden md:flex items-center gap-8">
-            <a href="#" className="text-foreground hover:text-primary transition-colors">
-              Home
-            </a>
-            <a href="#" className="text-foreground hover:text-primary transition-colors">
-              Articles
-            </a>
-            <a href="#" className="text-foreground hover:text-primary transition-colors">
-              About
-            </a>
-            <a href="#" className="text-foreground hover:text-primary transition-colors">
-              Contact
-            </a>
-          </nav>
+          <div className="flex items-center gap-6">
+            <nav className="hidden md:flex items-center gap-6">
+              <a href="#" className="text-foreground hover:text-primary transition-colors">
+                Home
+              </a>
+              <a href="#" className="text-foreground hover:text-primary transition-colors">
+                Articles
+              </a>
+              <a href="#" className="text-foreground hover:text-primary transition-colors">
+                About
+              </a>
+              <a href="#" className="text-foreground hover:text-primary transition-colors">
+                Contact
+              </a>
+            </nav>
 
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className="text-foreground hover:text-primary"
-          >
-            {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-          </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              className="text-foreground hover:text-primary"
+            >
+              {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            </Button>
+          </div>
         </div>
       </div>
     </header>
