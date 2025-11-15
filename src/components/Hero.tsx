@@ -4,7 +4,7 @@ const Hero = () => {
   return (
     <section className="container mx-auto px-4 py-12">
       <div className="grid md:grid-cols-2 gap-8 items-center">
-        <div className="aspect-video rounded-2xl bg-gradient-to-br from-blue-900 via-blue-700 to-blue-400 overflow-hidden">
+        <div className="aspect-video rounded-lg bg-gradient-to-br from-blue-900 via-blue-700 to-blue-400 overflow-hidden">
           <div className="w-full h-full flex items-center justify-center opacity-20">
             <div className="text-white text-6xl font-bold">JS</div>
           </div>
