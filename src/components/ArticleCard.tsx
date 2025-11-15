@@ -10,6 +10,7 @@ interface ArticleCardProps {
   authorAvatar?: string;
   date: string;
   image: string;
+  tags: string[];
 }
 
 const ArticleCard = ({
@@ -21,6 +22,7 @@ const ArticleCard = ({
   authorAvatar,
   date,
   image,
+  tags,
 }: ArticleCardProps) => {
   return (
     <div className="border-t border-border/50 dark:border-border/80 pt-6 pb-6 hover:opacity-95 transition-opacity">
@@ -40,6 +42,18 @@ const ArticleCard = ({
           </h3>
 
           <p className="text-muted-foreground text-sm leading-relaxed">{description}</p>
+
+          <div className="flex flex-wrap gap-2">
+            {tags.map((tag) => (
+              <Badge
+                key={tag}
+                variant="default"
+                className="text-xs font-semibold"
+              >
+                {tag}
+              </Badge>
+            ))}
+          </div>
 
           <div className="flex items-center gap-3 pt-1">
             <Avatar className="h-9 w-9">
