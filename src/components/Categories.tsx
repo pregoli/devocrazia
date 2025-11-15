@@ -1,6 +1,7 @@
 import { Card } from "./ui/card";
 import { articles } from "@/data/articles";
 import { useMemo } from "react";
+import { Link } from "react-router-dom";
 
 const Categories = () => {
   const categories = useMemo(() => {
@@ -21,13 +22,14 @@ const Categories = () => {
 
       <div className="space-y-2">
         {categories.map((category) => (
-          <div
+          <Link
             key={category.name}
+            to={`/articles?category=${encodeURIComponent(category.name)}`}
             className="flex items-center justify-between py-2 hover:text-primary cursor-pointer transition-colors"
           >
             <span className="text-card-foreground">{category.name}</span>
             <span className="text-muted-foreground text-sm">{category.count}</span>
-          </div>
+          </Link>
         ))}
       </div>
     </Card>

@@ -1,4 +1,5 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Search } from "lucide-react";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
@@ -27,11 +28,20 @@ import { format } from "date-fns";
 const ITEMS_PER_PAGE = 5;
 
 const Articles = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedTag, setSelectedTag] = useState("all");
   const [sortBy, setSortBy] = useState("recent");
   const [currentPage, setCurrentPage] = useState(1);
+
+  // Set initial category from URL params
+  useEffect(() => {
+    const categoryParam = searchParams.get("category");
+    if (categoryParam) {
+      setSelectedCategory(categoryParam);
+    }
+  }, [searchParams]);
 
   // Extract unique categories and tags
   const categories = useMemo(
