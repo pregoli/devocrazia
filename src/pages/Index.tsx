@@ -25,7 +25,7 @@ const articles = [
       "Learn how to containerize your applications for easier deployment, scaling, and management across different environments.",
     authorName: "Jane Smith",
     date: "Oct 24, 2023",
-    image: "bg-gradient-to-br from-amber-100 to-amber-50 flex items-center justify-center text-blue-700 text-6xl font-bold",
+    image: "bg-[#f5f0e8] flex items-center justify-center text-[#2b6cb0] text-6xl font-bold",
   },
   {
     category: "UI/UX",
