@@ -293,6 +293,13 @@ const Articles = () => {
                   />
 
                   <div className="flex-1 space-y-3">
+                    <Badge
+                      className={`${article.categoryColor} text-white text-xs font-semibold uppercase tracking-wider rounded-sm`}
+                      variant="secondary"
+                    >
+                      {article.category}
+                    </Badge>
+
                     <h2 className="font-bold text-xl text-foreground leading-tight hover:text-primary cursor-pointer transition-colors">
                       {article.title}
                     </h2>
