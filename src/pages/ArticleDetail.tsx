@@ -13,6 +13,7 @@ import rehypeHighlight from "rehype-highlight";
 import "highlight.js/styles/github-dark.css";
 import { Helmet } from "react-helmet";
 import authorAvatar from "@/assets/author-avatar.jpg";
+import { CodeBlock } from "@/components/CodeBlock";
 
 const ArticleDetail = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -168,16 +169,7 @@ const ArticleDetail = () => {
                   p: ({ children }) => (
                     <p className="mb-4 text-foreground leading-relaxed">{children}</p>
                   ),
-                  code: ({ className, children }) => {
-                    const isInline = !className;
-                    return isInline ? (
-                      <code className="px-1.5 py-0.5 rounded bg-muted text-foreground font-mono text-sm">
-                        {children}
-                      </code>
-                    ) : (
-                      <code className={className}>{children}</code>
-                    );
-                  },
+                  code: CodeBlock,
                   pre: ({ children }) => (
                     <pre className="bg-muted rounded-lg p-4 overflow-x-auto mb-6 border border-border">
                       {children}
