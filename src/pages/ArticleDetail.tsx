@@ -142,11 +142,11 @@ const ArticleDetail = () => {
 
           {/* Featured image */}
           {article.image.startsWith('/') || article.image.startsWith('http') ? (
-            <div className="w-full rounded-lg mb-8 bg-muted p-8 flex items-center justify-center">
+            <div className="w-full h-64 md:h-96 rounded-lg mb-8 overflow-hidden bg-muted">
               <img 
                 src={article.image} 
                 alt={article.title}
-                className="w-full max-h-[500px] object-contain rounded-lg"
+                className="w-full h-full object-cover"
               />
             </div>
           ) : (
