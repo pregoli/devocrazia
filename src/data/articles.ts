@@ -9,6 +9,8 @@ export interface Article {
   authorAvatar?: string;
   date: string; // ISO date string
   image: string;
+  tags: string[];
+  readTime: number; // in minutes
 }
 
 export const articles: Article[] = [
@@ -23,6 +25,8 @@ export const articles: Article[] = [
     authorName: "John Doe",
     date: "2023-10-26",
     image: "bg-gradient-to-br from-teal-800 to-teal-600",
+    tags: ["CSS", "Flexbox", "Grid"],
+    readTime: 5,
   },
   {
     id: 2,
@@ -35,6 +39,8 @@ export const articles: Article[] = [
     authorName: "Jane Smith",
     date: "2023-10-24",
     image: "bg-[#f5f0e8] flex items-center justify-center text-[#2b6cb0] text-6xl font-bold",
+    tags: ["Docker", "DevOps", "Containers"],
+    readTime: 8,
   },
   {
     id: 3,
@@ -47,6 +53,8 @@ export const articles: Article[] = [
     authorName: "John Doe",
     date: "2023-10-22",
     image: "bg-gradient-to-br from-slate-200 to-slate-100",
+    tags: ["UI/UX", "Design", "Frontend"],
+    readTime: 6,
   },
   {
     id: 4,
@@ -59,5 +67,7 @@ export const articles: Article[] = [
     authorName: "Jane Smith",
     date: "2023-10-20",
     image: "bg-gradient-to-br from-slate-100 to-white",
+    tags: ["Performance", "Web Dev", "Optimization"],
+    readTime: 7,
   },
 ];
