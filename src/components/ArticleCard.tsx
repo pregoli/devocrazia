@@ -47,8 +47,8 @@ const ArticleCard = ({
             {tags.map((tag) => (
               <Badge
                 key={tag}
-                variant="default"
-                className="text-xs font-semibold"
+                variant="outline"
+                className="text-xs font-semibold rounded-none border-primary text-primary"
               >
                 {tag}
               </Badge>
