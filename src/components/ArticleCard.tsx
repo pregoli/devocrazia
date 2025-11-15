@@ -37,8 +37,8 @@ const ArticleCard = ({
 
         <div className="flex-1 space-y-3">
           <Badge
-            className={`${categoryColor} text-white text-xs font-semibold uppercase tracking-wider rounded-sm`}
             variant="secondary"
+            className={`${categoryColor} text-primary-foreground text-xs font-semibold uppercase tracking-wider rounded-sm`}
           >
             {category}
           </Badge>

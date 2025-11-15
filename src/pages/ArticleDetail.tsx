@@ -107,7 +107,10 @@ const ArticleDetail = () => {
               to={`/articles?category=${encodeURIComponent(article.category)}`}
               className="inline-block mb-4"
             >
-              <Badge className={`${article.categoryColor} text-white hover:opacity-80`}>
+              <Badge 
+                variant="secondary"
+                className={`${article.categoryColor} text-primary-foreground text-xs font-semibold uppercase tracking-wider rounded-sm hover:opacity-90 transition-opacity`}
+              >
                 {article.category}
               </Badge>
             </Link>
@@ -214,7 +217,11 @@ const ArticleDetail = () => {
           <div className="mt-12 pt-6 border-t border-border">
             <div className="flex flex-wrap gap-2">
               {article.tags.map((tag) => (
-                <Badge key={tag} variant="secondary">
+                <Badge 
+                  key={tag} 
+                  variant="outline"
+                  className="text-xs font-semibold rounded-none border-primary text-primary"
+                >
                   {tag}
                 </Badge>
               ))}
