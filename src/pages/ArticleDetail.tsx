@@ -141,23 +141,13 @@ const ArticleDetail = () => {
           </header>
 
           {/* Featured image */}
-          {article.image.startsWith('/') || article.image.startsWith('http') ? (
-            <div className="w-full h-64 md:h-96 rounded-lg mb-8 overflow-hidden bg-muted">
-              <img 
-                src={article.image} 
-                alt={article.title}
-                className="w-full h-full object-cover"
-              />
-            </div>
-          ) : (
-            <div className={`w-full h-64 md:h-96 rounded-lg mb-8 overflow-hidden ${article.image}`}>
-              {article.image.includes("text-") && (
-                <div className="w-full h-full flex items-center justify-center">
-                  <span>🐳</span>
-                </div>
-              )}
-            </div>
-          )}
+          <div className={`w-full h-64 md:h-96 rounded-lg mb-8 overflow-hidden ${article.image}`}>
+            {article.image.includes("text-") && (
+              <div className="w-full h-full flex items-center justify-center">
+                <span>🐳</span>
+              </div>
+            )}
+          </div>
 
           {/* Article content */}
           {loading ? (

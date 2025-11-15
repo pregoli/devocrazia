@@ -15,20 +15,6 @@ export interface Article {
 
 export const articles: Article[] = [
   {
-    id: 0,
-    slug: "optimising-llm-inputs-json-vs-toon-explained",
-    category: "AI",
-    categoryColor: "bg-category-ai",
-    title: "Optimizing LLM Inputs: JSON vs TOON Explained",
-    description:
-      "Learn how TOON offers a more token-efficient alternative to JSON when sending structured data to LLMs. This article breaks down real-world use cases, conversion methods, and best practices for optimizing AI workflows.",
-    authorName: "Paolo Regoli",
-    date: "2025-11-15",
-    image: "/images/json-vs-toon.png",
-    tags: ["AI", "Optimization"],
-    readTime: 7,
-  },
-  {
     id: 1,
     slug: "a-guide-to-modern-css-layouts",
     category: "CSS",

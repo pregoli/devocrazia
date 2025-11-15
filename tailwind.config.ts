@@ -48,7 +48,6 @@ export default {
           foreground: "hsl(var(--card-foreground))",
         },
         category: {
-          ai: "hsl(var(--category-ai))",
           css: "hsl(var(--category-css))",
           devops: "hsl(var(--category-devops))",
           uiux: "hsl(var(--category-uiux))",

@@ -299,19 +299,9 @@ const Articles = () => {
                 }`}
               >
                 <div className="flex flex-col sm:flex-row gap-6 hover:opacity-90 transition-opacity">
-                  {article.image.startsWith('/') || article.image.startsWith('http') ? (
-                    <div className="w-full sm:w-60 h-40 flex-shrink-0 rounded-md overflow-hidden bg-muted">
-                      <img 
-                        src={article.image} 
-                        alt={article.title}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  ) : (
-                    <div
-                      className={`w-full sm:w-44 h-44 flex-shrink-0 rounded-md ${article.image}`}
-                    />
-                  )}
+                  <div
+                    className={`w-full sm:w-44 h-44 flex-shrink-0 rounded-md ${article.image}`}
+                  />
 
                   <div className="flex-1 space-y-3">
                     <Badge

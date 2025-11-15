@@ -33,17 +33,7 @@ const ArticleCard = ({
       className="block border-t border-border/50 dark:border-border/80 pt-6 pb-6 hover:opacity-95 transition-opacity"
     >
       <div className="flex flex-col sm:flex-row gap-6">
-        {image.startsWith('/') || image.startsWith('http') ? (
-          <div className="w-full sm:w-60 h-40 flex-shrink-0 rounded-md overflow-hidden bg-muted">
-            <img 
-              src={image} 
-              alt={title}
-              className="w-full h-full object-cover"
-            />
-          </div>
-        ) : (
-          <div className={`w-full sm:w-44 h-44 flex-shrink-0 rounded-md ${image}`} />
-        )}
+        <div className={`w-full sm:w-44 h-44 flex-shrink-0 rounded-md ${image}`} />
 
         <div className="flex-1 space-y-3">
           <Badge
