@@ -13,11 +13,11 @@ const About = () => {
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col md:flex-row gap-12 items-start">
             {/* Portrait Image */}
-            <div className="w-full md:w-80 flex-shrink-0">
+            <div className="w-full md:w-80 flex-shrink-0 flex justify-center md:justify-start">
               <img
                 src={authorAvatar}
                 alt="Alex Doe"
-                className="w-full aspect-[3/4] object-cover rounded-md shadow-md"
+                className="w-40 h-40 md:w-full md:aspect-[3/4] object-cover rounded-full md:rounded-md shadow-md"
               />
             </div>
 
