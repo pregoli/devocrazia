@@ -5,8 +5,8 @@ import authorAvatar from "@/assets/author-avatar.jpg";
 const AuthorCard = () => {
   return (
     <Card className="p-6 text-center space-y-4">
-      <Avatar className="h-24 w-24 mx-auto">
-        <AvatarImage src={authorAvatar} alt="Alex Doe" />
+      <Avatar className="h-28 w-28 mx-auto shadow-md">
+        <AvatarImage src={authorAvatar} alt="Alex Doe" className="object-cover" />
         <AvatarFallback>AD</AvatarFallback>
       </Avatar>
 
