@@ -1,4 +1,3 @@
-import { useState, FormEvent } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -6,47 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Mail, Github, Linkedin } from "lucide-react";
 import { Helmet } from "react-helmet";
-import { useToast } from "@/hooks/use-toast";
 
 const Contact = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const { toast } = useToast();
-
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-
-    const form = e.currentTarget;
-    const formData = new FormData(form);
-
-    try {
-      const response = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        body: formData
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        toast({
-          title: "Message sent!",
-          description: "Thank you for reaching out. I'll get back to you soon.",
-        });
-        form.reset();
-      } else {
-        throw new Error(data.message || 'Failed to send');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      toast({
-        title: "Error",
-        description: "Failed to send message. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
   return (
     <>
@@ -71,11 +31,11 @@ const Contact = () => {
             </div>
 
             {/* Contact Form */}
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Web3Forms Access Key - Get yours free at https://web3forms.com */}
-              <input type="hidden" name="access_key" value="YOUR_WEB3FORMS_ACCESS_KEY" />
-              <input type="hidden" name="subject" value="New Contact Form Submission from Devocrazia" />
-              <input type="hidden" name="from_name" value="Devocrazia Contact Form" />
+            <form action="https://formsubmit.co/paolo.regoli@gmail.com" method="POST" className="space-y-6">
+              {/* FormSubmit Configuration */}
+              <input type="hidden" name="_captcha" value="false" />
+              <input type="hidden" name="_template" value="box" />
+              <input type="hidden" name="_next" value={window.location.origin + "/contact?success=true"} />
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
@@ -105,12 +65,12 @@ const Contact = () => {
               </div>
 
               <div className="space-y-2">
-                <label htmlFor="user_subject" className="text-sm font-medium text-foreground">
+                <label htmlFor="subject" className="text-sm font-medium text-foreground">
                   Subject
                 </label>
                 <Input
-                  id="user_subject"
-                  name="user_subject"
+                  id="subject"
+                  name="_subject"
                   placeholder="What is this about?"
                   required
                 />
@@ -132,9 +92,8 @@ const Contact = () => {
               <Button
                 type="submit"
                 className="w-full h-12 text-base font-semibold"
-                disabled={isSubmitting}
               >
-                {isSubmitting ? "Sending..." : "Send Message"}
+                Send Message
               </Button>
             </form>
 
