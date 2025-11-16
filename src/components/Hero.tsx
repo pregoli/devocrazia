@@ -1,27 +1,35 @@
 import { Button } from "./ui/button";
+import { Link } from "react-router-dom";
+import { articles } from "@/data/articles";
 
 const Hero = () => {
+  // Get the latest article (first in the array)
+  const featuredArticle = articles[0];
+
   return (
     <section className="container mx-auto px-4 py-12">
       <div className="grid md:grid-cols-2 gap-8 items-center">
-        <div className="aspect-video rounded-md bg-gradient-to-br from-blue-900 via-blue-700 to-blue-400 overflow-hidden">
-          <div className="w-full h-full flex items-center justify-center opacity-20">
-            <div className="text-white text-6xl font-bold">JS</div>
-          </div>
+        <div className="aspect-video rounded-md overflow-hidden bg-muted">
+          <img 
+            src={featuredArticle.heroImage || featuredArticle.image} 
+            alt={featuredArticle.title}
+            className="w-full h-full object-cover"
+          />
         </div>
 
         <div className="space-y-4">
           <span className="text-primary text-sm font-semibold uppercase tracking-wider">
-            JavaScript
+            {featuredArticle.category}
           </span>
           <h1 className="text-4xl md:text-5xl font-bold text-foreground leading-tight">
-            Mastering Asynchronous JavaScript
+            {featuredArticle.title}
           </h1>
           <p className="text-muted-foreground text-lg">
-            Explore the core concepts of asynchronous programming in JavaScript, from callbacks to
-            async/await, and level up your coding skills.
+            {featuredArticle.description}
           </p>
-          <Button className="mt-4">Read More</Button>
+          <Button asChild className="mt-4">
+            <Link to={`/articles/${featuredArticle.slug}`}>Read More</Link>
+          </Button>
         </div>
       </div>
     </section>
