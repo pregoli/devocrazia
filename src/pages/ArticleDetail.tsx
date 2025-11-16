@@ -141,17 +141,17 @@ const ArticleDetail = () => {
           </header>
 
           {/* Featured image */}
-          {article.image.startsWith('/') || article.image.startsWith('http') ? (
+          {(article.heroImage || article.image).startsWith('/') || (article.heroImage || article.image).startsWith('http') ? (
             <div className="w-full rounded-lg mb-8 bg-muted p-8 flex items-center justify-center">
               <img 
-                src={article.image} 
+                src={article.heroImage || article.image} 
                 alt={article.title}
                 className="w-full max-h-[500px] object-contain rounded-lg"
               />
             </div>
           ) : (
-            <div className={`w-full h-64 md:h-96 rounded-lg mb-8 overflow-hidden ${article.image}`}>
-              {article.image.includes("text-") && (
+            <div className={`w-full h-64 md:h-96 rounded-lg mb-8 overflow-hidden ${article.heroImage || article.image}`}>
+              {(article.heroImage || article.image).includes("text-") && (
                 <div className="w-full h-full flex items-center justify-center">
                   <span>🐳</span>
                 </div>
