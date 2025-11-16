@@ -33,9 +33,9 @@ const Contact = () => {
             {/* Contact Form */}
             <form action="https://formsubmit.co/paolo.regoli@gmail.com" method="POST" className="space-y-6">
               {/* FormSubmit Configuration */}
+              <input type="hidden" name="_subject" value="New enquiry from Devocrazia website" />
               <input type="hidden" name="_captcha" value="false" />
-              <input type="hidden" name="_template" value="box" />
-              <input type="hidden" name="_next" value={window.location.origin + "/contact?success=true"} />
+              <input type="hidden" name="_template" value="table" />
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
@@ -70,7 +70,7 @@ const Contact = () => {
                 </label>
                 <Input
                   id="subject"
-                  name="_subject"
+                  name="subject"
                   placeholder="What is this about?"
                   required
                 />
