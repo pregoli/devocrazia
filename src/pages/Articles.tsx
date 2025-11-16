@@ -56,7 +56,7 @@ const Articles = () => {
 
   // Filter and sort articles
   const filteredArticles = useMemo(() => {
-    let filtered = articles.filter((article) => {
+    const filtered = articles.filter((article) => {
       const matchesSearch =
         searchQuery === "" ||
         article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
