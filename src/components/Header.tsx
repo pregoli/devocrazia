@@ -28,9 +28,9 @@ const Header = () => {
               <NavLink to="/about" className="text-foreground hover:text-primary transition-colors">
                 About
               </NavLink>
-              <a href="#" className="text-foreground hover:text-primary transition-colors">
+              <NavLink to="/contact" className="text-foreground hover:text-primary transition-colors">
                 Contact
-              </a>
+              </NavLink>
             </nav>
 
             <Button
@@ -64,9 +64,9 @@ const Header = () => {
             <NavLink to="/about" className="text-foreground hover:text-primary transition-colors">
               About
             </NavLink>
-            <a href="#" className="text-foreground hover:text-primary transition-colors">
+            <NavLink to="/contact" className="text-foreground hover:text-primary transition-colors">
               Contact
-            </a>
+            </NavLink>
           </nav>
         )}
       </div>

@@ -1,3 +1,5 @@
+import { NavLink } from "./NavLink";
+
 const Footer = () => {
   return (
     <footer className="border-t border-border bg-background mt-16">
@@ -9,15 +11,15 @@ const Footer = () => {
           </div>
 
           <nav className="flex gap-6">
-            <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+            <NavLink to="/about" className="text-muted-foreground hover:text-primary transition-colors">
               About
-            </a>
+            </NavLink>
             <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
               Privacy Policy
             </a>
-            <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+            <NavLink to="/contact" className="text-muted-foreground hover:text-primary transition-colors">
               Contact
-            </a>
+            </NavLink>
           </nav>
         </div>
       </div>
