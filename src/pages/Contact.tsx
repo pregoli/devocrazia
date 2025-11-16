@@ -20,28 +20,21 @@ const Contact = () => {
     const formData = new FormData(form);
 
     try {
-      const response = await fetch("https://formsubmit.co/ajax/paolo.regoli@gmail.com", {
+      const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify({
-          name: formData.get('name'),
-          email: formData.get('email'),
-          subject: formData.get('subject'),
-          message: formData.get('message')
-        })
+        body: formData
       });
 
-      if (response.ok) {
+      const data = await response.json();
+
+      if (data.success) {
         toast({
           title: "Message sent!",
           description: "Thank you for reaching out. I'll get back to you soon.",
         });
         form.reset();
       } else {
-        throw new Error('Failed to send');
+        throw new Error(data.message || 'Failed to send');
       }
     } catch (error) {
       console.error('Error:', error);
@@ -79,6 +72,11 @@ const Contact = () => {
 
             {/* Contact Form */}
             <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Web3Forms Access Key - Get yours free at https://web3forms.com */}
+              <input type="hidden" name="access_key" value="YOUR_WEB3FORMS_ACCESS_KEY" />
+              <input type="hidden" name="subject" value="New Contact Form Submission from Devocrazia" />
+              <input type="hidden" name="from_name" value="Devocrazia Contact Form" />
+              
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <label htmlFor="name" className="text-sm font-medium text-foreground">
@@ -107,12 +105,12 @@ const Contact = () => {
               </div>
 
               <div className="space-y-2">
-                <label htmlFor="subject" className="text-sm font-medium text-foreground">
+                <label htmlFor="user_subject" className="text-sm font-medium text-foreground">
                   Subject
                 </label>
                 <Input
-                  id="subject"
-                  name="subject"
+                  id="user_subject"
+                  name="user_subject"
                   placeholder="What is this about?"
                   required
                 />
