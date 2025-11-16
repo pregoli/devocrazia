@@ -2,8 +2,7 @@ import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Search, Home, FileText } from "lucide-react";
+import { Home, FileText } from "lucide-react";
 import { Helmet } from "react-helmet";
 
 const NotFound = () => {
@@ -32,16 +31,6 @@ const NotFound = () => {
           <p className="text-lg text-muted-foreground max-w-md mx-auto">
             Sorry, the page you are looking for might have been moved, renamed, or is temporarily unavailable.
           </p>
-
-          {/* Search Bar */}
-          <div className="relative max-w-md mx-auto">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-            <Input
-              type="text"
-              placeholder="Search the blog..."
-              className="pl-10 h-12"
-            />
-          </div>
 
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
