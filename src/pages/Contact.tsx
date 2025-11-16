@@ -3,7 +3,7 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Mail, Github, Linkedin } from "lucide-react";
+import { Mail, Github, Linkedin, Globe } from "lucide-react";
 import { Helmet } from "react-helmet";
 
 const Contact = () => {
