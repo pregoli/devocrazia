@@ -37,7 +37,7 @@ const ArticleCard = ({
           <img 
             src={image} 
             alt={title}
-            className="w-full sm:w-60 h-40 sm:h-36 flex-shrink-0 rounded-md object-contain bg-muted"
+            className="w-full sm:w-44 h-44 flex-shrink-0 rounded-md object-cover bg-muted"
           />
         ) : (
           <div className={`w-full sm:w-44 h-44 flex-shrink-0 rounded-md ${image}`} />
