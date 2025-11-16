@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import emailjs from "@emailjs/browser";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -11,12 +10,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Mail, Github, Linkedin } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Helmet } from "react-helmet";
-
-// EmailJS Configuration
-// You need to set these values from your EmailJS account
-const EMAILJS_SERVICE_ID = "YOUR_SERVICE_ID";
-const EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID";
-const EMAILJS_PUBLIC_KEY = "YOUR_PUBLIC_KEY";
 
 const contactSchema = z.object({
   name: z.string().trim().min(1, "Name is required").max(100, "Name must be less than 100 characters"),
@@ -44,30 +37,33 @@ const Contact = () => {
     setIsSubmitting(true);
     
     try {
-      // Send email using EmailJS
-      const templateParams = {
-        from_name: data.name,
-        from_email: data.email,
-        subject: data.subject,
-        message: data.message,
-        to_email: "paolo.regoli@gmail.com",
-      };
-
-      await emailjs.send(
-        EMAILJS_SERVICE_ID,
-        EMAILJS_TEMPLATE_ID,
-        templateParams,
-        EMAILJS_PUBLIC_KEY
-      );
+      // Send email using FormSubmit
+      const formData = new FormData();
+      formData.append("name", data.name);
+      formData.append("email", data.email);
+      formData.append("subject", data.subject);
+      formData.append("message", data.message);
+      formData.append("_captcha", "false"); // Disable captcha for better UX
       
-      toast({
-        title: "Message sent!",
-        description: "Thank you for reaching out. I'll get back to you soon.",
+      const response = await fetch("https://formsubmit.co/paolo.regoli@gmail.com", {
+        method: "POST",
+        body: formData,
+        headers: {
+          "Accept": "application/json"
+        }
       });
-      
-      reset();
+
+      if (response.ok) {
+        toast({
+          title: "Message sent!",
+          description: "Thank you for reaching out. I'll get back to you soon.",
+        });
+        reset();
+      } else {
+        throw new Error("Failed to send message");
+      }
     } catch (error) {
-      console.error("EmailJS Error:", error);
+      console.error("FormSubmit Error:", error);
       toast({
         title: "Error",
         description: "Failed to send message. Please try again.",
