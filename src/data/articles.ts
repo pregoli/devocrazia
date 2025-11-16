@@ -9,6 +9,7 @@ export interface Article {
   authorAvatar?: string;
   date: string; // ISO date string
   image: string;
+  heroImage?: string; // Optional larger image for detail page
   tags: string[];
   readTime: number; // in minutes
 }
@@ -24,7 +25,8 @@ export const articles: Article[] = [
       "Learn how TOON offers a more token-efficient alternative to JSON when sending structured data to LLMs. This article breaks down real-world use cases, conversion methods, and best practices for optimizing AI workflows.",
     authorName: "Paolo Regoli",
     date: "2025-11-15",
-    image: "/images/json-vs-toon.png",
+    image: "/images/json-vs-toon-preview.png",
+    heroImage: "/images/json-vs-toon-hero.png",
     tags: ["AI", "Optimization"],
     readTime: 7,
   },
