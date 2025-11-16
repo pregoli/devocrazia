@@ -1,78 +1,12 @@
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Mail, Github, Linkedin } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
 import { Helmet } from "react-helmet";
 
-const contactSchema = z.object({
-  name: z.string().trim().min(1, "Name is required").max(100, "Name must be less than 100 characters"),
-  email: z.string().trim().email("Invalid email address").max(255, "Email must be less than 255 characters"),
-  subject: z.string().trim().min(1, "Subject is required").max(200, "Subject must be less than 200 characters"),
-  message: z.string().trim().min(1, "Message is required").max(2000, "Message must be less than 2000 characters"),
-});
-
-type ContactFormData = z.infer<typeof contactSchema>;
-
 const Contact = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const { toast } = useToast();
-
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<ContactFormData>({
-    resolver: zodResolver(contactSchema),
-  });
-
-  const onSubmit = async (data: ContactFormData) => {
-    setIsSubmitting(true);
-    
-    try {
-      // Send email using FormSubmit
-      const formData = new FormData();
-      formData.append("name", data.name);
-      formData.append("email", data.email);
-      formData.append("subject", data.subject);
-      formData.append("message", data.message);
-      formData.append("_captcha", "false"); // Disable captcha for better UX
-      
-      const response = await fetch("https://formsubmit.co/paolo.regoli@gmail.com", {
-        method: "POST",
-        body: formData,
-        headers: {
-          "Accept": "application/json"
-        }
-      });
-
-      if (response.ok) {
-        toast({
-          title: "Message sent!",
-          description: "Thank you for reaching out. I'll get back to you soon.",
-        });
-        reset();
-      } else {
-        throw new Error("Failed to send message");
-      }
-    } catch (error) {
-      console.error("FormSubmit Error:", error);
-      toast({
-        title: "Error",
-        description: "Failed to send message. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
   return (
     <>
@@ -97,7 +31,11 @@ const Contact = () => {
             </div>
 
             {/* Contact Form */}
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            <form action="https://formsubmit.co/paolo.regoli@gmail.com" method="POST" className="space-y-6">
+              {/* FormSubmit Configuration */}
+              <input type="hidden" name="_captcha" value="false" />
+              <input type="hidden" name="_template" value="table" />
+              
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <label htmlFor="name" className="text-sm font-medium text-foreground">
@@ -105,13 +43,10 @@ const Contact = () => {
                   </label>
                   <Input
                     id="name"
+                    name="name"
                     placeholder="Enter your name"
-                    {...register("name")}
-                    className={errors.name ? "border-destructive" : ""}
+                    required
                   />
-                  {errors.name && (
-                    <p className="text-sm text-destructive">{errors.name.message}</p>
-                  )}
                 </div>
 
                 <div className="space-y-2">
@@ -120,14 +55,11 @@ const Contact = () => {
                   </label>
                   <Input
                     id="email"
+                    name="email"
                     type="email"
                     placeholder="Enter your email address"
-                    {...register("email")}
-                    className={errors.email ? "border-destructive" : ""}
+                    required
                   />
-                  {errors.email && (
-                    <p className="text-sm text-destructive">{errors.email.message}</p>
-                  )}
                 </div>
               </div>
 
@@ -137,13 +69,10 @@ const Contact = () => {
                 </label>
                 <Input
                   id="subject"
+                  name="subject"
                   placeholder="What is this about?"
-                  {...register("subject")}
-                  className={errors.subject ? "border-destructive" : ""}
+                  required
                 />
-                {errors.subject && (
-                  <p className="text-sm text-destructive">{errors.subject.message}</p>
-                )}
               </div>
 
               <div className="space-y-2">
@@ -152,22 +81,18 @@ const Contact = () => {
                 </label>
                 <Textarea
                   id="message"
+                  name="message"
                   placeholder="Write your message here..."
                   rows={6}
-                  {...register("message")}
-                  className={errors.message ? "border-destructive" : ""}
+                  required
                 />
-                {errors.message && (
-                  <p className="text-sm text-destructive">{errors.message.message}</p>
-                )}
               </div>
 
               <Button
                 type="submit"
                 className="w-full h-12 text-base font-semibold"
-                disabled={isSubmitting}
               >
-                {isSubmitting ? "Sending..." : "Send Message"}
+                Send Message
               </Button>
             </form>
 
