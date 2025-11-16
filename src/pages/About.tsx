@@ -16,7 +16,7 @@ const About = () => {
             <div className="w-full md:w-80 flex-shrink-0 flex justify-center md:justify-start">
               <img
                 src={authorAvatar}
-                alt="Alex Doe"
+                alt="Paolo Regoli"
                 className="w-40 h-40 md:w-80 md:h-auto object-cover rounded-full md:rounded-md shadow-md"
               />
             </div>
@@ -24,7 +24,7 @@ const About = () => {
             {/* Content */}
             <div className="flex-1 space-y-8">
               <div>
-                <h1 className="text-5xl font-bold text-foreground mb-3">Alex Doe</h1>
+                <h1 className="text-5xl font-bold text-foreground mb-3">Paolo Regoli</h1>
                 <h2 className="text-2xl text-primary font-medium">
                   Senior Software Engineer & Cloud Architect
                 </h2>
@@ -32,24 +32,32 @@ const About = () => {
 
               <div className="space-y-4 text-foreground leading-relaxed">
                 <p>
-                  Alex is a Senior Software Engineer with a passion for building scalable
-                  and efficient cloud-native applications. With over a decade of
-                  experience in the tech industry, they specialize in Go, Kubernetes, and
-                  distributed systems architecture.
+                  I’m a Software Engineer with almost twenty years of
+                  experience building software across Europe and Australia. My career started in Italy
+                  and took me to Sydney, Berlin, and now London, giving me the chance to work in
+                  diverse engineering cultures and on a wide range of problem domains. I specialise in
+                  designing and developing modern applications using .NET, C#, TypeScript, and cloud
+                  technologies, with a strong focus on clarity, maintainability, and real-world domain
+                  modelling.
                 </p>
 
                 <p>
-                  Throughout their career, Alex has led teams at both startups and large
-                  enterprises, focusing on creating robust backend services and fostering
-                  a culture of technical excellence. They believe in the power of well-
-                  crafted code and elegant solutions to solve complex problems.
+                  Much of my work has been centred around software architecture, particularly
+                  Domain-Driven Design, event-driven systems, asynchronous workflows, messaging
+                  patterns, and clean, modular application boundaries. I’ve worked extensively on
+                  distributed systems, financial platforms, enterprise SaaS products, and integrations
+                  between complex services. I enjoy taking intricate business domains and turning them
+                  into software that is expressive, understandable, and built to evolve over time
+                  rather than degrade.
                 </p>
 
                 <p>
-                  When not coding, Alex enjoys contributing to open-source projects,
-                  speaking at tech conferences, and exploring hiking trails. This blog is a
-                  space for them to share insights, tutorials, and reflections on the ever-
-                  evolving world of software development.
+                  Outside of my day-to-day work, I’m constantly exploring new architectural techniques,
+                  experimenting with modern tooling, and refining the principles that help developers
+                  build better systems. This blog is where I document what I learn along the way,
+                  whether it’s about software architecture, patterns, DDD, testing, cloud-native
+                  approaches, or the practical lessons gained from building and maintaining real
+                  production systems across multiple countries and teams.
                 </p>
               </div>
 
@@ -62,7 +70,7 @@ const About = () => {
                     className="flex items-center gap-2"
                     asChild
                   >
-                    <a href="https://github.com" target="_blank" rel="noopener noreferrer">
+                    <a href="https://github.com/pregoli" target="_blank" rel="noopener noreferrer">
                       <Github className="h-4 w-4" />
                       GitHub
                     </a>
@@ -73,7 +81,7 @@ const About = () => {
                     className="flex items-center gap-2"
                     asChild
                   >
-                    <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
+                    <a href="https://www.linkedin.com/in/pregoli" target="_blank" rel="noopener noreferrer">
                       <Linkedin className="h-4 w-4" />
                       LinkedIn
                     </a>

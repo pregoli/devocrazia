@@ -106,7 +106,7 @@ const Contact = () => {
                   className="flex items-center gap-2"
                   asChild
                 >
-                  <a href="https://github.com" target="_blank" rel="noopener noreferrer">
+                  <a href="https://github.com/pregoli" target="_blank" rel="noopener noreferrer">
                     <Github className="h-4 w-4" />
                     GitHub
                   </a>
@@ -117,7 +117,7 @@ const Contact = () => {
                   className="flex items-center gap-2"
                   asChild
                 >
-                  <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
+                  <a href="https://www.linkedin.com/in/pregoli" target="_blank" rel="noopener noreferrer">
                     <Linkedin className="h-4 w-4" />
                     LinkedIn
                   </a>
