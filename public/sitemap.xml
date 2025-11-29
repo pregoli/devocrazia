@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  
+  <!-- Main Pages -->
+  <url>
+    <loc>https://devocrazia.com/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <url>
+    <loc>https://devocrazia.com/about</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>https://devocrazia.com/articles</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <url>
+    <loc>https://devocrazia.com/contact</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://devocrazia.com/privacy</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  
+  <!-- Articles -->
+  <url>
+    <loc>https://devocrazia.com/articles/building-bank-atm-event-sourcing-cqrs-dotnet</loc>
+    <lastmod>2025-07-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://devocrazia.com/images/event-sourcing-cqrs-hero.svg</image:loc>
+      <image:title>Event Sourcing and CQRS in .NET 9</image:title>
+    </image:image>
+  </url>
+  
+  <url>
+    <loc>https://devocrazia.com/articles/optimising-llm-inputs-json-vs-toon-explained</loc>
+    <lastmod>2025-11-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://devocrazia.com/images/json-vs-toon-hero.svg</image:loc>
+      <image:title>JSON vs TOON for LLM Optimization</image:title>
+    </image:image>
+  </url>
+  
+  <url>
+    <loc>https://devocrazia.com/articles/a-guide-to-modern-css-layouts</loc>
+    <lastmod>2023-10-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <url>
+    <loc>https://devocrazia.com/articles/getting-started-with-docker-containers</loc>
+    <lastmod>2023-10-20</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <url>
+    <loc>https://devocrazia.com/articles/optimizing-web-performance</loc>
+    <lastmod>2023-10-15</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <url>
+    <loc>https://devocrazia.com/articles/ui-ux-design-principles-for-developers</loc>
+    <lastmod>2023-10-12</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+</urlset>

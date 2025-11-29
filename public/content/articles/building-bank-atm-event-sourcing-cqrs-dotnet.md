@@ -1,63 +1,51 @@
 # Building a Bank ATM System with Event Sourcing and CQRS in .NET 9
 
-Every transaction in a bank account tells a story. A deposit here, a withdrawal there, maybe an account deactivation—each one matters. Traditional databases update rows in place, overwriting history. But what if you need to know exactly what happened at 3:47 PM last Tuesday? Or reconstruct an account's state from any point in time?
+Every bank transaction tells a story. A customer opens an account, deposits their first paycheck, withdraws cash for the weekend, maybe closes the account years later. Traditional databases store only the final chapter—the current balance. But what if you need to understand the entire journey? What if an auditor asks exactly what happened at 3:47 PM last Tuesday?
 
-This is where **Event Sourcing** shines.
+This is where **Event Sourcing** changes the game.
 
-In this article, I'll walk you through a production-ready banking system built with Event Sourcing, CQRS, and Domain-Driven Design in .NET 9. We'll cover real code, real patterns, and real trade-offs—everything you need to implement this architecture in your own projects.
+Instead of overwriting data with each change, Event Sourcing preserves every state transition as an immutable record. The current state becomes a natural consequence of replaying history—not something stored directly. For financial systems, this isn't just a nice-to-have; it's often a regulatory requirement.
+
+In this article, I'll walk through a production-style banking system built with Event Sourcing, CQRS, and Domain-Driven Design in .NET 9. We'll examine real code, explore the architectural trade-offs, and see how these patterns work together to create a robust, auditable system.
 
 ---
 
-## Why Event Sourcing for Financial Systems?
+## Why Event Sourcing Fits Financial Systems
 
-Traditional CRUD systems have a fundamental problem: they only store the current state. When you update a bank balance from £1,000 to £1,250, the £1,000 is gone forever.
+Traditional CRUD operations have a fundamental limitation: they destroy history. When you update a bank balance from £1,000 to £1,250, the original value vanishes. You know *what* the balance is, but not *how* it got there.
 
-**Event Sourcing flips this model.** Instead of storing state, you store the events that led to that state:
+**Event Sourcing inverts this model.** Rather than storing state, you store the sequence of events that produced it:
 
 ```
-AccountCreated { balance: 1000 }
-MoneyDeposited { amount: 500 }
-CashWithdrawn { amount: 250 }
+AccountCreated    → Initial balance: £1,000
+MoneyDeposited    → +£500
+CashWithdrawn     → -£250
 ```
 
-The current balance (£1,250) is derived by replaying these events. This gives you:
+The current balance (£1,250) emerges naturally by replaying these events. This approach delivers several powerful capabilities:
 
-- **Complete audit trail** — Every change is recorded with timestamp and context
-- **Temporal queries** — Reconstruct state at any point in time
-- **Debug superpowers** — Replay events to understand exactly what happened
-- **Regulatory compliance** — Financial regulators love immutable audit logs
+- **Complete audit trail** — Every change is preserved with full context and timestamp
+- **Time travel** — Reconstruct the account state at any historical moment
+- **Root cause analysis** — Debug production issues by replaying exact event sequences
+- **Regulatory compliance** — Immutable logs satisfy financial audit requirements
 
 ---
 
 ## Architecture Overview
 
-The ScratchBank ATM system follows Clean Architecture with four distinct layers:
+The system follows Clean Architecture principles, organised into four concentric layers where dependencies point inward. The Domain sits at the centre, completely isolated from external concerns.
 
-```
-┌─────────────────────────────────────────────────────────┐
-│                      API Layer                          │
-│              (Controllers, HTTP Endpoints)              │
-├─────────────────────────────────────────────────────────┤
-│                  Application Layer                      │
-│         (Commands, Queries, Handlers, DTOs)             │
-├─────────────────────────────────────────────────────────┤
-│                    Domain Layer                         │
-│    (Aggregates, Events, Value Objects, Exceptions)      │
-├─────────────────────────────────────────────────────────┤
-│                Infrastructure Layer                     │
-│  (Event Store, Projections, Messaging, Repositories)    │
-└─────────────────────────────────────────────────────────┘
-```
+![Clean Architecture](/images/articles/event-sourcing/architecture.svg)
 
-Each layer has a specific responsibility, and dependencies flow inward—infrastructure depends on domain, never the reverse.
+This structure ensures that business logic remains framework-agnostic. You could swap Entity Framework for Dapper, or Azure Service Bus for RabbitMQ, without touching the domain layer.
 
 ---
 
-## The Domain Layer: Where Business Logic Lives
+## The Domain Layer: Pure Business Logic
 
 ### The BankAccount Aggregate
 
-An aggregate is a cluster of domain objects treated as a single unit. The `BankAccount` aggregate encapsulates all banking business rules:
+In Domain-Driven Design, an *aggregate* is a cluster of related objects treated as a transactional unit. The `BankAccount` aggregate encapsulates all banking rules—overdraft prevention, account status validation, and balance calculations:
 
 ```csharp
 public class BankAccount : AggregateRoot
@@ -114,11 +102,11 @@ public class BankAccount : AggregateRoot
 }
 ```
 
-Notice how state changes happen through events. The `DepositMoney` method doesn't directly modify `Balance`—it creates a `MoneyDepositedEvent`. This is the core principle of Event Sourcing.
+Notice something important: methods like `DepositMoney` don't directly modify `Balance`. Instead, they record a `MoneyDepositedEvent`. The actual state change happens when the event is applied. This separation is fundamental to Event Sourcing—**commands produce events, and events produce state**.
 
-### Value Objects: Enforcing Invariants
+### Value Objects: Self-Validating Data
 
-Value Objects encapsulate validation rules and ensure data integrity:
+Value Objects wrap primitive types with domain-specific validation, eliminating entire categories of bugs:
 
 ```csharp
 public record Money
@@ -142,14 +130,11 @@ public record Money
 }
 ```
 
-The `Money` value object guarantees that:
-- Currency is always valid
-- Amounts are always rounded to 2 decimal places
-- All money operations are type-safe
+Once created, a `Money` instance is guaranteed valid—currency is never empty, amounts are always rounded to two decimal places. You cannot accidentally pass raw decimals around and hope someone validates them later.
 
-### Domain Events: The Source of Truth
+### Domain Events: Immutable Facts
 
-Domain events capture business occurrences as immutable records:
+Domain events capture business occurrences as permanent records:
 
 ```csharp
 public abstract record DomainEvent
@@ -172,16 +157,17 @@ public record CashWithdrawnEvent(
     decimal NewBalance) : DomainEvent;
 ```
 
-Each event is:
-- **Immutable** — Once created, it never changes
-- **Versioned** — Enables optimistic concurrency control
-- **Timestamped** — Full temporal ordering
+Each event is immutable (using C# records), versioned for concurrency control, and timestamped for temporal ordering. Once persisted, events never change—they represent facts about what happened.
 
 ---
 
-## The Event Store: Persisting Events
+## The Event Store: An Append-Only Ledger
 
-The Event Store is the heart of Event Sourcing. It provides append-only persistence for domain events:
+The Event Store is the heart of this architecture. Unlike traditional databases where records are updated in place, the Event Store only permits appending new events. Nothing is ever modified or deleted.
+
+![Append-Only Event Store](/images/articles/event-sourcing/append-only.svg)
+
+Each write operation adds a new event to the stream with an incrementing version number. This append-only constraint is what makes the audit trail trustworthy—if events could be modified, you'd lose the guarantee that history is accurate.
 
 ```csharp
 public class EfEventStore : IEventStore
@@ -218,22 +204,26 @@ public class EfEventStore : IEventStore
 }
 ```
 
-### Optimistic Concurrency Control
+### Handling Concurrent Writes
 
-A unique constraint on `(AggregateType, AggregateId, Version)` prevents conflicting writes:
+A unique constraint on `(AggregateType, AggregateId, Version)` prevents conflicting updates:
 
 ```sql
 CREATE UNIQUE INDEX IX_Events_Stream_Version
 ON Events (AggregateType, AggregateId, Version);
 ```
 
-If two processes try to append version 5 simultaneously, one succeeds and one gets a concurrency exception. This is exactly what you want in a financial system.
+Imagine two ATMs processing withdrawals for the same account simultaneously. Both load version 5, both try to append version 6. The database constraint ensures only one succeeds—the other receives a concurrency exception and must retry with fresh data. For financial operations, this optimistic concurrency control is essential.
 
 ---
 
-## Rehydrating Aggregates: Replaying Events
+## Rehydrating Aggregates: Replaying History
 
-To load an aggregate, we replay all its events:
+Loading an aggregate means replaying its event stream from the beginning. Each event transforms the aggregate's state incrementally until you arrive at the present:
+
+![Event Replay](/images/articles/event-sourcing/events-replay.svg)
+
+The formula is straightforward: read events in chronological order, apply each one, and the final state emerges naturally.
 
 ```csharp
 public abstract class AggregateRoot
@@ -263,7 +253,7 @@ public abstract class AggregateRoot
 }
 ```
 
-Each event type has a corresponding `Apply` method in the aggregate:
+Each event type has a corresponding `Apply` method that updates the aggregate's internal state:
 
 ```csharp
 protected internal void Apply(MoneyDepositedEvent @event)
@@ -281,13 +271,17 @@ protected internal void Apply(CashWithdrawnEvent @event)
 
 ---
 
-## CQRS: Separating Reads from Writes
+## CQRS: Optimising Reads and Writes Independently
 
-CQRS (Command Query Responsibility Segregation) recognizes that read and write operations have fundamentally different requirements.
+CQRS (Command Query Responsibility Segregation) recognises that read and write operations have different requirements. Writes need strong consistency and business rule enforcement. Reads need speed and flexibility.
 
-### Commands: Modifying State
+![CQRS Overview](/images/articles/event-sourcing/cqrs-pattern.svg)
 
-Commands represent intentions to change state:
+By separating these concerns, you can optimise each side independently.
+
+### Commands: Expressing Intent
+
+Commands represent a user's intention to change system state:
 
 ```csharp
 public record DepositMoneyCommand(
@@ -296,7 +290,7 @@ public record DepositMoneyCommand(
     string Currency) : FlagstoneAtmCommand;
 ```
 
-Command handlers orchestrate the business operation:
+Command handlers coordinate the operation—loading the aggregate, invoking domain logic, and persisting results:
 
 ```csharp
 public class DepositMoneyCommandHandler : RequestHandlerAsync<DepositMoneyCommand>
@@ -317,15 +311,17 @@ public class DepositMoneyCommandHandler : RequestHandlerAsync<DepositMoneyComman
 }
 ```
 
-### Queries: Reading State
+### Queries: Flexible Read Strategies
 
-The read side can be optimized independently. ScratchBank ATM supports **three query strategies**, each with different trade-offs:
+The read side offers three strategies, each with different trade-offs:
 
-| Strategy | Consistency | Performance | Use Case |
+| Strategy | Consistency | Performance | Best For |
 |----------|-------------|-------------|----------|
-| **Projection** | Eventual | Fast | Dashboards, UIs |
-| **EventReplay** | Immediate | Slow | Auditing, disputes |
-| **Snapshot** | Immediate | Balanced | Financial reconciliation |
+| **Projection** | Eventual | Fastest | Dashboards, listings |
+| **EventReplay** | Immediate | Slowest | Audit, debugging |
+| **Snapshot** | Immediate | Balanced | General queries |
+
+![Three Query Strategies](/images/articles/event-sourcing/query-strategies.svg)
 
 ```csharp
 public async Task<BankAccountDto?> GetAccountBalanceAsync(
@@ -340,7 +336,7 @@ public async Task<BankAccountDto?> GetAccountBalanceAsync(
     };
 ```
 
-The API exposes this flexibility:
+The API exposes this flexibility directly:
 
 ```http
 GET /api/BankAccounts/{id}/balance?strategy=Projection
@@ -350,13 +346,17 @@ GET /api/BankAccounts/{id}/balance?strategy=Snapshot
 
 ---
 
-## Projections: Multiple Read Models from One Event Stream
+## Projections: Multiple Views from One Source
 
-One of Event Sourcing's superpowers is building multiple read models from the same events. ScratchBank ATM maintains two projections:
+One of Event Sourcing's most powerful features is building multiple read-optimised views from the same event stream. As events flow into the store, they're published to a message bus where projection handlers update specialised read tables.
 
-### 1. Balance Projection
+![Projections](/images/articles/event-sourcing/projection.svg)
 
-A simple, fast lookup for current balance:
+Different consumers build different views—a Balance projection for instant lookups, a Monthly Cash Flow projection for financial reports—all from the same underlying events.
+
+### Balance Projection
+
+A denormalised table optimised for fast balance queries:
 
 ```csharp
 public class BalanceTransactionCompletedProjectionHandler 
@@ -378,9 +378,9 @@ public class BalanceTransactionCompletedProjectionHandler
 }
 ```
 
-### 2. Monthly Cash Flow Projection
+### Monthly Cash Flow Projection
 
-An analytical view showing deposits and withdrawals by month:
+An analytical view aggregating transactions by month:
 
 ```http
 GET /api/BankAccounts/{id}/monthly-cashflow
@@ -397,32 +397,36 @@ Response:
 ]
 ```
 
-Same events, different views—no data duplication required.
+Same events, different perspectives—no data duplication required.
 
 ---
 
-## Snapshotting: Performance Optimization
+## Snapshotting: Taming Long Event Streams
 
-Replaying thousands of events for every read is expensive. Snapshots solve this by periodically capturing aggregate state:
+Replaying hundreds or thousands of events for every read becomes expensive. Snapshots solve this by periodically capturing aggregate state, allowing the system to resume from a checkpoint rather than the beginning.
+
+![Snapshotting](/images/articles/event-sourcing/snapshotting.svg)
+
+Instead of replaying all events, load the most recent snapshot and replay only subsequent events.
 
 ```csharp
 public class SnapshotLoadingStrategy : IAggregateLoadingStrategy<BankAccount>
 {
     public async Task<BankAccount?> LoadAsync(StreamId streamId)
     {
-        // Try to get latest snapshot
+        // Attempt to restore from snapshot
         var (aggregate, fromVersion) = await TryRestoreFromSnapshotAsync(streamId.AggregateId);
 
-        // Get only events AFTER the snapshot
+        // Fetch only events AFTER the snapshot version
         var partialStream = await _eventStore.GetPartialStreamAsync(streamId, fromVersion);
 
         if (aggregate == null)
         {
-            // No snapshot - replay all events
+            // No snapshot available—replay everything
             return AggregateRoot.ReplayEvents<BankAccount>(partialStream.Events);
         }
 
-        // Apply only the recent events to the snapshot
+        // Apply only recent events to the restored snapshot
         foreach (var @event in partialStream.Events)
         {
             aggregate.ApplyEvent(@event);
@@ -433,7 +437,7 @@ public class SnapshotLoadingStrategy : IAggregateLoadingStrategy<BankAccount>
 }
 ```
 
-The snapshot policy determines when to create snapshots:
+A configurable policy determines when to create snapshots:
 
 ```csharp
 public class ConfigurableSnapshotPolicy : ISnapshotPolicy
@@ -446,13 +450,13 @@ public class ConfigurableSnapshotPolicy : ISnapshotPolicy
 }
 ```
 
-With a policy of snapshotting every 50 events, an aggregate with 1,000 events only needs to replay 0-49 events instead of all 1,000.
+With snapshots every 5 events, an account with 1,000 events only needs to replay at most 4 events instead of the full history. For long-lived aggregates, this dramatically improves load times.
 
 ---
 
-## Integration Events: Eventual Consistency
+## Integration Events: Connecting Systems
 
-Domain events trigger integration events published to Azure Service Bus:
+Domain events trigger integration events published to Azure Service Bus, enabling downstream systems to react asynchronously:
 
 ```csharp
 public async Task PublishFromDomainEventsAsync(IReadOnlyCollection<DomainEvent> domainEvents)
@@ -468,21 +472,21 @@ public async Task PublishFromDomainEventsAsync(IReadOnlyCollection<DomainEvent> 
 }
 ```
 
-A background worker subscribes to these events and updates projections asynchronously:
+The flow looks like this:
 
 ```
 Domain Event → Integration Event → Azure Service Bus → Worker → Projection Update
 ```
 
-This decouples the write side (immediately consistent) from the read side (eventually consistent).
+This decouples the write side (immediately consistent) from the read side (eventually consistent), allowing each to scale and evolve independently.
 
 ---
 
-## The Complete Flow: Creating an Account
+## End-to-End: Creating an Account
 
-Let's trace through creating a bank account:
+Let's trace through the complete flow when a customer opens an account:
 
-**1. HTTP Request:**
+**1. HTTP Request arrives:**
 ```http
 POST /api/BankAccounts
 {
@@ -492,7 +496,7 @@ POST /api/BankAccounts
 }
 ```
 
-**2. Command Handler:**
+**2. Command handler creates the aggregate:**
 ```csharp
 var account = BankAccount.Create(
     Guid.NewGuid(),
@@ -503,7 +507,7 @@ var account = BankAccount.Create(
 await _repository.SaveAsync(account);
 ```
 
-**3. Event Created:**
+**3. Domain event is generated:**
 ```json
 {
   "eventType": "BankAccountCreatedEvent",
@@ -516,13 +520,13 @@ await _repository.SaveAsync(account);
 }
 ```
 
-**4. Event Persisted to Event Store**
+**4. Event persisted to the Event Store**
 
-**5. Integration Event Published to Azure Service Bus**
+**5. Integration event published to Azure Service Bus**
 
-**6. Worker Updates Projections**
+**6. Background worker updates projections**
 
-**7. Query Returns Data:**
+**7. Query returns the data:**
 ```http
 GET /api/BankAccounts/abc-123/balance
 
@@ -538,9 +542,9 @@ GET /api/BankAccounts/abc-123/balance
 
 ---
 
-## Testing It Yourself
+## Try It Yourself
 
-Here's a complete test scenario you can run:
+Here's a complete test scenario to explore the system:
 
 ```http
 ### 1. Create Account
@@ -571,13 +575,13 @@ Content-Type: application/json
   "currency": "GBP"
 }
 
-### 4. Check Balance (should be 1150.00)
+### 4. Check Balance (expect £1,150.00)
 GET {{baseUrl}}/BankAccounts/{{accountId}}/balance
 
-### 5. View Full Audit Log
+### 5. View Complete Audit Trail
 GET {{baseUrl}}/BankAccounts/{{accountId}}/audit-logs
 
-### 6. Try Overdraft (should fail)
+### 6. Attempt Overdraft (expect failure)
 POST {{baseUrl}}/BankAccounts/{{accountId}}/withdraw
 Content-Type: application/json
 
@@ -591,43 +595,44 @@ Content-Type: application/json
 
 ## Key Takeaways
 
-**Event Sourcing gives you:**
-- Complete audit trail for every state change
-- Ability to reconstruct state at any point in time
-- Natural fit for event-driven architectures
-- Debugging superpowers
+**Event Sourcing provides:**
+- Complete, immutable audit trail of every state change
+- Ability to reconstruct system state at any point in history
+- Natural fit for event-driven architectures and microservices
+- Powerful debugging through event replay
 
-**CQRS gives you:**
-- Independent optimization of reads and writes
-- Multiple read models from the same data
-- Flexibility in consistency guarantees
+**CQRS enables:**
+- Independent scaling and optimisation of reads and writes
+- Multiple read models from the same underlying data
+- Flexibility in consistency guarantees per use case
 
-**The trade-offs:**
-- More complex than CRUD
-- Eventual consistency requires careful handling
-- Event schema evolution needs planning
+**The trade-offs to consider:**
+- Higher complexity than traditional CRUD
+- Eventual consistency requires thoughtful handling
+- Event schema evolution demands careful planning
+- Team familiarity affects adoption success
 
 ---
 
-## When Should You Use This?
+## When to Use This Architecture
 
-Event Sourcing is excellent for:
-- **Financial systems** — Where audit trails are mandatory
-- **Collaborative applications** — Where conflict resolution matters
-- **Complex domains** — Where understanding "how we got here" is valuable
-- **Event-driven architectures** — Where events are first-class citizens
+Event Sourcing excels in domains where:
+- **Audit requirements are strict** — Financial services, healthcare, legal systems
+- **History matters** — Understanding "how we got here" is valuable
+- **Events are natural** — The domain already thinks in terms of things that happened
+- **Collaboration is complex** — Multiple actors may conflict and need resolution
 
-It's overkill for:
-- Simple CRUD applications
-- High-throughput, low-latency systems (without careful optimization)
-- Teams unfamiliar with the pattern
+It's likely overkill when:
+- Simple CRUD operations suffice
+- Ultra-low latency is critical without optimisation budget
+- The team lacks Event Sourcing experience and timeline is tight
 
 ---
 
 ## Conclusion
 
-Building a banking system with Event Sourcing forced me to think differently about state. Instead of "what is the balance?", I asked "what happened to reach this balance?" This shift in perspective opens up possibilities that traditional CRUD systems simply can't match.
+Building this banking system with Event Sourcing fundamentally changed how I think about state management. Rather than asking "what is the balance?", I learned to ask "what events led to this balance?" This shift opens possibilities that traditional CRUD systems simply cannot match.
 
-The ScratchBank ATM project demonstrates that Event Sourcing in .NET 9 is not just academically interesting—it's production-ready. With Entity Framework Core for persistence, Paramore Brighter for messaging, and Azure Service Bus for integration, you have all the building blocks for a robust, auditable, scalable financial system.
+The ScratchBank ATM project demonstrates that Event Sourcing in .NET 9 is practical and production-ready. With Entity Framework Core handling persistence, Paramore Brighter orchestrating commands, and Azure Service Bus enabling integration, you have everything needed for a robust, auditable financial system.
 
-**Your next step:** Clone the repository, run the tests, and see Event Sourcing in action. The code speaks louder than any article ever could.
+**Next steps:** Clone the repository, run the tests, and watch Event Sourcing in action. The code will teach you more than any article ever could.

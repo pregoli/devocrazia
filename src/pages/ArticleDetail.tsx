@@ -89,7 +89,7 @@ const ArticleDetail = () => {
 
       <Layout showFooter={true}>
         <div className="container mx-auto px-4 py-8">
-          <article className="max-w-4xl mx-auto">
+          <article className="max-w-6xl mx-auto">
             {/* Back button */}
             <Button
               variant="ghost"

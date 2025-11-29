@@ -14,9 +14,9 @@ const Footer = () => {
             <NavLink to="/about" className="text-muted-foreground hover:text-primary transition-colors">
               About
             </NavLink>
-            <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+            <NavLink to="/privacy" className="text-muted-foreground hover:text-primary transition-colors">
               Privacy Policy
-            </a>
+            </NavLink>
             <NavLink to="/contact" className="text-muted-foreground hover:text-primary transition-colors">
               Contact
             </NavLink>

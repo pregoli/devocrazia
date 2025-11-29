@@ -1,0 +1,218 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 950 550">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0a0f"/>
+      <stop offset="100%" style="stop-color:#12121a"/>
+    </linearGradient>
+    
+    <linearGradient id="eventStoreGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#8b5cf6"/>
+      <stop offset="100%" style="stop-color:#6366f1"/>
+    </linearGradient>
+    
+    <linearGradient id="messageBusGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#0078d4"/>
+      <stop offset="100%" style="stop-color:#00a2ed"/>
+    </linearGradient>
+    
+    <linearGradient id="projection1Grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981"/>
+      <stop offset="100%" style="stop-color:#059669"/>
+    </linearGradient>
+    
+    <linearGradient id="projection2Grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b"/>
+      <stop offset="100%" style="stop-color:#d97706"/>
+    </linearGradient>
+    
+    <linearGradient id="projection3Grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#ec4899"/>
+      <stop offset="100%" style="stop-color:#db2777"/>
+    </linearGradient>
+    
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#000" flood-opacity="0.4"/>
+    </filter>
+    
+    <marker id="arrow1" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#0078d4"/>
+    </marker>
+    
+    <marker id="arrow2" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#10b981"/>
+    </marker>
+    
+    <marker id="arrow3" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#f59e0b"/>
+    </marker>
+    
+    <marker id="arrow4" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#ec4899"/>
+    </marker>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="950" height="550" fill="url(#bgGrad)"/>
+  
+  <!-- Grid pattern -->
+  <g opacity="0.03">
+    <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M 30 0 L 0 0 0 30" fill="none" stroke="white" stroke-width="0.5"/>
+    </pattern>
+    <rect width="950" height="550" fill="url(#grid)"/>
+  </g>
+  
+  <!-- Title -->
+  <text x="475" y="40" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="24" font-weight="700" fill="white">
+    Projections: Multiple Views from One Source
+  </text>
+  <text x="475" y="65" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" fill="#64748b">
+    Events flow through a message bus to update multiple read-optimised projections
+  </text>
+  
+  <!-- Event Store -->
+  <g transform="translate(60, 140)" filter="url(#shadow)">
+    <rect width="180" height="280" rx="16" fill="#1a1a24" stroke="#8b5cf6" stroke-width="2"/>
+    
+    <!-- Header -->
+    <rect width="180" height="45" rx="16" fill="url(#eventStoreGrad)" opacity="0.2"/>
+    <text x="90" y="30" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="700" fill="#8b5cf6">EVENT STORE</text>
+    
+    <!-- Events -->
+    <g transform="translate(15, 60)">
+      <rect width="150" height="35" rx="6" fill="#8b5cf6" opacity="0.9"/>
+      <text x="75" y="15" text-anchor="middle" font-family="SF Mono, Monaco, monospace" font-size="9" fill="white">MoneyDeposited</text>
+      <text x="75" y="28" text-anchor="middle" font-family="SF Mono, Monaco, monospace" font-size="9" fill="rgba(255,255,255,0.7)">v6 • +£250</text>
+    </g>
+    
+    <g transform="translate(15, 102)">
+      <rect width="150" height="35" rx="6" fill="#8b5cf6" opacity="0.7"/>
+      <text x="75" y="15" text-anchor="middle" font-family="SF Mono, Monaco, monospace" font-size="9" fill="white">CashWithdrawn</text>
+      <text x="75" y="28" text-anchor="middle" font-family="SF Mono, Monaco, monospace" font-size="9" fill="rgba(255,255,255,0.7)">v5 • -£100</text>
+    </g>
+    
+    <g transform="translate(15, 144)">
+      <rect width="150" height="35" rx="6" fill="#8b5cf6" opacity="0.5"/>
+      <text x="75" y="15" text-anchor="middle" font-family="SF Mono, Monaco, monospace" font-size="9" fill="white">MoneyDeposited</text>
+      <text x="75" y="28" text-anchor="middle" font-family="SF Mono, Monaco, monospace" font-size="9" fill="rgba(255,255,255,0.7)">v4 • +£500</text>
+    </g>
+    
+    <g transform="translate(15, 186)">
+      <rect width="150" height="35" rx="6" fill="#8b5cf6" opacity="0.35"/>
+      <text x="75" y="15" text-anchor="middle" font-family="SF Mono, Monaco, monospace" font-size="9" fill="white">CashWithdrawn</text>
+      <text x="75" y="28" text-anchor="middle" font-family="SF Mono, Monaco, monospace" font-size="9" fill="rgba(255,255,255,0.7)">v3 • -£50</text>
+    </g>
+    
+    <g transform="translate(15, 228)">
+      <rect width="150" height="35" rx="6" fill="#8b5cf6" opacity="0.2"/>
+      <text x="75" y="22" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#64748b">· · · more events</text>
+    </g>
+  </g>
+  
+  <!-- Arrow to Message Bus -->
+  <line x1="250" y1="280" x2="330" y2="280" stroke="#0078d4" stroke-width="2" marker-end="url(#arrow1)"/>
+  
+  <!-- Azure Service Bus -->
+  <g transform="translate(340, 220)" filter="url(#shadow)">
+    <rect width="180" height="120" rx="14" fill="#1a1a24" stroke="#0078d4" stroke-width="2"/>
+    <rect width="180" height="40" rx="14" fill="url(#messageBusGrad)" opacity="0.2"/>
+    
+    <!-- Azure icon approximation -->
+    <g transform="translate(20, 12)">
+      <rect width="16" height="16" rx="3" fill="#0078d4"/>
+    </g>
+    <text x="100" y="27" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#0078d4">Azure Service Bus</text>
+    
+    <text x="90" y="60" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#64748b">Integration Events</text>
+    <text x="90" y="80" text-anchor="middle" font-family="SF Mono, Monaco, monospace" font-size="9" fill="#94a3b8">AccountTransactionCompleted</text>
+    <text x="90" y="100" text-anchor="middle" font-family="SF Mono, Monaco, monospace" font-size="9" fill="#94a3b8">AccountCreated, Deactivated</text>
+  </g>
+  
+  <!-- Arrows to Projections -->
+  <path d="M530,260 Q600,260 630,160" stroke="#10b981" stroke-width="2" fill="none" marker-end="url(#arrow2)"/>
+  <line x1="530" y1="280" x2="630" y2="280" stroke="#f59e0b" stroke-width="2" marker-end="url(#arrow3)"/>
+  <path d="M530,300 Q600,300 630,400" stroke="#ec4899" stroke-width="2" fill="none" marker-end="url(#arrow4)"/>
+  
+  <!-- Projection 1: Balance -->
+  <g transform="translate(640, 95)" filter="url(#shadow)">
+    <rect width="250" height="130" rx="12" fill="#1a1a24" stroke="#10b981" stroke-width="2"/>
+    <rect width="250" height="35" rx="12" fill="url(#projection1Grad)" opacity="0.2"/>
+    <text x="125" y="24" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#10b981">Balance Projection</text>
+    
+    <!-- Table header -->
+    <g transform="translate(15, 45)">
+      <rect width="220" height="22" rx="4" fill="#10b981" opacity="0.1"/>
+      <text x="40" y="15" text-anchor="middle" font-family="SF Mono, Monaco, monospace" font-size="9" fill="#64748b">AccountId</text>
+      <text x="120" y="15" text-anchor="middle" font-family="SF Mono, Monaco, monospace" font-size="9" fill="#64748b">Balance</text>
+      <text x="190" y="15" text-anchor="middle" font-family="SF Mono, Monaco, monospace" font-size="9" fill="#64748b">Version</text>
+    </g>
+    
+    <!-- Table rows -->
+    <g transform="translate(15, 72)">
+      <text x="40" y="12" text-anchor="middle" font-family="SF Mono, Monaco, monospace" font-size="9" fill="#94a3b8">acc-123</text>
+      <text x="120" y="12" text-anchor="middle" font-family="SF Mono, Monaco, monospace" font-size="10" font-weight="600" fill="#10b981">£1,550</text>
+      <text x="190" y="12" text-anchor="middle" font-family="SF Mono, Monaco, monospace" font-size="9" fill="#94a3b8">6</text>
+    </g>
+    <g transform="translate(15, 92)">
+      <text x="40" y="12" text-anchor="middle" font-family="SF Mono, Monaco, monospace" font-size="9" fill="#94a3b8">acc-456</text>
+      <text x="120" y="12" text-anchor="middle" font-family="SF Mono, Monaco, monospace" font-size="10" font-weight="600" fill="#10b981">£3,200</text>
+      <text x="190" y="12" text-anchor="middle" font-family="SF Mono, Monaco, monospace" font-size="9" fill="#94a3b8">12</text>
+    </g>
+  </g>
+  
+  <!-- Projection 2: Monthly Cash Flow -->
+  <g transform="translate(640, 235)" filter="url(#shadow)">
+    <rect width="250" height="130" rx="12" fill="#1a1a24" stroke="#f59e0b" stroke-width="2"/>
+    <rect width="250" height="35" rx="12" fill="url(#projection2Grad)" opacity="0.2"/>
+    <text x="125" y="24" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#f59e0b">Monthly Cash Flow</text>
+    
+    <!-- Table header -->
+    <g transform="translate(15, 45)">
+      <rect width="220" height="22" rx="4" fill="#f59e0b" opacity="0.1"/>
+      <text x="35" y="15" text-anchor="middle" font-family="SF Mono, Monaco, monospace" font-size="9" fill="#64748b">Month</text>
+      <text x="100" y="15" text-anchor="middle" font-family="SF Mono, Monaco, monospace" font-size="9" fill="#64748b">In</text>
+      <text x="155" y="15" text-anchor="middle" font-family="SF Mono, Monaco, monospace" font-size="9" fill="#64748b">Out</text>
+      <text x="205" y="15" text-anchor="middle" font-family="SF Mono, Monaco, monospace" font-size="9" fill="#64748b">Net</text>
+    </g>
+    
+    <!-- Table rows -->
+    <g transform="translate(15, 72)">
+      <text x="35" y="12" text-anchor="middle" font-family="SF Mono, Monaco, monospace" font-size="9" fill="#94a3b8">Jul 25</text>
+      <text x="100" y="12" text-anchor="middle" font-family="SF Mono, Monaco, monospace" font-size="9" fill="#10b981">+£750</text>
+      <text x="155" y="12" text-anchor="middle" font-family="SF Mono, Monaco, monospace" font-size="9" fill="#ef4444">-£150</text>
+      <text x="205" y="12" text-anchor="middle" font-family="SF Mono, Monaco, monospace" font-size="9" font-weight="600" fill="#f59e0b">£600</text>
+    </g>
+    <g transform="translate(15, 92)">
+      <text x="35" y="12" text-anchor="middle" font-family="SF Mono, Monaco, monospace" font-size="9" fill="#94a3b8">Jun 25</text>
+      <text x="100" y="12" text-anchor="middle" font-family="SF Mono, Monaco, monospace" font-size="9" fill="#10b981">+£1,200</text>
+      <text x="155" y="12" text-anchor="middle" font-family="SF Mono, Monaco, monospace" font-size="9" fill="#ef4444">-£800</text>
+      <text x="205" y="12" text-anchor="middle" font-family="SF Mono, Monaco, monospace" font-size="9" font-weight="600" fill="#f59e0b">£400</text>
+    </g>
+  </g>
+  
+  <!-- Projection 3: Any Future Projection -->
+  <g transform="translate(640, 375)" filter="url(#shadow)">
+    <rect width="250" height="100" rx="12" fill="#1a1a24" stroke="#ec4899" stroke-width="2"/>
+    <rect width="250" height="35" rx="12" fill="url(#projection3Grad)" opacity="0.2"/>
+    <text x="125" y="24" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#ec4899">Any Future Projection</text>
+    
+    <text x="125" y="58" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#64748b">Add new projections anytime</text>
+    <text x="125" y="75" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#64748b">without changing the Event Store</text>
+  </g>
+  
+  <!-- Footer -->
+  <g transform="translate(475, 510)">
+    <rect x="-220" y="-15" width="440" height="35" rx="8" fill="#1a1a24" stroke="#2d2d3d" stroke-width="1"/>
+    <text x="0" y="5" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#64748b">
+      Same events, multiple optimised views — each projection serves a specific query pattern
+    </text>
+  </g>
+</svg>

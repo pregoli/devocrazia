@@ -1,0 +1,142 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 480">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a"/>
+      <stop offset="100%" style="stop-color:#1e293b"/>
+    </linearGradient>
+    <linearGradient id="commandGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b"/>
+      <stop offset="100%" style="stop-color:#d97706"/>
+    </linearGradient>
+    <linearGradient id="queryGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6"/>
+      <stop offset="100%" style="stop-color:#2563eb"/>
+    </linearGradient>
+    <linearGradient id="eventGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#8b5cf6"/>
+      <stop offset="100%" style="stop-color:#6366f1"/>
+    </linearGradient>
+    <linearGradient id="projectionGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#10b981"/>
+      <stop offset="100%" style="stop-color:#059669"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <marker id="arrowOrange" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#f59e0b"/>
+    </marker>
+    <marker id="arrowBlue" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#3b82f6"/>
+    </marker>
+    <marker id="arrowPurple" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#8b5cf6"/>
+    </marker>
+    <marker id="arrowGreen" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#10b981"/>
+    </marker>
+  </defs>
+  
+  <rect width="900" height="480" fill="url(#bgGrad)"/>
+  <g opacity="0.03">
+    <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M 30 0 L 0 0 0 30" fill="none" stroke="white" stroke-width="1"/>
+    </pattern>
+    <rect width="900" height="480" fill="url(#grid)"/>
+  </g>
+  
+  <text x="450" y="40" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="24" font-weight="700" fill="white">CQRS: Command Query Responsibility Segregation</text>
+  <text x="450" y="65" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="14" fill="#64748b">Separate models for reading and writing • Optimise each independently</text>
+  
+  <line x1="450" y1="95" x2="450" y2="440" stroke="#334155" stroke-width="2" stroke-dasharray="10,5"/>
+  <text x="450" y="460" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#475569">Separation of concerns</text>
+  
+  <!-- WRITE SIDE -->
+  <g transform="translate(30, 100)">
+    <rect width="390" height="40" rx="8" fill="url(#commandGrad)" opacity="0.15"/>
+    <text x="195" y="27" text-anchor="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#f59e0b">WRITE SIDE</text>
+    
+    <g transform="translate(30, 60)">
+      <rect width="100" height="50" rx="8" fill="#1e293b" stroke="#f59e0b" stroke-width="2" filter="url(#softGlow)"/>
+      <text x="50" y="22" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#64748b">API</text>
+      <text x="50" y="38" text-anchor="middle" font-family="Monaco, monospace" font-size="11" font-weight="600" fill="white">POST</text>
+    </g>
+    
+    <path d="M 140 85 L 180 85" stroke="#f59e0b" stroke-width="2" fill="none" marker-end="url(#arrowOrange)"/>
+    
+    <g transform="translate(190, 55)">
+      <rect width="130" height="60" rx="8" fill="#1e293b" stroke="#f59e0b" stroke-width="2" filter="url(#softGlow)"/>
+      <text x="65" y="22" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#64748b">Command Handler</text>
+      <text x="65" y="42" text-anchor="middle" font-family="Monaco, monospace" font-size="9" fill="#f59e0b">DepositMoney</text>
+    </g>
+    
+    <path d="M 255 120 L 255 150" stroke="#f59e0b" stroke-width="2" fill="none" marker-end="url(#arrowOrange)"/>
+    
+    <g transform="translate(165, 160)">
+      <rect width="180" height="70" rx="8" fill="#1e293b" stroke="#8b5cf6" stroke-width="2" filter="url(#softGlow)"/>
+      <text x="90" y="22" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#64748b">Domain Aggregate</text>
+      <text x="90" y="42" text-anchor="middle" font-family="Monaco, monospace" font-size="11" font-weight="600" fill="white">BankAccount</text>
+      <text x="90" y="58" text-anchor="middle" font-family="Monaco, monospace" font-size="9" fill="#8b5cf6">+ Events</text>
+    </g>
+    
+    <path d="M 255 235 L 255 260" stroke="#8b5cf6" stroke-width="2" fill="none" marker-end="url(#arrowPurple)"/>
+    
+    <g transform="translate(145, 270)">
+      <rect width="220" height="60" rx="8" fill="url(#eventGrad)" filter="url(#glow)"/>
+      <text x="110" y="25" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="600" fill="white">EVENT STORE</text>
+      <text x="110" y="45" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="rgba(255,255,255,0.8)">Append-only • Source of truth</text>
+    </g>
+  </g>
+  
+  <!-- READ SIDE -->
+  <g transform="translate(480, 100)">
+    <rect width="390" height="40" rx="8" fill="url(#queryGrad)" opacity="0.15"/>
+    <text x="195" y="27" text-anchor="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#3b82f6">READ SIDE</text>
+    
+    <g transform="translate(260, 60)">
+      <rect width="100" height="50" rx="8" fill="#1e293b" stroke="#3b82f6" stroke-width="2" filter="url(#softGlow)"/>
+      <text x="50" y="22" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#64748b">API</text>
+      <text x="50" y="38" text-anchor="middle" font-family="Monaco, monospace" font-size="11" font-weight="600" fill="white">GET</text>
+    </g>
+    
+    <path d="M 250 85 L 210 85" stroke="#3b82f6" stroke-width="2" fill="none" marker-end="url(#arrowBlue)"/>
+    
+    <g transform="translate(70, 55)">
+      <rect width="130" height="60" rx="8" fill="#1e293b" stroke="#3b82f6" stroke-width="2" filter="url(#softGlow)"/>
+      <text x="65" y="22" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#64748b">Query Handler</text>
+      <text x="65" y="42" text-anchor="middle" font-family="Monaco, monospace" font-size="9" fill="#3b82f6">GetBalance</text>
+    </g>
+    
+    <path d="M 135 120 L 135 150" stroke="#3b82f6" stroke-width="2" fill="none" marker-end="url(#arrowBlue)"/>
+    
+    <g transform="translate(50, 160)">
+      <rect width="170" height="60" rx="8" fill="#1e293b" stroke="#10b981" stroke-width="2" filter="url(#softGlow)"/>
+      <text x="85" y="22" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#64748b">Query Service</text>
+      <text x="85" y="42" text-anchor="middle" font-family="Monaco, monospace" font-size="9" fill="#10b981">Choose Strategy</text>
+    </g>
+    
+    <path d="M 135 225 L 135 260" stroke="#10b981" stroke-width="2" fill="none" marker-end="url(#arrowGreen)"/>
+    
+    <g transform="translate(25, 270)">
+      <rect width="220" height="60" rx="8" fill="url(#projectionGrad)" filter="url(#glow)"/>
+      <text x="110" y="25" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="600" fill="white">PROJECTION STORE</text>
+      <text x="110" y="45" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="rgba(255,255,255,0.8)">Optimised • Eventually consistent</text>
+    </g>
+  </g>
+  
+  <path d="M 395 395 Q 450 410 505 395" stroke="#475569" stroke-width="2" stroke-dasharray="6,3" fill="none"/>
+  <text x="450" y="425" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#475569">async sync via message bus</text>
+  
+  <g transform="translate(50, 430)">
+    <g><circle cx="10" cy="10" r="5" fill="#f59e0b"/><text x="25" y="14" font-family="system-ui, sans-serif" font-size="10" fill="#94a3b8">Optimised for writes</text></g>
+    <g transform="translate(150, 0)"><circle cx="10" cy="10" r="5" fill="#8b5cf6"/><text x="25" y="14" font-family="system-ui, sans-serif" font-size="10" fill="#94a3b8">Domain logic isolation</text></g>
+    <g transform="translate(330, 0)"><circle cx="10" cy="10" r="5" fill="#3b82f6"/><text x="25" y="14" font-family="system-ui, sans-serif" font-size="10" fill="#94a3b8">Optimised for reads</text></g>
+    <g transform="translate(500, 0)"><circle cx="10" cy="10" r="5" fill="#10b981"/><text x="25" y="14" font-family="system-ui, sans-serif" font-size="10" fill="#94a3b8">Multiple read models</text></g>
+    <g transform="translate(670, 0)"><circle cx="10" cy="10" r="5" fill="#ec4899"/><text x="25" y="14" font-family="system-ui, sans-serif" font-size="10" fill="#94a3b8">Independent scaling</text></g>
+  </g>
+</svg>

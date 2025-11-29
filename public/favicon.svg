@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e"/>
+      <stop offset="100%" style="stop-color:#0f0f1a"/>
+    </linearGradient>
+    <linearGradient id="dGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8b5cf6"/>
+      <stop offset="100%" style="stop-color:#6366f1"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="512" height="512" rx="96" fill="url(#bgGrad)"/>
+  
+  <!-- Letter D -->
+  <path d="M 140 120 
+           L 140 392 
+           L 260 392 
+           C 340 392 400 332 400 256 
+           C 400 180 340 120 260 120 
+           L 140 120 Z
+           M 200 176 
+           L 250 176 
+           C 305 176 340 210 340 256 
+           C 340 302 305 336 250 336 
+           L 200 336 
+           L 200 176 Z" 
+        fill="url(#dGrad)"/>
+  
+  <!-- Code bracket accent -->
+  <path d="M 365 140 L 395 170 L 365 200" 
+        fill="none" stroke="#4ade80" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 365 312 L 395 342 L 365 372" 
+        fill="none" stroke="#4ade80" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

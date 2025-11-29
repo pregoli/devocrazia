@@ -1,0 +1,191 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a"/>
+      <stop offset="100%" style="stop-color:#1e293b"/>
+    </linearGradient>
+    
+    <linearGradient id="projectionGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981"/>
+      <stop offset="100%" style="stop-color:#059669"/>
+    </linearGradient>
+    
+    <linearGradient id="replayGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#8b5cf6"/>
+      <stop offset="100%" style="stop-color:#6366f1"/>
+    </linearGradient>
+    
+    <linearGradient id="snapshotGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b"/>
+      <stop offset="100%" style="stop-color:#d97706"/>
+    </linearGradient>
+    
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="900" height="420" fill="url(#bgGrad)"/>
+  
+  <!-- Subtle grid -->
+  <g opacity="0.03">
+    <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M 30 0 L 0 0 0 30" fill="none" stroke="white" stroke-width="1"/>
+    </pattern>
+    <rect width="900" height="420" fill="url(#grid)"/>
+  </g>
+  
+  <!-- Title -->
+  <text x="450" y="40" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="24" font-weight="700" fill="white">
+    Three Query Strategies
+  </text>
+  <text x="450" y="65" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="14" fill="#64748b">
+    Choose the right trade-off between speed and consistency for your use case
+  </text>
+  
+  <!-- Strategy 1: Projection -->
+  <g transform="translate(40, 95)">
+    <rect width="260" height="280" rx="12" fill="#1e293b" stroke="#10b981" stroke-width="2" filter="url(#softGlow)"/>
+    
+    <!-- Header -->
+    <rect width="260" height="50" rx="12" fill="url(#projectionGrad)" opacity="0.2"/>
+    <rect y="45" width="260" height="5" fill="#1e293b"/>
+    <text x="130" y="32" text-anchor="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#10b981">PROJECTION</text>
+    
+    <!-- Speed indicator -->
+    <g transform="translate(20, 65)">
+      <text x="0" y="15" font-family="system-ui, sans-serif" font-size="11" fill="#64748b">Speed</text>
+      <rect x="70" y="5" width="160" height="14" rx="7" fill="#0f172a"/>
+      <rect x="70" y="5" width="155" height="14" rx="7" fill="#10b981" filter="url(#softGlow)"/>
+      <text x="150" y="16" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" font-weight="600" fill="white">FAST</text>
+    </g>
+    
+    <!-- Consistency indicator -->
+    <g transform="translate(20, 95)">
+      <text x="0" y="15" font-family="system-ui, sans-serif" font-size="11" fill="#64748b">Consistency</text>
+      <rect x="70" y="5" width="160" height="14" rx="7" fill="#0f172a"/>
+      <rect x="70" y="5" width="60" height="14" rx="7" fill="#f59e0b"/>
+      <text x="100" y="16" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" font-weight="600" fill="white">EVENTUAL</text>
+    </g>
+    
+    <!-- Description -->
+    <g transform="translate(20, 130)">
+      <text x="0" y="15" font-family="system-ui, sans-serif" font-size="11" fill="#94a3b8">Reads from pre-computed</text>
+      <text x="0" y="32" font-family="system-ui, sans-serif" font-size="11" fill="#94a3b8">denormalised tables.</text>
+      <text x="0" y="49" font-family="system-ui, sans-serif" font-size="11" fill="#94a3b8">Updated asynchronously.</text>
+    </g>
+    
+    <!-- Use cases -->
+    <g transform="translate(20, 195)">
+      <text x="0" y="0" font-family="system-ui, sans-serif" font-size="10" font-weight="600" fill="#10b981">BEST FOR:</text>
+      <text x="0" y="20" font-family="system-ui, sans-serif" font-size="10" fill="#64748b">• User interfaces</text>
+      <text x="0" y="37" font-family="system-ui, sans-serif" font-size="10" fill="#64748b">• Dashboards</text>
+      <text x="0" y="54" font-family="system-ui, sans-serif" font-size="10" fill="#64748b">• High-traffic reads</text>
+      <text x="0" y="71" font-family="system-ui, sans-serif" font-size="10" fill="#64748b">• Mobile apps</text>
+    </g>
+  </g>
+  
+  <!-- Strategy 2: Event Replay -->
+  <g transform="translate(320, 95)">
+    <rect width="260" height="280" rx="12" fill="#1e293b" stroke="#8b5cf6" stroke-width="2" filter="url(#softGlow)"/>
+    
+    <!-- Header -->
+    <rect width="260" height="50" rx="12" fill="url(#replayGrad)" opacity="0.2"/>
+    <rect y="45" width="260" height="5" fill="#1e293b"/>
+    <text x="130" y="32" text-anchor="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#8b5cf6">EVENT REPLAY</text>
+    
+    <!-- Speed indicator -->
+    <g transform="translate(20, 65)">
+      <text x="0" y="15" font-family="system-ui, sans-serif" font-size="11" fill="#64748b">Speed</text>
+      <rect x="70" y="5" width="160" height="14" rx="7" fill="#0f172a"/>
+      <rect x="70" y="5" width="50" height="14" rx="7" fill="#ef4444"/>
+      <text x="95" y="16" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" font-weight="600" fill="white">SLOW</text>
+    </g>
+    
+    <!-- Consistency indicator -->
+    <g transform="translate(20, 95)">
+      <text x="0" y="15" font-family="system-ui, sans-serif" font-size="11" fill="#64748b">Consistency</text>
+      <rect x="70" y="5" width="160" height="14" rx="7" fill="#0f172a"/>
+      <rect x="70" y="5" width="155" height="14" rx="7" fill="#10b981" filter="url(#softGlow)"/>
+      <text x="147" y="16" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" font-weight="600" fill="white">IMMEDIATE</text>
+    </g>
+    
+    <!-- Description -->
+    <g transform="translate(20, 130)">
+      <text x="0" y="15" font-family="system-ui, sans-serif" font-size="11" fill="#94a3b8">Rebuilds state by replaying</text>
+      <text x="0" y="32" font-family="system-ui, sans-serif" font-size="11" fill="#94a3b8">ALL events from beginning.</text>
+      <text x="0" y="49" font-family="system-ui, sans-serif" font-size="11" fill="#94a3b8">Always 100% accurate.</text>
+    </g>
+    
+    <!-- Use cases -->
+    <g transform="translate(20, 195)">
+      <text x="0" y="0" font-family="system-ui, sans-serif" font-size="10" font-weight="600" fill="#8b5cf6">BEST FOR:</text>
+      <text x="0" y="20" font-family="system-ui, sans-serif" font-size="10" fill="#64748b">• Audit queries</text>
+      <text x="0" y="37" font-family="system-ui, sans-serif" font-size="10" fill="#64748b">• Dispute resolution</text>
+      <text x="0" y="54" font-family="system-ui, sans-serif" font-size="10" fill="#64748b">• Debugging</text>
+      <text x="0" y="71" font-family="system-ui, sans-serif" font-size="10" fill="#64748b">• Regulatory reports</text>
+    </g>
+  </g>
+  
+  <!-- Strategy 3: Snapshot -->
+  <g transform="translate(600, 95)">
+    <rect width="260" height="280" rx="12" fill="#1e293b" stroke="#f59e0b" stroke-width="2" filter="url(#softGlow)"/>
+    
+    <!-- Header -->
+    <rect width="260" height="50" rx="12" fill="url(#snapshotGrad)" opacity="0.2"/>
+    <rect y="45" width="260" height="5" fill="#1e293b"/>
+    <text x="130" y="32" text-anchor="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#f59e0b">SNAPSHOT</text>
+    
+    <!-- Speed indicator -->
+    <g transform="translate(20, 65)">
+      <text x="0" y="15" font-family="system-ui, sans-serif" font-size="11" fill="#64748b">Speed</text>
+      <rect x="70" y="5" width="160" height="14" rx="7" fill="#0f172a"/>
+      <rect x="70" y="5" width="110" height="14" rx="7" fill="#f59e0b"/>
+      <text x="125" y="16" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" font-weight="600" fill="white">BALANCED</text>
+    </g>
+    
+    <!-- Consistency indicator -->
+    <g transform="translate(20, 95)">
+      <text x="0" y="15" font-family="system-ui, sans-serif" font-size="11" fill="#64748b">Consistency</text>
+      <rect x="70" y="5" width="160" height="14" rx="7" fill="#0f172a"/>
+      <rect x="70" y="5" width="155" height="14" rx="7" fill="#10b981" filter="url(#softGlow)"/>
+      <text x="147" y="16" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" font-weight="600" fill="white">IMMEDIATE</text>
+    </g>
+    
+    <!-- Description -->
+    <g transform="translate(20, 130)">
+      <text x="0" y="15" font-family="system-ui, sans-serif" font-size="11" fill="#94a3b8">Loads cached snapshot,</text>
+      <text x="0" y="32" font-family="system-ui, sans-serif" font-size="11" fill="#94a3b8">then replays only recent</text>
+      <text x="0" y="49" font-family="system-ui, sans-serif" font-size="11" fill="#94a3b8">events. Best of both.</text>
+    </g>
+    
+    <!-- Use cases -->
+    <g transform="translate(20, 195)">
+      <text x="0" y="0" font-family="system-ui, sans-serif" font-size="10" font-weight="600" fill="#f59e0b">BEST FOR:</text>
+      <text x="0" y="20" font-family="system-ui, sans-serif" font-size="10" fill="#64748b">• Financial reconciliation</text>
+      <text x="0" y="37" font-family="system-ui, sans-serif" font-size="10" fill="#64748b">• Write-side reads</text>
+      <text x="0" y="54" font-family="system-ui, sans-serif" font-size="10" fill="#64748b">• Long-lived aggregates</text>
+      <text x="0" y="71" font-family="system-ui, sans-serif" font-size="10" fill="#64748b">• Balance checks</text>
+    </g>
+  </g>
+  
+  <!-- API examples at bottom -->
+  <g transform="translate(40, 390)">
+    <text x="130" y="15" text-anchor="middle" font-family="Monaco, monospace" font-size="9" fill="#10b981">?strategy=Projection</text>
+    <text x="410" y="15" text-anchor="middle" font-family="Monaco, monospace" font-size="9" fill="#8b5cf6">?strategy=EventReplay</text>
+    <text x="690" y="15" text-anchor="middle" font-family="Monaco, monospace" font-size="9" fill="#f59e0b">?strategy=Snapshot</text>
+  </g>
+</svg>

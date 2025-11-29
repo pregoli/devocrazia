@@ -1,3 +1,6 @@
+# Devocrazia - robots.txt
+# https://devocrazia.com
+
 User-agent: Googlebot
 Allow: /
 
@@ -10,5 +13,11 @@ Allow: /
 User-agent: facebookexternalhit
 Allow: /
 
+User-agent: LinkedInBot
+Allow: /
+
 User-agent: *
 Allow: /
+
+# Sitemap location
+Sitemap: https://devocrazia.com/sitemap.xml
