@@ -1,8 +1,8 @@
 import { useState, useMemo, useEffect } from "react";
-import { useSearchParams, Link } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { Search } from "lucide-react";
-import Footer from "@/components/Footer";
-import Header from "@/components/Header";
+import Layout from "@/components/Layout";
+import ArticleCard from "@/components/ArticleCard";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -23,12 +23,12 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { articles } from "@/data/articles";
-import { format } from "date-fns";
+import { formatDate } from "@/lib/utils";
 
 const ITEMS_PER_PAGE = 5;
 
 const Articles = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedTag, setSelectedTag] = useState("all");
@@ -42,6 +42,11 @@ const Articles = () => {
       setSelectedCategory(categoryParam);
     }
   }, [searchParams]);
+
+  // Reset to page 1 when filters change (this was incorrectly using useMemo before)
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, selectedCategory, selectedTag, sortBy]);
 
   // Extract unique categories and tags
   const categories = useMemo(
@@ -57,11 +62,12 @@ const Articles = () => {
   // Filter and sort articles
   const filteredArticles = useMemo(() => {
     const filtered = articles.filter((article) => {
+      const searchLower = searchQuery.toLowerCase();
       const matchesSearch =
         searchQuery === "" ||
-        article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        article.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        article.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+        article.title.toLowerCase().includes(searchLower) ||
+        article.description.toLowerCase().includes(searchLower) ||
+        article.tags.some((tag) => tag.toLowerCase().includes(searchLower));
 
       const matchesCategory =
         selectedCategory === "all" || article.category === selectedCategory;
@@ -72,8 +78,8 @@ const Articles = () => {
       return matchesSearch && matchesCategory && matchesTag;
     });
 
-    // Sort articles
-    filtered.sort((a, b) => {
+    // Sort articles (create new array to avoid mutation)
+    return [...filtered].sort((a, b) => {
       switch (sortBy) {
         case "recent":
           return new Date(b.date).getTime() - new Date(a.date).getTime();
@@ -85,21 +91,20 @@ const Articles = () => {
           return 0;
       }
     });
-
-    return filtered;
   }, [searchQuery, selectedCategory, selectedTag, sortBy]);
 
   // Pagination
   const totalPages = Math.ceil(filteredArticles.length / ITEMS_PER_PAGE);
+  
   const paginatedArticles = useMemo(() => {
     const start = (currentPage - 1) * ITEMS_PER_PAGE;
-    return filteredArticles.slice(start, start + ITEMS_PER_PAGE);
+    return filteredArticles
+      .slice(start, start + ITEMS_PER_PAGE)
+      .map((article) => ({
+        ...article,
+        date: formatDate(article.date),
+      }));
   }, [filteredArticles, currentPage]);
-
-  // Reset to page 1 when filters change
-  useMemo(() => {
-    setCurrentPage(1);
-  }, [searchQuery, selectedCategory, selectedTag, sortBy]);
 
   const clearFilters = () => {
     setSearchQuery("");
@@ -198,10 +203,11 @@ const Articles = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
-
-      <main className="container mx-auto px-4 py-12">
+    <Layout
+      title="Articles"
+      description="Browse all articles about software engineering, architecture, and cloud technologies."
+    >
+      <div className="container mx-auto px-4 py-12">
         <h1 className="text-4xl font-bold text-foreground mb-8">All Articles</h1>
 
         {/* Search Bar */}
@@ -213,13 +219,14 @@ const Articles = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-10"
+            aria-label="Search articles"
           />
         </div>
 
         {/* Filter Dropdowns */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
           <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-            <SelectTrigger>
+            <SelectTrigger aria-label="Filter by category">
               <SelectValue placeholder="All Categories" />
             </SelectTrigger>
             <SelectContent>
@@ -233,7 +240,7 @@ const Articles = () => {
           </Select>
 
           <Select value={selectedTag} onValueChange={setSelectedTag}>
-            <SelectTrigger>
+            <SelectTrigger aria-label="Filter by tag">
               <SelectValue placeholder="All Tags" />
             </SelectTrigger>
             <SelectContent>
@@ -247,7 +254,7 @@ const Articles = () => {
           </Select>
 
           <Select value={sortBy} onValueChange={setSortBy}>
-            <SelectTrigger>
+            <SelectTrigger aria-label="Sort articles">
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>
             <SelectContent>
@@ -283,72 +290,17 @@ const Articles = () => {
           </div>
         )}
 
-        {/* Articles List */}
-        <div className="space-y-6 mb-8">
+        {/* Articles List - Now using ArticleCard component */}
+        <div className="space-y-0 mb-8">
           {paginatedArticles.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-muted-foreground">No articles found matching your criteria.</p>
+              <p className="text-muted-foreground">
+                No articles found matching your criteria.
+              </p>
             </div>
           ) : (
-            paginatedArticles.map((article, index) => (
-              <Link
-                key={article.id}
-                to={`/articles/${article.slug}`}
-                className={`block ${
-                  index > 0 ? "border-t border-border/50 dark:border-border/80 pt-6" : ""
-                }`}
-              >
-                <div className="flex flex-col sm:flex-row gap-6 hover:opacity-90 transition-opacity">
-                  {article.image.startsWith('/') || article.image.startsWith('http') ? (
-                    <img 
-                      src={article.image} 
-                      alt={article.title}
-                      className="w-full sm:w-44 h-44 flex-shrink-0 rounded-md object-cover bg-muted"
-                    />
-                  ) : (
-                    <div
-                      className={`w-full sm:w-44 h-44 flex-shrink-0 rounded-md ${article.image}`}
-                    />
-                  )}
-
-                  <div className="flex-1 space-y-3">
-                    <Badge
-                      className={`${article.categoryColor} text-white text-xs font-semibold uppercase tracking-wider rounded-sm`}
-                      variant="secondary"
-                    >
-                      {article.category}
-                    </Badge>
-
-                    <h2 className="font-bold text-xl text-foreground leading-tight hover:text-primary transition-colors">
-                      {article.title}
-                    </h2>
-
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <span className="font-medium text-foreground">{article.authorName}</span>
-                      <span>•</span>
-                      <span>{format(new Date(article.date), "MMM dd, yyyy")}</span>
-                      <span>•</span>
-                      <span>{article.readTime} min read</span>
-                    </div>
-
-                    <p className="text-muted-foreground text-sm leading-relaxed">
-                      {article.description}
-                    </p>
-
-                    <div className="flex flex-wrap gap-2">
-                      {article.tags.map((tag) => (
-                        <Badge
-                          key={tag}
-                          variant="outline"
-                          className="text-xs font-semibold rounded-none border-primary text-primary"
-                        >
-                          {tag}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </Link>
+            paginatedArticles.map((article) => (
+              <ArticleCard key={article.id} {...article} />
             ))
           )}
         </div>
@@ -363,6 +315,7 @@ const Articles = () => {
                   className={`cursor-pointer ${
                     currentPage === 1 ? "pointer-events-none opacity-50" : ""
                   }`}
+                  aria-disabled={currentPage === 1}
                 />
               </PaginationItem>
 
@@ -374,6 +327,7 @@ const Articles = () => {
                   className={`cursor-pointer ${
                     currentPage === totalPages ? "pointer-events-none opacity-50" : ""
                   }`}
+                  aria-disabled={currentPage === totalPages}
                 />
               </PaginationItem>
             </PaginationContent>
@@ -390,10 +344,8 @@ const Articles = () => {
             </p>
           </div>
         )}
-      </main>
-
-      <Footer />
-    </div>
+      </div>
+    </Layout>
   );
 };
 

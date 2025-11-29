@@ -4,9 +4,20 @@ import { useTheme } from "./ThemeProvider";
 import { useState } from "react";
 import { NavLink } from "./NavLink";
 
+const NAV_ITEMS = [
+  { to: "/", label: "Home" },
+  { to: "/articles", label: "Articles" },
+  { to: "/about", label: "About" },
+  { to: "/contact", label: "Contact" },
+] as const;
+
 const Header = () => {
   const { theme, setTheme } = useTheme();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const toggleTheme = () => setTheme(theme === "dark" ? "light" : "dark");
+  const toggleMobileMenu = () => setMobileMenuOpen((prev) => !prev);
+  const closeMobileMenu = () => setMobileMenuOpen(false);
 
   return (
     <header className="border-b border-border bg-background sticky top-0 z-50">
@@ -18,55 +29,70 @@ const Header = () => {
           </NavLink>
 
           <div className="flex items-center gap-6">
-            <nav className="hidden md:flex items-center gap-6">
-              <NavLink to="/" className="text-foreground hover:text-primary transition-colors">
-                Home
-              </NavLink>
-              <NavLink to="/articles" className="text-foreground hover:text-primary transition-colors">
-                Articles
-              </NavLink>
-              <NavLink to="/about" className="text-foreground hover:text-primary transition-colors">
-                About
-              </NavLink>
-              <NavLink to="/contact" className="text-foreground hover:text-primary transition-colors">
-                Contact
-              </NavLink>
+            {/* Desktop Navigation */}
+            <nav className="hidden md:flex items-center gap-6" aria-label="Main navigation">
+              {NAV_ITEMS.map(({ to, label }) => (
+                <NavLink
+                  key={to}
+                  to={to}
+                  className="text-foreground hover:text-primary transition-colors"
+                >
+                  {label}
+                </NavLink>
+              ))}
             </nav>
 
+            {/* Theme Toggle */}
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              onClick={toggleTheme}
               className="text-foreground hover:text-primary"
+              aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
             >
-              {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+              {theme === "dark" ? (
+                <Sun className="h-5 w-5" />
+              ) : (
+                <Moon className="h-5 w-5" />
+              )}
             </Button>
 
+            {/* Mobile Menu Toggle */}
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              onClick={toggleMobileMenu}
               className="md:hidden text-foreground hover:text-primary"
+              aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-menu"
             >
-              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              {mobileMenuOpen ? (
+                <X className="h-5 w-5" />
+              ) : (
+                <Menu className="h-5 w-5" />
+              )}
             </Button>
           </div>
         </div>
 
+        {/* Mobile Navigation */}
         {mobileMenuOpen && (
-          <nav className="md:hidden flex flex-col gap-4 pt-4 pb-2 border-t border-border/50 mt-4">
-            <NavLink to="/" className="text-foreground hover:text-primary transition-colors">
-              Home
-            </NavLink>
-            <NavLink to="/articles" className="text-foreground hover:text-primary transition-colors">
-              Articles
-            </NavLink>
-            <NavLink to="/about" className="text-foreground hover:text-primary transition-colors">
-              About
-            </NavLink>
-            <NavLink to="/contact" className="text-foreground hover:text-primary transition-colors">
-              Contact
-            </NavLink>
+          <nav
+            id="mobile-menu"
+            className="md:hidden flex flex-col gap-4 pt-4 pb-2 border-t border-border/50 mt-4"
+            aria-label="Mobile navigation"
+          >
+            {NAV_ITEMS.map(({ to, label }) => (
+              <NavLink
+                key={to}
+                to={to}
+                className="text-foreground hover:text-primary transition-colors"
+                onClick={closeMobileMenu}
+              >
+                {label}
+              </NavLink>
+            ))}
           </nav>
         )}
       </div>

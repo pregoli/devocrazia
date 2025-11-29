@@ -1,0 +1,186 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <defs>
+    <!-- Background gradient -->
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a"/>
+      <stop offset="50%" style="stop-color:#1e293b"/>
+      <stop offset="100%" style="stop-color:#0f172a"/>
+    </linearGradient>
+    
+    <!-- Accent gradients -->
+    <linearGradient id="jsonGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b"/>
+      <stop offset="100%" style="stop-color:#d97706"/>
+    </linearGradient>
+    
+    <linearGradient id="toonGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981"/>
+      <stop offset="100%" style="stop-color:#059669"/>
+    </linearGradient>
+    
+    <linearGradient id="arrowGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#f59e0b"/>
+      <stop offset="100%" style="stop-color:#10b981"/>
+    </linearGradient>
+    
+    <!-- Glow filters -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <!-- Code block style -->
+    <linearGradient id="codeBlockBg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e293b"/>
+      <stop offset="100%" style="stop-color:#0f172a"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGradient)"/>
+  
+  <!-- Subtle grid pattern -->
+  <g opacity="0.03">
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" stroke-width="1"/>
+    </pattern>
+    <rect width="1200" height="630" fill="url(#grid)"/>
+  </g>
+  
+  <!-- Decorative circles -->
+  <circle cx="100" cy="100" r="200" fill="#f59e0b" opacity="0.03"/>
+  <circle cx="1100" cy="530" r="250" fill="#10b981" opacity="0.03"/>
+  
+  <!-- Title -->
+  <text x="600" y="80" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="42" font-weight="700" fill="white">
+    Optimizing LLM Inputs
+  </text>
+  <text x="600" y="130" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="28" font-weight="400" fill="#94a3b8">
+    Token-Efficient Data Formats for AI
+  </text>
+  
+  <!-- JSON Code Block (Left) -->
+  <g transform="translate(80, 180)">
+    <!-- Card background -->
+    <rect x="0" y="0" width="420" height="380" rx="12" fill="url(#codeBlockBg)" stroke="#f59e0b" stroke-width="2" opacity="0.9"/>
+    
+    <!-- Header bar -->
+    <rect x="0" y="0" width="420" height="45" rx="12" fill="#f59e0b" opacity="0.1"/>
+    <rect x="0" y="35" width="420" height="10" fill="url(#codeBlockBg)"/>
+    
+    <!-- Traffic lights -->
+    <circle cx="25" cy="22" r="6" fill="#ef4444"/>
+    <circle cx="47" cy="22" r="6" fill="#f59e0b"/>
+    <circle cx="69" cy="22" r="6" fill="#22c55e"/>
+    
+    <!-- JSON label -->
+    <text x="210" y="28" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="16" font-weight="600" fill="#f59e0b">
+      JSON
+    </text>
+    
+    <!-- JSON code -->
+    <text x="25" y="80" font-family="Monaco, Consolas, monospace" font-size="14" fill="#64748b">{</text>
+    <text x="40" y="105" font-family="Monaco, Consolas, monospace" font-size="14">
+      <tspan fill="#f59e0b">"users"</tspan><tspan fill="#64748b">: [</tspan>
+    </text>
+    <text x="55" y="130" font-family="Monaco, Consolas, monospace" font-size="14" fill="#64748b">{</text>
+    <text x="70" y="155" font-family="Monaco, Consolas, monospace" font-size="14">
+      <tspan fill="#f59e0b">"id"</tspan><tspan fill="#64748b">: </tspan><tspan fill="#a78bfa">1</tspan><tspan fill="#64748b">,</tspan>
+    </text>
+    <text x="70" y="180" font-family="Monaco, Consolas, monospace" font-size="14">
+      <tspan fill="#f59e0b">"name"</tspan><tspan fill="#64748b">: </tspan><tspan fill="#34d399">"Alice"</tspan><tspan fill="#64748b">,</tspan>
+    </text>
+    <text x="70" y="205" font-family="Monaco, Consolas, monospace" font-size="14">
+      <tspan fill="#f59e0b">"role"</tspan><tspan fill="#64748b">: </tspan><tspan fill="#34d399">"Admin"</tspan>
+    </text>
+    <text x="55" y="230" font-family="Monaco, Consolas, monospace" font-size="14" fill="#64748b">},</text>
+    <text x="55" y="255" font-family="Monaco, Consolas, monospace" font-size="14" fill="#64748b">{</text>
+    <text x="70" y="280" font-family="Monaco, Consolas, monospace" font-size="14">
+      <tspan fill="#f59e0b">"id"</tspan><tspan fill="#64748b">: </tspan><tspan fill="#a78bfa">2</tspan><tspan fill="#64748b">,</tspan>
+    </text>
+    <text x="70" y="305" font-family="Monaco, Consolas, monospace" font-size="14">
+      <tspan fill="#f59e0b">"name"</tspan><tspan fill="#64748b">: </tspan><tspan fill="#34d399">"Bob"</tspan><tspan fill="#64748b">,</tspan>
+    </text>
+    <text x="70" y="330" font-family="Monaco, Consolas, monospace" font-size="14">
+      <tspan fill="#f59e0b">"role"</tspan><tspan fill="#64748b">: </tspan><tspan fill="#34d399">"Editor"</tspan>
+    </text>
+    <text x="55" y="355" font-family="Monaco, Consolas, monospace" font-size="14" fill="#64748b">}</text>
+    
+    <!-- Token count badge -->
+    <rect x="280" y="340" width="120" height="28" rx="14" fill="#f59e0b" opacity="0.2"/>
+    <text x="340" y="359" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#f59e0b">~45 tokens</text>
+  </g>
+  
+  <!-- Arrow -->
+  <g transform="translate(540, 350)">
+    <path d="M 0 0 L 100 0 L 85 -15 M 100 0 L 85 15" stroke="url(#arrowGradient)" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)"/>
+  </g>
+  
+  <!-- Efficiency indicator -->
+  <g transform="translate(600, 420)">
+    <text x="0" y="0" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="18" font-weight="600" fill="#10b981">
+      40% fewer tokens
+    </text>
+    <text x="0" y="25" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="14" fill="#64748b">
+      = Lower API costs
+    </text>
+  </g>
+  
+  <!-- TOON Code Block (Right) -->
+  <g transform="translate(700, 180)">
+    <!-- Card background -->
+    <rect x="0" y="0" width="420" height="380" rx="12" fill="url(#codeBlockBg)" stroke="#10b981" stroke-width="2" opacity="0.9"/>
+    
+    <!-- Header bar -->
+    <rect x="0" y="0" width="420" height="45" rx="12" fill="#10b981" opacity="0.1"/>
+    <rect x="0" y="35" width="420" height="10" fill="url(#codeBlockBg)"/>
+    
+    <!-- Traffic lights -->
+    <circle cx="25" cy="22" r="6" fill="#ef4444"/>
+    <circle cx="47" cy="22" r="6" fill="#f59e0b"/>
+    <circle cx="69" cy="22" r="6" fill="#22c55e"/>
+    
+    <!-- TOON label -->
+    <text x="210" y="28" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="16" font-weight="600" fill="#10b981">
+      TOON
+    </text>
+    
+    <!-- TOON code -->
+    <text x="25" y="100" font-family="Monaco, Consolas, monospace" font-size="15">
+      <tspan fill="#10b981">users</tspan><tspan fill="#64748b">[</tspan><tspan fill="#a78bfa">2</tspan><tspan fill="#64748b">]</tspan><tspan fill="#64748b">{</tspan><tspan fill="#94a3b8">id,name,role</tspan><tspan fill="#64748b">}:</tspan>
+    </text>
+    
+    <text x="25" y="150" font-family="Monaco, Consolas, monospace" font-size="15">
+      <tspan fill="#a78bfa">1</tspan><tspan fill="#64748b">  </tspan><tspan fill="#34d399">"Alice"</tspan><tspan fill="#64748b">  </tspan><tspan fill="#34d399">"Admin"</tspan>
+    </text>
+    
+    <text x="25" y="200" font-family="Monaco, Consolas, monospace" font-size="15">
+      <tspan fill="#a78bfa">2</tspan><tspan fill="#64748b">  </tspan><tspan fill="#34d399">"Bob"</tspan><tspan fill="#64748b">    </tspan><tspan fill="#34d399">"Editor"</tspan>
+    </text>
+    
+    <!-- Benefits list -->
+    <g transform="translate(25, 260)">
+      <text y="0" font-family="system-ui, sans-serif" font-size="13" fill="#64748b">
+        <tspan fill="#10b981">✓</tspan> No repeated keys
+      </text>
+      <text y="28" font-family="system-ui, sans-serif" font-size="13" fill="#64748b">
+        <tspan fill="#10b981">✓</tspan> Compact structure
+      </text>
+      <text y="56" font-family="system-ui, sans-serif" font-size="13" fill="#64748b">
+        <tspan fill="#10b981">✓</tspan> LLM-optimized
+      </text>
+    </g>
+    
+    <!-- Token count badge -->
+    <rect x="280" y="340" width="120" height="28" rx="14" fill="#10b981" opacity="0.2"/>
+    <text x="340" y="359" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#10b981">~27 tokens</text>
+  </g>
+  
+  <!-- Bottom tagline -->
+  <text x="600" y="600" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="16" fill="#475569">
+    Same data. Fewer tokens. Lower costs.
+  </text>
+</svg>

@@ -1,0 +1,147 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a"/>
+      <stop offset="50%" style="stop-color:#1e293b"/>
+      <stop offset="100%" style="stop-color:#0f172a"/>
+    </linearGradient>
+    
+    <linearGradient id="eventGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8b5cf6"/>
+      <stop offset="100%" style="stop-color:#6366f1"/>
+    </linearGradient>
+    
+    <linearGradient id="commandGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#f59e0b"/>
+      <stop offset="100%" style="stop-color:#d97706"/>
+    </linearGradient>
+    
+    <linearGradient id="queryGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#10b981"/>
+      <stop offset="100%" style="stop-color:#059669"/>
+    </linearGradient>
+    
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="400" height="400" fill="url(#bgGradient)"/>
+  
+  <!-- Grid pattern -->
+  <g opacity="0.05">
+    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M 20 0 L 0 0 0 20" fill="none" stroke="white" stroke-width="0.5"/>
+    </pattern>
+    <rect width="400" height="400" fill="url(#grid)"/>
+  </g>
+  
+  <!-- Decorative circles -->
+  <circle cx="50" cy="50" r="100" fill="#8b5cf6" opacity="0.05"/>
+  <circle cx="350" cy="350" r="120" fill="#10b981" opacity="0.05"/>
+  
+  <!-- Title -->
+  <text x="200" y="40" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="18" font-weight="700" fill="white">
+    Event Sourcing
+  </text>
+  <text x="200" y="62" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="400" fill="#94a3b8">
+    &amp; CQRS in .NET 9
+  </text>
+  
+  <!-- Event Timeline (horizontal) -->
+  <g transform="translate(30, 90)">
+    <!-- Timeline line -->
+    <line x1="0" y1="35" x2="340" y2="35" stroke="#334155" stroke-width="2"/>
+    
+    <!-- Events -->
+    <g transform="translate(40, 0)">
+      <rect x="-30" y="0" width="60" height="35" rx="4" fill="url(#eventGradient)" filter="url(#glow)"/>
+      <text x="0" y="15" text-anchor="middle" font-family="Monaco, monospace" font-size="7" fill="white">Account</text>
+      <text x="0" y="26" text-anchor="middle" font-family="Monaco, monospace" font-size="7" fill="white">Created</text>
+      <circle cx="0" cy="35" r="5" fill="#8b5cf6" stroke="white" stroke-width="1.5"/>
+    </g>
+    
+    <g transform="translate(120, 0)">
+      <rect x="-30" y="0" width="60" height="35" rx="4" fill="url(#eventGradient)" filter="url(#glow)"/>
+      <text x="0" y="15" text-anchor="middle" font-family="Monaco, monospace" font-size="7" fill="white">Money</text>
+      <text x="0" y="26" text-anchor="middle" font-family="Monaco, monospace" font-size="7" fill="white">Deposited</text>
+      <circle cx="0" cy="35" r="5" fill="#8b5cf6" stroke="white" stroke-width="1.5"/>
+    </g>
+    
+    <g transform="translate(200, 0)">
+      <rect x="-30" y="0" width="60" height="35" rx="4" fill="url(#eventGradient)" filter="url(#glow)"/>
+      <text x="0" y="15" text-anchor="middle" font-family="Monaco, monospace" font-size="7" fill="white">Cash</text>
+      <text x="0" y="26" text-anchor="middle" font-family="Monaco, monospace" font-size="7" fill="white">Withdrawn</text>
+      <circle cx="0" cy="35" r="5" fill="#8b5cf6" stroke="white" stroke-width="1.5"/>
+    </g>
+    
+    <g transform="translate(280, 0)">
+      <rect x="-30" y="0" width="60" height="35" rx="4" fill="url(#eventGradient)" filter="url(#glow)"/>
+      <text x="0" y="15" text-anchor="middle" font-family="Monaco, monospace" font-size="7" fill="white">Account</text>
+      <text x="0" y="26" text-anchor="middle" font-family="Monaco, monospace" font-size="7" fill="white">Deactivated</text>
+      <circle cx="0" cy="35" r="5" fill="#8b5cf6" stroke="white" stroke-width="1.5"/>
+    </g>
+    
+    <text x="170" y="60" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="600" fill="#8b5cf6">EVENT STORE</text>
+  </g>
+  
+  <!-- CQRS boxes -->
+  <g transform="translate(30, 180)">
+    <!-- Write side -->
+    <rect width="160" height="100" rx="8" fill="#1e293b" stroke="#f59e0b" stroke-width="2"/>
+    <rect width="160" height="25" rx="8" fill="#f59e0b" opacity="0.15"/>
+    <rect y="20" width="160" height="5" fill="#1e293b"/>
+    <text x="80" y="17" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="600" fill="#f59e0b">COMMANDS</text>
+    
+    <text x="80" y="45" text-anchor="middle" font-family="Monaco, monospace" font-size="9" fill="#94a3b8">CreateAccount</text>
+    <text x="80" y="62" text-anchor="middle" font-family="Monaco, monospace" font-size="9" fill="#94a3b8">DepositMoney</text>
+    <text x="80" y="79" text-anchor="middle" font-family="Monaco, monospace" font-size="9" fill="#94a3b8">WithdrawCash</text>
+    
+    <!-- Read side -->
+    <g transform="translate(180, 0)">
+      <rect width="160" height="100" rx="8" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
+      <rect width="160" height="25" rx="8" fill="#10b981" opacity="0.15"/>
+      <rect y="20" width="160" height="5" fill="#1e293b"/>
+      <text x="80" y="17" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="600" fill="#10b981">QUERIES</text>
+      
+      <text x="80" y="45" text-anchor="middle" font-family="Monaco, monospace" font-size="9" fill="#94a3b8">GetBalance</text>
+      <text x="80" y="62" text-anchor="middle" font-family="Monaco, monospace" font-size="9" fill="#94a3b8">GetTransactions</text>
+      <text x="80" y="79" text-anchor="middle" font-family="Monaco, monospace" font-size="9" fill="#94a3b8">GetCashFlow</text>
+    </g>
+  </g>
+  
+  <!-- Features -->
+  <g transform="translate(30, 310)">
+    <rect width="340" height="60" rx="8" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+    
+    <text x="20" y="25" font-family="system-ui, sans-serif" font-size="10" fill="#64748b">
+      <tspan fill="#8b5cf6">✓</tspan> Complete Audit Trail
+    </text>
+    <text x="20" y="45" font-family="system-ui, sans-serif" font-size="10" fill="#64748b">
+      <tspan fill="#8b5cf6">✓</tspan> Temporal Queries
+    </text>
+    <text x="180" y="25" font-family="system-ui, sans-serif" font-size="10" fill="#64748b">
+      <tspan fill="#10b981">✓</tspan> Multiple Projections
+    </text>
+    <text x="180" y="45" font-family="system-ui, sans-serif" font-size="10" fill="#64748b">
+      <tspan fill="#10b981">✓</tspan> Snapshotting
+    </text>
+  </g>
+  
+  <!-- Tech badges -->
+  <g transform="translate(100, 380)">
+    <rect x="0" y="0" width="50" height="16" rx="3" fill="#512bd4"/>
+    <text x="25" y="11" text-anchor="middle" font-family="system-ui, sans-serif" font-size="8" font-weight="600" fill="white">.NET 9</text>
+    
+    <rect x="58" y="0" width="60" height="16" rx="3" fill="#512bd4"/>
+    <text x="88" y="11" text-anchor="middle" font-family="system-ui, sans-serif" font-size="8" font-weight="600" fill="white">EF Core</text>
+    
+    <rect x="126" y="0" width="70" height="16" rx="3" fill="#0078d4"/>
+    <text x="161" y="11" text-anchor="middle" font-family="system-ui, sans-serif" font-size="8" font-weight="600" fill="white">Azure SB</text>
+  </g>
+</svg>

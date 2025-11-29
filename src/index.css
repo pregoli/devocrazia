@@ -42,6 +42,7 @@ All colors MUST be HSL.
     --category-css: 195 100% 45%;
     --category-devops: 45 93% 47%;
     --category-uiux: 280 70% 60%;
+    --category-patterns: 0 64% 58%;
     --category-performance: 330 80% 55%;
   }
 
@@ -78,6 +79,7 @@ All colors MUST be HSL.
     --category-css: 195 100% 45%;
     --category-devops: 45 93% 47%;
     --category-uiux: 280 70% 60%;
+    --category-patterns: 0 64% 58%;
     --category-performance: 330 80% 55%;
   }
 }

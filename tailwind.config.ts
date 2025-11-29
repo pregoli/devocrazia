@@ -52,6 +52,7 @@ export default {
           css: "hsl(var(--category-css))",
           devops: "hsl(var(--category-devops))",
           uiux: "hsl(var(--category-uiux))",
+          patterns: "hsl(var(--category-patterns))",
           performance: "hsl(var(--category-performance))",
         },
       },
@@ -84,5 +85,6 @@ export default {
       },
     },
   },
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   plugins: [require("tailwindcss-animate")],
 } satisfies Config;

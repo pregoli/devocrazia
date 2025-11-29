@@ -17,6 +17,21 @@ export interface Article {
 export const articles: Article[] = [
   {
     id: 0,
+    slug: "building-bank-atm-event-sourcing-cqrs-dotnet",
+    category: "Patterns",
+    categoryColor: "bg-category-patterns",
+    title: "Building a Bank ATM System with Event Sourcing and CQRS in .NET 9",
+    description:
+      "A deep dive into implementing Event Sourcing, CQRS, and Domain-Driven Design for a production-ready banking system. Covers aggregates, projections, snapshotting, and multiple query strategies.",
+    authorName: "Paolo Regoli",
+    date: "2025-07-20",
+    image: "/images/event-sourcing-cqrs-preview.svg",
+    heroImage: "/images/event-sourcing-cqrs-hero.svg",
+    tags: [".NET", "Event Sourcing", "CQRS", "DDD"],
+    readTime: 15,
+  },
+  {
+    id: 1,
     slug: "optimising-llm-inputs-json-vs-toon-explained",
     category: "AI",
     categoryColor: "bg-category-ai",
@@ -25,13 +40,13 @@ export const articles: Article[] = [
       "Learn how TOON offers a more token-efficient alternative to JSON when sending structured data to LLMs. This article breaks down real-world use cases, conversion methods, and best practices for optimizing AI workflows.",
     authorName: "Paolo Regoli",
     date: "2025-11-15",
-    image: "/images/json-vs-toon-preview.png",
-    heroImage: "/images/json-vs-toon-hero.png",
+    image: "/images/json-vs-toon-preview.svg",
+    heroImage: "/images/json-vs-toon-hero.svg",
     tags: ["AI", "Optimization"],
     readTime: 7,
   },
   {
-    id: 1,
+    id: 2,
     slug: "a-guide-to-modern-css-layouts",
     category: "CSS",
     categoryColor: "bg-category-css",
@@ -45,7 +60,7 @@ export const articles: Article[] = [
     readTime: 5,
   },
   {
-    id: 2,
+    id: 3,
     slug: "getting-started-with-docker-containers",
     category: "DEVOPS",
     categoryColor: "bg-category-devops",
@@ -59,7 +74,7 @@ export const articles: Article[] = [
     readTime: 8,
   },
   {
-    id: 3,
+    id: 4,
     slug: "ui-ux-design-principles-for-developers",
     category: "UI/UX",
     categoryColor: "bg-category-uiux",
@@ -73,7 +88,7 @@ export const articles: Article[] = [
     readTime: 6,
   },
   {
-    id: 4,
+    id: 5,
     slug: "optimizing-web-performance",
     category: "PERFORMANCE",
     categoryColor: "bg-category-performance",
