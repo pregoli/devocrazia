@@ -287,7 +287,7 @@ Commands represent a user's intention to change system state:
 public record DepositMoneyCommand(
     Guid AccountId,
     decimal Amount,
-    string Currency) : FlagstoneAtmCommand;
+    string Currency) : ScratchBankATMCommand;
 ```
 
 Command handlers coordinate the operation—loading the aggregate, invoking domain logic, and persisting results:

@@ -46,7 +46,7 @@ export const articles: Article[] = [
     heroImage: "/images/event-sourcing-cqrs-hero.svg",
     tags: [".NET", "Event Sourcing", "CQRS", "DDD"],
     readTime: 15,
-    repositoryUrl: "https://github.com/pregoli/Flagstone.ATM",
+    repositoryUrl: "https://github.com/pregoli/ScratchBankATM",
   },
   {
     id: 2,
