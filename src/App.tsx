@@ -10,6 +10,7 @@ import Articles from "./pages/Articles";
 import ArticleDetail from "./pages/ArticleDetail";
 import Contact from "./pages/Contact";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import ThankYou from "./pages/ThankYou";
 import NotFound from "./pages/NotFound";
 
 // Configure QueryClient with sensible defaults
@@ -39,6 +40,7 @@ const App = () => (
             <Route path="/articles/:slug" element={<ArticleDetail />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/thank-you" element={<ThankYou />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

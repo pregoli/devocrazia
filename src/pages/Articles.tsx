@@ -35,11 +35,15 @@ const Articles = () => {
   const [sortBy, setSortBy] = useState("recent");
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Set initial category from URL params
+  // Set initial category and tag from URL params
   useEffect(() => {
     const categoryParam = searchParams.get("category");
+    const tagParam = searchParams.get("tag");
     if (categoryParam) {
       setSelectedCategory(categoryParam);
+    }
+    if (tagParam) {
+      setSelectedTag(tagParam);
     }
   }, [searchParams]);
 

@@ -1,6 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Badge } from "./ui/badge";
 import { Link } from "react-router-dom";
+import { Github } from "lucide-react";
 
 interface ArticleCardProps {
   slug: string;
@@ -13,6 +14,7 @@ interface ArticleCardProps {
   date: string;
   image: string;
   tags: string[];
+  repositoryUrl?: string;
 }
 
 const ArticleCard = ({
@@ -26,6 +28,7 @@ const ArticleCard = ({
   date,
   image,
   tags,
+  repositoryUrl,
 }: ArticleCardProps) => {
   return (
     <Link 
@@ -57,16 +60,34 @@ const ArticleCard = ({
 
           <p className="text-muted-foreground text-sm leading-relaxed">{description}</p>
 
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             {tags.map((tag) => (
-              <Badge
+              <Link
                 key={tag}
-                variant="outline"
-                className="text-xs font-semibold rounded-none border-primary text-primary"
+                to={`/articles?tag=${encodeURIComponent(tag)}`}
+                onClick={(e) => e.stopPropagation()}
               >
-                {tag}
-              </Badge>
+                <Badge
+                  variant="outline"
+                  className="text-xs font-semibold rounded-none border-primary text-primary hover:bg-primary/10 transition-colors"
+                >
+                  {tag}
+                </Badge>
+              </Link>
             ))}
+            {repositoryUrl && (
+              <a
+                href={repositoryUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                className="inline-flex items-center gap-1 px-2 py-0.5 rounded border border-primary/30 bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
+                title="View source code"
+              >
+                <Github className="h-3.5 w-3.5" />
+                <span className="text-xs font-medium">Code</span>
+              </a>
+            )}
           </div>
 
           <div className="flex items-center gap-3 pt-1">

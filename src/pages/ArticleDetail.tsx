@@ -5,7 +5,7 @@ import Layout from "@/components/Layout";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calendar, Clock, ArrowLeft } from "lucide-react";
+import { Calendar, Clock, ArrowLeft, Github } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
@@ -14,6 +14,11 @@ import { Helmet } from "react-helmet";
 import defaultAuthorAvatar from "@/assets/author-avatar.jpg";
 import { CodeBlock } from "@/components/CodeBlock";
 import { formatDateLong } from "@/lib/utils";
+
+// Site configuration
+const SITE_URL = import.meta.env.VITE_SITE_URL || "";
+const SITE_NAME = import.meta.env.VITE_SITE_NAME || "Devocrazia";
+const DEFAULT_OG_IMAGE = `${SITE_URL}/images/og-image.png`;
 
 const ArticleDetail = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -73,18 +78,88 @@ const ArticleDetail = () => {
 
   const formattedDate = formatDateLong(article.date);
   const heroImageSrc = article.heroImage || article.image;
+  
+  // Build absolute URLs for SEO
+  const articleUrl = `${SITE_URL}/articles/${article.slug}`;
+  const ogImageUrl = heroImageSrc.startsWith("http") 
+    ? heroImageSrc 
+    : `${SITE_URL}${heroImageSrc}`;
+
+  // JSON-LD Structured Data for Article
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": article.title,
+    "description": article.description,
+    "image": ogImageUrl,
+    "datePublished": article.date,
+    "dateModified": article.date,
+    "author": {
+      "@type": "Person",
+      "name": article.authorName,
+      "url": `${SITE_URL}/about`
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": SITE_NAME,
+      "url": SITE_URL
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": articleUrl
+    },
+    "keywords": article.tags.join(", "),
+    "articleSection": article.category,
+    "wordCount": content.split(/\s+/).length,
+    "timeRequired": `PT${article.readTime}M`
+  };
 
   return (
     <>
       <Helmet>
-        <title>{article.title} | Devocrazia</title>
+        {/* Primary Meta Tags */}
+        <title>{article.title} | {SITE_NAME}</title>
+        <meta name="title" content={`${article.title} | ${SITE_NAME}`} />
         <meta name="description" content={article.description} />
+        <meta name="author" content={article.authorName} />
+        <meta name="keywords" content={article.tags.join(", ")} />
+        
+        {/* Canonical URL */}
+        <link rel="canonical" href={articleUrl} />
+        
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content={articleUrl} />
         <meta property="og:title" content={article.title} />
         <meta property="og:description" content={article.description} />
-        <meta property="og:type" content="article" />
+        <meta property="og:image" content={ogImageUrl} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:site_name" content={SITE_NAME} />
+        <meta property="og:locale" content="en_GB" />
+        
+        {/* Article-specific OG tags */}
+        <meta property="article:published_time" content={article.date} />
+        <meta property="article:modified_time" content={article.date} />
+        <meta property="article:author" content={article.authorName} />
+        <meta property="article:section" content={article.category} />
+        {article.tags.map((tag, index) => (
+          <meta key={index} property="article:tag" content={tag} />
+        ))}
+        
+        {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content={articleUrl} />
         <meta name="twitter:title" content={article.title} />
         <meta name="twitter:description" content={article.description} />
+        <meta name="twitter:image" content={ogImageUrl} />
+        <meta name="twitter:label1" content="Reading time" />
+        <meta name="twitter:data1" content={`${article.readTime} min read`} />
+        
+        {/* JSON-LD Structured Data */}
+        <script type="application/ld+json">
+          {JSON.stringify(structuredData)}
+        </script>
       </Helmet>
 
       <Layout showFooter={true}>
@@ -138,6 +213,18 @@ const ArticleDetail = () => {
                   <Clock className="h-4 w-4" aria-hidden="true" />
                   <span>{article.readTime} min read</span>
                 </div>
+
+                {article.repositoryUrl && (
+                  <a
+                    href={article.repositoryUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 px-3 py-1 rounded-md bg-primary/10 text-primary hover:bg-primary/20 transition-colors border border-primary/30"
+                  >
+                    <Github className="h-4 w-4" aria-hidden="true" />
+                    <span className="text-sm font-medium">View Source</span>
+                  </a>
+                )}
               </div>
             </header>
 
@@ -236,16 +323,35 @@ const ArticleDetail = () => {
 
             {/* Tags */}
             <div className="mt-12 pt-6 border-t border-border">
-              <div className="flex flex-wrap gap-2">
-                {article.tags.map((tag) => (
-                  <Badge
-                    key={tag}
-                    variant="outline"
-                    className="text-xs font-semibold rounded-none border-primary text-primary"
+              <div className="flex flex-wrap items-center justify-between gap-4">
+                <div className="flex flex-wrap gap-2">
+                  {article.tags.map((tag) => (
+                    <Link
+                      key={tag}
+                      to={`/articles?tag=${encodeURIComponent(tag)}`}
+                    >
+                      <Badge
+                        variant="outline"
+                        className="text-xs font-semibold rounded-none border-primary text-primary hover:bg-primary/10 transition-colors"
+                      >
+                        {tag}
+                      </Badge>
+                    </Link>
+                  ))}
+                </div>
+
+                {article.repositoryUrl && (
+                  <a
+                    href={article.repositoryUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
-                    {tag}
-                  </Badge>
-                ))}
+                    <Button variant="outline" className="gap-2">
+                      <Github className="h-4 w-4" />
+                      View on GitHub
+                    </Button>
+                  </a>
+                )}
               </div>
             </div>
           </article>

@@ -12,6 +12,7 @@ export interface Article {
   heroImage?: string; // Optional larger image for detail page
   tags: string[];
   readTime: number; // in minutes
+  repositoryUrl?: string; // Optional link to source code
 }
 
 export const articles: Article[] = [
@@ -29,6 +30,7 @@ export const articles: Article[] = [
     heroImage: "/images/event-sourcing-cqrs-hero.svg",
     tags: [".NET", "Event Sourcing", "CQRS", "DDD"],
     readTime: 15,
+    repositoryUrl: "https://github.com/yourusername/scratchbank-atm",
   },
   {
     id: 1,

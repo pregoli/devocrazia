@@ -24,7 +24,7 @@ const Header = () => {
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <NavLink to="/" className="flex items-center gap-2">
-            <BookOpen className="h-6 w-6 text-primary" />
+            <img src="/favicon.svg" alt="Devocrazia logo" className="h-8 w-8" />
             <span className="text-xl font-bold text-foreground">Devocrazia</span>
           </NavLink>
 

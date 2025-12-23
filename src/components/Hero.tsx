@@ -9,21 +9,23 @@ const Hero = () => {
   return (
     <section className="container mx-auto px-4 py-12">
       <div className="grid md:grid-cols-2 gap-8 items-center">
-        <div className="aspect-video rounded-md overflow-hidden bg-muted">
+        <Link to={`/articles/${featuredArticle.slug}`} className="aspect-video rounded-md overflow-hidden bg-muted block hover:opacity-90 transition-opacity">
           <img 
             src={featuredArticle.heroImage || featuredArticle.image} 
             alt={featuredArticle.title}
             className="w-full h-full object-cover"
           />
-        </div>
+        </Link>
 
         <div className="space-y-4">
           <span className="text-primary text-sm font-semibold uppercase tracking-wider">
             {featuredArticle.category}
           </span>
-          <h1 className="text-4xl md:text-5xl font-bold text-foreground leading-tight">
-            {featuredArticle.title}
-          </h1>
+          <Link to={`/articles/${featuredArticle.slug}`}>
+            <h1 className="text-4xl md:text-5xl font-bold text-foreground leading-tight hover:text-primary transition-colors">
+              {featuredArticle.title}
+            </h1>
+          </Link>
           <p className="text-muted-foreground text-lg">
             {featuredArticle.description}
           </p>
