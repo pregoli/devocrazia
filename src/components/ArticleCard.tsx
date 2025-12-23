@@ -91,14 +91,7 @@ const ArticleCard = ({
           </div>
 
           <div className="flex items-center gap-3 pt-1">
-            <Avatar className="h-9 w-9">
-              <AvatarImage src={authorAvatar} />
-              <AvatarFallback>{authorName[0]}</AvatarFallback>
-            </Avatar>
-            <div className="text-sm">
-              <p className="font-medium text-foreground">{authorName}</p>
-              <p className="text-muted-foreground text-xs">{date}</p>
-            </div>
+            <p className="text-muted-foreground text-sm pt-1">{date}</p>
           </div>
         </div>
       </div>

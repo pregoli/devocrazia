@@ -195,15 +195,6 @@ const ArticleDetail = () => {
               </h1>
 
               <div className="flex flex-wrap items-center gap-6 text-muted-foreground">
-                <div className="flex items-center gap-3">
-                  <Avatar className="h-10 w-10">
-                    <AvatarImage src={authorAvatarSrc} alt={article.authorName} />
-                    <AvatarFallback>{article.authorName[0]}</AvatarFallback>
-                  </Avatar>
-                  <span className="font-medium text-foreground">
-                    {article.authorName}
-                  </span>
-                </div>
 
                 <div className="flex items-center gap-2">
                   <Calendar className="h-4 w-4" aria-hidden="true" />
