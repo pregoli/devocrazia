@@ -38,7 +38,7 @@ const Contact = () => {
             <input type="hidden" name="_captcha" value="false" />
             <input type="hidden" name="_template" value="table" />
             {/* UPDATE THIS URL WHEN GOING LIVE */}
-            <input type="hidden" name="_next" value="https://devocrazia.com/thank-you" />
+            <input type="hidden" name="_next" value={`${window.location.origin}/thank-you`} />
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
