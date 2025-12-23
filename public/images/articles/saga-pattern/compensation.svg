@@ -1,0 +1,116 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 350">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a"/>
+      <stop offset="100%" style="stop-color:#1e293b"/>
+    </linearGradient>
+    
+    <linearGradient id="forwardGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981"/>
+      <stop offset="100%" style="stop-color:#059669"/>
+    </linearGradient>
+    
+    <linearGradient id="compensateGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b"/>
+      <stop offset="100%" style="stop-color:#d97706"/>
+    </linearGradient>
+    
+    <linearGradient id="failGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ef4444"/>
+      <stop offset="100%" style="stop-color:#dc2626"/>
+    </linearGradient>
+    
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <marker id="arrowGreen" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+      <polygon points="0 0, 10 5, 0 10" fill="#10b981"/>
+    </marker>
+    
+    <marker id="arrowOrange" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+      <polygon points="0 0, 10 5, 0 10" fill="#f59e0b"/>
+    </marker>
+    
+    <marker id="arrowRed" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+      <polygon points="0 0, 10 5, 0 10" fill="#ef4444"/>
+    </marker>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="800" height="350" fill="url(#bgGradient)"/>
+  
+  <!-- Grid -->
+  <g opacity="0.03">
+    <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M 30 0 L 0 0 0 30" fill="none" stroke="white" stroke-width="0.5"/>
+    </pattern>
+    <rect width="800" height="350" fill="url(#grid)"/>
+  </g>
+  
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" font-family="system-ui, sans-serif" font-size="18" font-weight="600" fill="#94a3b8">Compensation Flow: Payment Failure Scenario</text>
+  
+  <!-- Timeline -->
+  <line x1="80" y1="150" x2="720" y2="150" stroke="#334155" stroke-width="3"/>
+  
+  <!-- Step 1: Stock Reserved (Success) -->
+  <g transform="translate(100, 80)">
+    <rect x="0" y="0" width="140" height="50" rx="8" fill="url(#forwardGradient)" filter="url(#glow)"/>
+    <text x="70" y="22" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="600" fill="white">✓ Stock Reserved</text>
+    <text x="70" y="38" text-anchor="middle" font-family="Monaco, monospace" font-size="9" fill="rgba(255,255,255,0.8)">5 units locked</text>
+    <circle cx="70" cy="70" r="8" fill="#10b981" stroke="white" stroke-width="2"/>
+    <text x="70" y="95" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#10b981">Step 1</text>
+  </g>
+  
+  <!-- Step 2: Payment Failed -->
+  <g transform="translate(330, 80)">
+    <rect x="0" y="0" width="140" height="50" rx="8" fill="url(#failGradient)" filter="url(#glow)"/>
+    <text x="70" y="22" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="600" fill="white">✗ Payment Failed</text>
+    <text x="70" y="38" text-anchor="middle" font-family="Monaco, monospace" font-size="9" fill="rgba(255,255,255,0.8)">Card declined</text>
+    <circle cx="70" cy="70" r="8" fill="#ef4444" stroke="white" stroke-width="2"/>
+    <text x="70" y="95" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#ef4444">Step 2 ⚠️</text>
+  </g>
+  
+  <!-- Forward Flow Arrow -->
+  <path d="M 240 105 L 325 105" stroke="#10b981" stroke-width="2" fill="none" marker-end="url(#arrowGreen)"/>
+  <text x="282" y="95" text-anchor="middle" font-family="Monaco, monospace" font-size="8" fill="#64748b">forward</text>
+  
+  <!-- Compensation: Stock Released -->
+  <g transform="translate(100, 220)">
+    <rect x="0" y="0" width="140" height="50" rx="8" fill="url(#compensateGradient)" filter="url(#glow)"/>
+    <text x="70" y="22" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="600" fill="white">⟲ Stock Released</text>
+    <text x="70" y="38" text-anchor="middle" font-family="Monaco, monospace" font-size="9" fill="rgba(255,255,255,0.8)">5 units restored</text>
+    <circle cx="70" cy="-20" r="8" fill="#f59e0b" stroke="white" stroke-width="2"/>
+  </g>
+  
+  <!-- Compensation Arrow -->
+  <path d="M 400 130 L 400 180 L 170 180 L 170 200" stroke="#f59e0b" stroke-width="2" stroke-dasharray="6,3" fill="none" marker-end="url(#arrowOrange)"/>
+  <text x="360" y="195" text-anchor="middle" font-family="Monaco, monospace" font-size="9" fill="#f59e0b">compensate</text>
+  
+  <!-- Final State -->
+  <g transform="translate(560, 195)">
+    <rect x="0" y="0" width="160" height="80" rx="8" fill="#1e293b" stroke="#64748b" stroke-width="2"/>
+    <text x="80" y="25" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#94a3b8">Final State</text>
+    <text x="80" y="48" text-anchor="middle" font-family="Monaco, monospace" font-size="10" fill="#ef4444">Saga: Failed</text>
+    <text x="80" y="68" text-anchor="middle" font-family="Monaco, monospace" font-size="10" fill="#10b981">Stock: Restored ✓</text>
+  </g>
+  
+  <!-- Arrow to Final State -->
+  <path d="M 240 245 L 555 245" stroke="#64748b" stroke-width="2" fill="none"/>
+  <polygon points="553,240 565,245 553,250" fill="#64748b"/>
+  
+  <!-- Explanation Box -->
+  <g transform="translate(560, 60)">
+    <rect x="0" y="0" width="180" height="100" rx="6" fill="#1e293b" stroke="#334155"/>
+    <text x="90" y="20" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="600" fill="#94a3b8">KEY INSIGHT</text>
+    <text x="90" y="45" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#64748b">When Step 2 fails,</text>
+    <text x="90" y="60" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#64748b">the saga automatically</text>
+    <text x="90" y="75" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#64748b">runs compensating</text>
+    <text x="90" y="90" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#f59e0b">actions in reverse order</text>
+  </g>
+</svg>

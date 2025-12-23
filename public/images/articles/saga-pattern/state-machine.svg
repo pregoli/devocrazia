@@ -1,0 +1,158 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a"/>
+      <stop offset="100%" style="stop-color:#1e293b"/>
+    </linearGradient>
+    
+    <linearGradient id="pendingGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#64748b"/>
+      <stop offset="100%" style="stop-color:#475569"/>
+    </linearGradient>
+    
+    <linearGradient id="activeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#06b6d4"/>
+      <stop offset="100%" style="stop-color:#0891b2"/>
+    </linearGradient>
+    
+    <linearGradient id="successGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981"/>
+      <stop offset="100%" style="stop-color:#059669"/>
+    </linearGradient>
+    
+    <linearGradient id="compensateGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b"/>
+      <stop offset="100%" style="stop-color:#d97706"/>
+    </linearGradient>
+    
+    <linearGradient id="failGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ef4444"/>
+      <stop offset="100%" style="stop-color:#dc2626"/>
+    </linearGradient>
+    
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="8" refY="4" orient="auto">
+      <polygon points="0 0, 8 4, 0 8" fill="#64748b"/>
+    </marker>
+    
+    <marker id="arrowOrange" markerWidth="8" markerHeight="8" refX="8" refY="4" orient="auto">
+      <polygon points="0 0, 8 4, 0 8" fill="#f59e0b"/>
+    </marker>
+    
+    <marker id="arrowRed" markerWidth="8" markerHeight="8" refX="8" refY="4" orient="auto">
+      <polygon points="0 0, 8 4, 0 8" fill="#ef4444"/>
+    </marker>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="800" height="400" fill="url(#bgGradient)"/>
+  
+  <!-- Grid -->
+  <g opacity="0.03">
+    <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M 30 0 L 0 0 0 30" fill="none" stroke="white" stroke-width="0.5"/>
+    </pattern>
+    <rect width="800" height="400" fill="url(#grid)"/>
+  </g>
+  
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" font-family="system-ui, sans-serif" font-size="18" font-weight="600" fill="#94a3b8">Saga State Machine Flow</text>
+  
+  <!-- Happy Path States -->
+  <!-- Pending -->
+  <g transform="translate(50, 80)">
+    <rect x="0" y="0" width="110" height="55" rx="8" fill="url(#pendingGradient)" filter="url(#glow)"/>
+    <text x="55" y="25" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="white">Pending</text>
+    <text x="55" y="42" text-anchor="middle" font-family="Monaco, monospace" font-size="9" fill="rgba(255,255,255,0.7)">Initial State</text>
+  </g>
+  
+  <!-- Reserving Stock -->
+  <g transform="translate(200, 80)">
+    <rect x="0" y="0" width="120" height="55" rx="8" fill="url(#activeGradient)" filter="url(#glow)"/>
+    <text x="60" y="25" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="600" fill="white">ReservingStock</text>
+    <text x="60" y="42" text-anchor="middle" font-family="Monaco, monospace" font-size="9" fill="rgba(255,255,255,0.7)">📦 Step 1</text>
+  </g>
+  
+  <!-- Processing Payment -->
+  <g transform="translate(360, 80)">
+    <rect x="0" y="0" width="130" height="55" rx="8" fill="url(#activeGradient)" filter="url(#glow)"/>
+    <text x="65" y="25" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="600" fill="white">ProcessingPayment</text>
+    <text x="65" y="42" text-anchor="middle" font-family="Monaco, monospace" font-size="9" fill="rgba(255,255,255,0.7)">💳 Step 2</text>
+  </g>
+  
+  <!-- Arranging Shipping -->
+  <g transform="translate(530, 80)">
+    <rect x="0" y="0" width="130" height="55" rx="8" fill="url(#activeGradient)" filter="url(#glow)"/>
+    <text x="65" y="25" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="600" fill="white">ArrangingShipping</text>
+    <text x="65" y="42" text-anchor="middle" font-family="Monaco, monospace" font-size="9" fill="rgba(255,255,255,0.7)">🚚 Step 3</text>
+  </g>
+  
+  <!-- Completed -->
+  <g transform="translate(700, 80)">
+    <rect x="0" y="0" width="90" height="55" rx="8" fill="url(#successGradient)" filter="url(#glow)"/>
+    <text x="45" y="25" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="white">✓ Completed</text>
+    <text x="45" y="42" text-anchor="middle" font-family="Monaco, monospace" font-size="9" fill="rgba(255,255,255,0.7)">Final</text>
+  </g>
+  
+  <!-- Happy Path Arrows -->
+  <path d="M 160 107 L 195 107" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+  <path d="M 320 107 L 355 107" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+  <path d="M 490 107 L 525 107" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+  <path d="M 660 107 L 695 107" stroke="#10b981" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+  
+  <!-- Event Labels on Happy Path -->
+  <text x="177" y="95" text-anchor="middle" font-family="Monaco, monospace" font-size="8" fill="#64748b">OrderSubmitted</text>
+  <text x="337" y="95" text-anchor="middle" font-family="Monaco, monospace" font-size="8" fill="#64748b">StockReserved</text>
+  <text x="507" y="95" text-anchor="middle" font-family="Monaco, monospace" font-size="8" fill="#64748b">PaymentCompleted</text>
+  <text x="677" y="95" text-anchor="middle" font-family="Monaco, monospace" font-size="8" fill="#10b981">ShippingArranged</text>
+  
+  <!-- Compensation Path -->
+  <!-- Compensating State -->
+  <g transform="translate(360, 200)">
+    <rect x="0" y="0" width="130" height="55" rx="8" fill="url(#compensateGradient)" filter="url(#glow)"/>
+    <text x="65" y="25" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="white">Compensating</text>
+    <text x="65" y="42" text-anchor="middle" font-family="Monaco, monospace" font-size="9" fill="rgba(255,255,255,0.7)">⟲ Rollback</text>
+  </g>
+  
+  <!-- Failed State -->
+  <g transform="translate(360, 310)">
+    <rect x="0" y="0" width="130" height="55" rx="8" fill="url(#failGradient)" filter="url(#glow)"/>
+    <text x="65" y="25" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="white">✗ Failed</text>
+    <text x="65" y="42" text-anchor="middle" font-family="Monaco, monospace" font-size="9" fill="rgba(255,255,255,0.7)">Terminal</text>
+  </g>
+  
+  <!-- Failure Arrows -->
+  <!-- From ReservingStock to Failed (stock reservation failed) -->
+  <path d="M 260 135 L 260 225 L 360 225 L 360 310" stroke="#ef4444" stroke-width="2" stroke-dasharray="5,3" fill="none" marker-end="url(#arrowRed)"/>
+  <text x="180" y="225" font-family="Monaco, monospace" font-size="8" fill="#ef4444">StockReservationFailed</text>
+  
+  <!-- From ProcessingPayment to Compensating -->
+  <path d="M 425 135 L 425 195" stroke="#f59e0b" stroke-width="2" stroke-dasharray="5,3" fill="none" marker-end="url(#arrowOrange)"/>
+  <text x="430" y="170" font-family="Monaco, monospace" font-size="8" fill="#f59e0b">PaymentFailed</text>
+  
+  <!-- From Compensating to Failed -->
+  <path d="M 425 255 L 425 305" stroke="#ef4444" stroke-width="2" fill="none" marker-end="url(#arrowRed)"/>
+  <text x="430" y="285" font-family="Monaco, monospace" font-size="8" fill="#64748b">StockReleased</text>
+  
+  <!-- Legend -->
+  <g transform="translate(30, 290)">
+    <rect x="0" y="0" width="200" height="90" rx="6" fill="#1e293b" stroke="#334155"/>
+    <text x="100" y="20" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="600" fill="#94a3b8">TRANSITIONS</text>
+    
+    <line x1="15" y1="40" x2="50" y2="40" stroke="#64748b" stroke-width="2"/>
+    <text x="60" y="44" font-family="system-ui, sans-serif" font-size="9" fill="#64748b">Happy Path</text>
+    
+    <line x1="15" y1="60" x2="50" y2="60" stroke="#f59e0b" stroke-width="2" stroke-dasharray="5,3"/>
+    <text x="60" y="64" font-family="system-ui, sans-serif" font-size="9" fill="#64748b">Failure → Compensate</text>
+    
+    <line x1="15" y1="80" x2="50" y2="80" stroke="#ef4444" stroke-width="2"/>
+    <text x="60" y="84" font-family="system-ui, sans-serif" font-size="9" fill="#64748b">Terminal Failure</text>
+  </g>
+</svg>
