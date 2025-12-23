@@ -14,6 +14,7 @@ import { Helmet } from "react-helmet";
 import defaultAuthorAvatar from "@/assets/author-avatar.jpg";
 import { CodeBlock } from "@/components/CodeBlock";
 import { formatDateLong } from "@/lib/utils";
+import Giscus from "@/components/Giscus";
 
 // Site configuration
 const SITE_URL = import.meta.env.VITE_SITE_URL || "";
@@ -354,6 +355,7 @@ const ArticleDetail = () => {
                 )}
               </div>
             </div>
+            <Giscus />
           </article>
         </div>
       </Layout>
