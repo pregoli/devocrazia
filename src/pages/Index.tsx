@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { Helmet } from "react-helmet";
 import ArticleCard from "@/components/ArticleCard";
 import AuthorCard from "@/components/AuthorCard";
 import Categories from "@/components/Categories";
@@ -21,38 +22,88 @@ const Index = () => {
       }));
   }, []);
 
+  // Website + Blog Schema for SEO
+  const structuredData = [
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Devocrazia",
+      "url": "https://devocrazia.com",
+      "description": "Software Engineering & Architecture Blog",
+      "author": {
+        "@type": "Person",
+        "name": "Paolo Regoli",
+        "url": "https://devocrazia.com/about",
+        "jobTitle": "Senior Software Engineer",
+        "sameAs": [
+          "https://github.com/pregoli",
+          "https://www.linkedin.com/in/pregoli"
+        ]
+      }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Blog",
+      "name": "Devocrazia",
+      "url": "https://devocrazia.com",
+      "description": "Insights on software architecture, .NET development, Domain-Driven Design, Event Sourcing, and cloud technologies.",
+      "author": {
+        "@type": "Person",
+        "name": "Paolo Regoli"
+      },
+      "blogPost": articles.slice(0, 10).map((article) => ({
+        "@type": "BlogPosting",
+        "headline": article.title,
+        "url": `https://devocrazia.com/articles/${article.slug}`,
+        "datePublished": article.date,
+        "author": {
+          "@type": "Person",
+          "name": "Paolo Regoli"
+        }
+      }))
+    }
+  ];
+
   return (
-    <Layout
-      title="Home"
-      description="Devocrazia - A blog about software engineering, architecture, and cloud technologies."
-    >
-      <Hero />
+    <>
+      <Helmet>
+        <script type="application/ld+json">
+          {JSON.stringify(structuredData)}
+        </script>
+      </Helmet>
+      
+      <Layout
+        title="Home"
+        description="Devocrazia - A blog about software engineering, architecture, and cloud technologies."
+      >
+        <Hero />
 
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid lg:grid-cols-[1fr_300px] gap-8 items-start">
-          <div className="space-y-6">
-            <h2 className="text-3xl font-bold text-foreground">Latest Articles</h2>
+        <div className="container mx-auto px-4 py-12">
+          <div className="grid lg:grid-cols-[1fr_300px] gap-8 items-start">
+            <div className="space-y-6">
+              <h2 className="text-3xl font-bold text-foreground">Latest Articles</h2>
 
-            <div className="space-y-0">
-              {latestArticles.map((article) => (
-                <ArticleCard key={article.id} {...article} />
-              ))}
+              <div className="space-y-0">
+                {latestArticles.map((article) => (
+                  <ArticleCard key={article.id} {...article} />
+                ))}
+              </div>
+
+              <div className="flex justify-center pt-8">
+                <Button variant="default" size="lg" asChild>
+                  <a href="/articles">Load More Articles</a>
+                </Button>
+              </div>
             </div>
 
-            <div className="flex justify-center pt-8">
-              <Button variant="default" size="lg" asChild>
-                <a href="/articles">Load More Articles</a>
-              </Button>
-            </div>
+            <aside className="space-y-6">
+              <AuthorCard />
+              <Categories />
+            </aside>
           </div>
-
-          <aside className="space-y-6">
-            <AuthorCard />
-            <Categories />
-          </aside>
         </div>
-      </div>
-    </Layout>
+      </Layout>
+    </>
   );
 };
 

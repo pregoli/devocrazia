@@ -1,4 +1,3 @@
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Badge } from "./ui/badge";
 import { Link } from "react-router-dom";
 import { Github } from "lucide-react";
@@ -9,8 +8,6 @@ interface ArticleCardProps {
   categoryColor: string;
   title: string;
   description: string;
-  authorName: string;
-  authorAvatar?: string;
   date: string;
   image: string;
   tags: string[];
@@ -23,28 +20,25 @@ const ArticleCard = ({
   categoryColor,
   title,
   description,
-  authorName,
-  authorAvatar,
   date,
   image,
   tags,
   repositoryUrl,
 }: ArticleCardProps) => {
   return (
-    <Link 
-      to={`/articles/${slug}`}
-      className="block border-t border-border/50 dark:border-border/80 pt-6 pb-6 hover:opacity-95 transition-opacity"
-    >
+    <article className="relative border-t border-border/50 dark:border-border/80 pt-6 pb-6 hover:opacity-95 transition-opacity">
       <div className="flex flex-col sm:flex-row gap-6">
-        {image.startsWith('/') || image.startsWith('http') ? (
-          <img 
-            src={image} 
-            alt={title}
-            className="w-full sm:w-44 h-44 flex-shrink-0 rounded-md object-cover bg-muted"
-          />
-        ) : (
-          <div className={`w-full sm:w-44 h-44 flex-shrink-0 rounded-md ${image}`} />
-        )}
+        <Link to={`/articles/${slug}`} className="block flex-shrink-0">
+          {image.startsWith("/") || image.startsWith("http") ? (
+            <img
+              src={image}
+              alt={title}
+              className="w-full sm:w-44 h-44 rounded-md object-cover bg-muted"
+            />
+          ) : (
+            <div className={`w-full sm:w-44 h-44 rounded-md ${image}`} />
+          )}
+        </Link>
 
         <div className="flex-1 space-y-3">
           <Badge
@@ -54,19 +48,22 @@ const ArticleCard = ({
             {category}
           </Badge>
 
-          <h3 className="font-bold text-xl text-foreground leading-tight hover:text-primary cursor-pointer transition-colors">
-            {title}
+          <h3 className="font-bold text-xl text-foreground leading-tight">
+            <Link
+              to={`/articles/${slug}`}
+              className="hover:text-primary transition-colors"
+            >
+              {title}
+            </Link>
           </h3>
 
-          <p className="text-muted-foreground text-sm leading-relaxed">{description}</p>
+          <p className="text-muted-foreground text-sm leading-relaxed">
+            {description}
+          </p>
 
           <div className="flex flex-wrap items-center gap-2">
             {tags.map((tag) => (
-              <Link
-                key={tag}
-                to={`/articles?tag=${encodeURIComponent(tag)}`}
-                onClick={(e) => e.stopPropagation()}
-              >
+              <Link key={tag} to={`/articles?tag=${encodeURIComponent(tag)}`}>
                 <Badge
                   variant="outline"
                   className="text-xs font-semibold rounded-none border-primary text-primary hover:bg-primary/10 transition-colors"
@@ -80,7 +77,6 @@ const ArticleCard = ({
                 href={repositoryUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={(e) => e.stopPropagation()}
                 className="inline-flex items-center gap-1 px-2 py-0.5 rounded border border-primary/30 bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
                 title="View source code"
               >
@@ -90,12 +86,10 @@ const ArticleCard = ({
             )}
           </div>
 
-          <div className="flex items-center gap-3 pt-1">
-            <p className="text-muted-foreground text-sm pt-1">{date}</p>
-          </div>
+          <p className="text-muted-foreground text-sm pt-1">{date}</p>
         </div>
       </div>
-    </Link>
+    </article>
   );
 };
 
