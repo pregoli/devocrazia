@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a"/>
+      <stop offset="100%" style="stop-color:#1e293b"/>
+    </linearGradient>
+    
+    <linearGradient id="entityGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6"/>
+      <stop offset="100%" style="stop-color:#2563eb"/>
+    </linearGradient>
+    
+    <linearGradient id="behaviourGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8b5cf6"/>
+      <stop offset="100%" style="stop-color:#7c3aed"/>
+    </linearGradient>
+    
+    <linearGradient id="valueGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#06b6d4"/>
+      <stop offset="100%" style="stop-color:#0891b2"/>
+    </linearGradient>
+    
+    <linearGradient id="richGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#22c55e"/>
+      <stop offset="100%" style="stop-color:#16a34a"/>
+    </linearGradient>
+    
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="400" height="400" fill="url(#bgGradient)"/>
+  
+  <!-- Grid -->
+  <g opacity="0.03">
+    <pattern id="grid" width="25" height="25" patternUnits="userSpaceOnUse">
+      <path d="M 25 0 L 0 0 0 25" fill="none" stroke="white" stroke-width="0.5"/>
+    </pattern>
+    <rect width="400" height="400" fill="url(#grid)"/>
+  </g>
+  
+  <!-- Title -->
+  <text x="200" y="35" text-anchor="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="white">Rich Domain Modelling</text>
+  <text x="200" y="55" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#94a3b8">Escape the Anaemic Model Trap</text>
+  
+  <!-- Aggregate boundary -->
+  <rect x="50" y="75" width="300" height="240" rx="15" fill="none" stroke="#22c55e" stroke-width="2" stroke-dasharray="8,4" opacity="0.6"/>
+  
+  <!-- Rich Entity -->
+  <g transform="translate(80, 95)">
+    <rect x="0" y="0" width="240" height="140" rx="10" fill="url(#entityGradient)" filter="url(#glow)"/>
+    <text x="120" y="28" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="700" fill="white">📦 Order</text>
+    <text x="120" y="45" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="rgba(255,255,255,0.7)">AGGREGATE ROOT</text>
+    
+    <!-- Data section -->
+    <rect x="15" y="55" width="210" height="35" rx="4" fill="rgba(255,255,255,0.1)"/>
+    <text x="120" y="70" text-anchor="middle" font-family="system-ui, sans-serif" font-size="8" font-weight="600" fill="rgba(255,255,255,0.9)">DATA</text>
+    <text x="120" y="83" text-anchor="middle" font-family="Monaco, monospace" font-size="7" fill="rgba(255,255,255,0.7)">Id • Total • Status • Email</text>
+    
+    <!-- Behaviour section -->
+    <rect x="15" y="95" width="210" height="35" rx="4" fill="url(#behaviourGradient)" opacity="0.8"/>
+    <text x="120" y="110" text-anchor="middle" font-family="system-ui, sans-serif" font-size="8" font-weight="600" fill="white">BEHAVIOUR</text>
+    <text x="120" y="123" text-anchor="middle" font-family="Monaco, monospace" font-size="7" fill="rgba(255,255,255,0.9)">AddLine() • Submit() • Ship()</text>
+  </g>
+  
+  <!-- Value Objects -->
+  <g transform="translate(70, 250)">
+    <rect x="0" y="0" width="75" height="40" rx="6" fill="url(#valueGradient)"/>
+    <text x="37" y="17" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" font-weight="600" fill="white">💰 Money</text>
+    <text x="37" y="30" text-anchor="middle" font-family="system-ui, sans-serif" font-size="7" fill="rgba(255,255,255,0.7)">Value Object</text>
+  </g>
+  
+  <g transform="translate(160, 250)">
+    <rect x="0" y="0" width="75" height="40" rx="6" fill="url(#valueGradient)"/>
+    <text x="37" y="17" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" font-weight="600" fill="white">📧 Email</text>
+    <text x="37" y="30" text-anchor="middle" font-family="system-ui, sans-serif" font-size="7" fill="rgba(255,255,255,0.7)">Value Object</text>
+  </g>
+  
+  <g transform="translate(250, 250)">
+    <rect x="0" y="0" width="75" height="40" rx="6" fill="url(#valueGradient)"/>
+    <text x="37" y="17" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" font-weight="600" fill="white">📊 Qty</text>
+    <text x="37" y="30" text-anchor="middle" font-family="system-ui, sans-serif" font-size="7" fill="rgba(255,255,255,0.7)">Value Object</text>
+  </g>
+  
+  <!-- Tags -->
+  <g transform="translate(60, 330)">
+    <rect x="0" y="0" width="55" height="22" rx="3" fill="#22c55e"/>
+    <text x="27" y="15" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" font-weight="600" fill="white">C#</text>
+  </g>
+  
+  <g transform="translate(125, 330)">
+    <rect x="0" y="0" width="55" height="22" rx="3" fill="#8b5cf6"/>
+    <text x="27" y="15" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" font-weight="600" fill="white">DDD</text>
+  </g>
+  
+  <g transform="translate(190, 330)">
+    <rect x="0" y="0" width="90" height="22" rx="3" fill="#3b82f6"/>
+    <text x="45" y="15" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" font-weight="600" fill="white">Clean Code</text>
+  </g>
+  
+  <g transform="translate(290, 330)">
+    <rect x="0" y="0" width="55" height="22" rx="3" fill="#06b6d4"/>
+    <text x="27" y="15" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" font-weight="600" fill="white">OOP</text>
+  </g>
+  
+  <!-- Footer tagline -->
+  <text x="200" y="375" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#64748b">Data + Behaviour • Self-Validating • Encapsulated</text>
+</svg>

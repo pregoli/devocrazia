@@ -18,6 +18,22 @@ export interface Article {
 export const articles: Article[] = [
   {
     id: 0,
+    slug: "rich-domain-modelling-escape-anaemic-models",
+    category: "Patterns",
+    categoryColor: "bg-category-patterns",
+    title: "Rich Domain Modelling: Escaping the Anaemic Model Trap",
+    description:
+      "Learn how to build domain models that combine data and behaviour, enforce invariants, and make invalid states unrepresentable. Covers value objects, entities, aggregates, and the specification pattern.",
+    authorName: "Paolo Regoli",
+    date: "2025-12-25",
+    image: "/images/rich-domain-model-preview.svg",
+    heroImage: "/images/rich-domain-model-hero.svg",
+    tags: ["C#", "DDD", "Clean Code", "OOP"],
+    readTime: 12,
+    repositoryUrl: "https://github.com/pregoli/RichDomainModelling",
+  },
+  {
+    id: 1,
     slug: "mastering-saga-pattern-distributed-transactions-dotnet",
     category: "Patterns",
     categoryColor: "bg-category-patterns",
@@ -33,7 +49,7 @@ export const articles: Article[] = [
     repositoryUrl: "https://github.com/pregoli/SagaDemo",
   },
   {
-    id: 1,
+    id: 2,
     slug: "building-bank-atm-event-sourcing-cqrs-dotnet",
     category: "Patterns",
     categoryColor: "bg-category-patterns",
@@ -49,7 +65,7 @@ export const articles: Article[] = [
     repositoryUrl: "https://github.com/pregoli/ScratchBankATM",
   },
   {
-    id: 2,
+    id: 3,
     slug: "optimising-llm-inputs-json-vs-toon-explained",
     category: "AI",
     categoryColor: "bg-category-ai",

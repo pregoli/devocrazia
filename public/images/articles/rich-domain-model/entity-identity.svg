@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a"/>
+      <stop offset="100%" style="stop-color:#1e293b"/>
+    </linearGradient>
+    
+    <linearGradient id="entityGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6"/>
+      <stop offset="100%" style="stop-color:#2563eb"/>
+    </linearGradient>
+    
+    <linearGradient id="idGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b"/>
+      <stop offset="100%" style="stop-color:#d97706"/>
+    </linearGradient>
+    
+    <linearGradient id="successGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#22c55e"/>
+      <stop offset="100%" style="stop-color:#16a34a"/>
+    </linearGradient>
+    
+    <linearGradient id="dangerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ef4444"/>
+      <stop offset="100%" style="stop-color:#dc2626"/>
+    </linearGradient>
+    
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="800" height="300" fill="url(#bgGradient)"/>
+  
+  <!-- Grid -->
+  <g opacity="0.03">
+    <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M 30 0 L 0 0 0 30" fill="none" stroke="white" stroke-width="0.5"/>
+    </pattern>
+    <rect width="800" height="300" fill="url(#grid)"/>
+  </g>
+  
+  <!-- Title -->
+  <text x="400" y="30" text-anchor="middle" font-family="system-ui, sans-serif" font-size="18" font-weight="600" fill="#94a3b8">Entity Identity: Same ID = Same Entity</text>
+  
+  <!-- Two entities comparison -->
+  <!-- Entity 1 -->
+  <g transform="translate(100, 60)">
+    <rect x="0" y="0" width="200" height="130" rx="10" fill="url(#entityGradient)" filter="url(#glow)"/>
+    <text x="100" y="25" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="white">📦 Order A</text>
+    
+    <rect x="15" y="40" width="170" height="30" rx="4" fill="url(#idGradient)"/>
+    <text x="100" y="60" text-anchor="middle" font-family="Monaco, monospace" font-size="10" fill="white">ID: order-123</text>
+    
+    <text x="100" y="90" text-anchor="middle" font-family="Monaco, monospace" font-size="9" fill="rgba(255,255,255,0.8)">Status: Draft</text>
+    <text x="100" y="105" text-anchor="middle" font-family="Monaco, monospace" font-size="9" fill="rgba(255,255,255,0.8)">Total: £50.00</text>
+    <text x="100" y="120" text-anchor="middle" font-family="Monaco, monospace" font-size="9" fill="rgba(255,255,255,0.8)">Lines: 2</text>
+  </g>
+  
+  <!-- Entity 2 (same ID, different state) -->
+  <g transform="translate(500, 60)">
+    <rect x="0" y="0" width="200" height="130" rx="10" fill="url(#entityGradient)" filter="url(#glow)"/>
+    <text x="100" y="25" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="white">📦 Order B</text>
+    
+    <rect x="15" y="40" width="170" height="30" rx="4" fill="url(#idGradient)"/>
+    <text x="100" y="60" text-anchor="middle" font-family="Monaco, monospace" font-size="10" fill="white">ID: order-123</text>
+    
+    <text x="100" y="90" text-anchor="middle" font-family="Monaco, monospace" font-size="9" fill="rgba(255,255,255,0.8)">Status: Shipped</text>
+    <text x="100" y="105" text-anchor="middle" font-family="Monaco, monospace" font-size="9" fill="rgba(255,255,255,0.8)">Total: £75.00</text>
+    <text x="100" y="120" text-anchor="middle" font-family="Monaco, monospace" font-size="9" fill="rgba(255,255,255,0.8)">Lines: 3</text>
+  </g>
+  
+  <!-- Equals sign -->
+  <g transform="translate(370, 100)">
+    <text x="0" y="0" font-family="system-ui, sans-serif" font-size="40" font-weight="700" fill="#22c55e">=</text>
+  </g>
+  
+  <!-- Result box -->
+  <g transform="translate(250, 210)">
+    <rect x="0" y="0" width="300" height="60" rx="8" fill="url(#successGradient)" filter="url(#glow)"/>
+    <text x="150" y="25" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="white">✅ Same Entity</text>
+    <text x="150" y="45" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="rgba(255,255,255,0.9)">Attributes changed over time, identity persists</text>
+  </g>
+  
+  <!-- Annotations -->
+  <text x="200" y="215" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#64748b">Different attributes</text>
+  <text x="600" y="215" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#64748b">Same ID</text>
+</svg>

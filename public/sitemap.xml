@@ -36,6 +36,17 @@
   
   <!-- Articles -->
   <url>
+    <loc>https://devocrazia.com/articles/rich-domain-modelling-escape-anaemic-models</loc>
+    <lastmod>2025-12-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://devocrazia.com/images/rich-domain-model-hero.svg</image:loc>
+      <image:title>Rich Domain Modelling: Escaping the Anaemic Model Trap</image:title>
+    </image:image>
+  </url>
+  
+  <url>
     <loc>https://devocrazia.com/articles/mastering-saga-pattern-distributed-transactions-dotnet</loc>
     <lastmod>2025-12-23</lastmod>
     <changefreq>monthly</changefreq>

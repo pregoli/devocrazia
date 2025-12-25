@@ -1,0 +1,139 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a"/>
+      <stop offset="100%" style="stop-color:#1e293b"/>
+    </linearGradient>
+    
+    <linearGradient id="rootGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6"/>
+      <stop offset="100%" style="stop-color:#2563eb"/>
+    </linearGradient>
+    
+    <linearGradient id="entityGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8b5cf6"/>
+      <stop offset="100%" style="stop-color:#7c3aed"/>
+    </linearGradient>
+    
+    <linearGradient id="valueGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#06b6d4"/>
+      <stop offset="100%" style="stop-color:#0891b2"/>
+    </linearGradient>
+    
+    <linearGradient id="externalGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#64748b"/>
+      <stop offset="100%" style="stop-color:#475569"/>
+    </linearGradient>
+    
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+      <polygon points="0 0, 10 5, 0 10" fill="#22c55e"/>
+    </marker>
+    
+    <marker id="blockedArrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+      <polygon points="0 0, 10 5, 0 10" fill="#ef4444"/>
+    </marker>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="800" height="450" fill="url(#bgGradient)"/>
+  
+  <!-- Grid -->
+  <g opacity="0.03">
+    <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M 30 0 L 0 0 0 30" fill="none" stroke="white" stroke-width="0.5"/>
+    </pattern>
+    <rect width="800" height="450" fill="url(#grid)"/>
+  </g>
+  
+  <!-- Title -->
+  <text x="400" y="30" text-anchor="middle" font-family="system-ui, sans-serif" font-size="18" font-weight="600" fill="#94a3b8">Aggregate: Consistency Boundary</text>
+  
+  <!-- Aggregate Boundary -->
+  <rect x="180" y="60" width="440" height="320" rx="20" fill="none" stroke="#3b82f6" stroke-width="3" stroke-dasharray="10,5"/>
+  <text x="400" y="85" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#3b82f6">ORDER AGGREGATE</text>
+  
+  <!-- Aggregate Root -->
+  <g transform="translate(300, 100)">
+    <rect x="0" y="0" width="200" height="80" rx="10" fill="url(#rootGradient)" filter="url(#glow)"/>
+    <text x="100" y="25" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="700" fill="white">📦 Order</text>
+    <text x="100" y="42" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="rgba(255,255,255,0.8)">AGGREGATE ROOT</text>
+    <text x="100" y="60" text-anchor="middle" font-family="Monaco, monospace" font-size="8" fill="rgba(255,255,255,0.7)">AddLine(), Submit()</text>
+    <text x="100" y="72" text-anchor="middle" font-family="Monaco, monospace" font-size="8" fill="rgba(255,255,255,0.7)">Ship(), Cancel()</text>
+  </g>
+  
+  <!-- Order Lines (entities within aggregate) -->
+  <g transform="translate(210, 210)">
+    <rect x="0" y="0" width="140" height="60" rx="8" fill="url(#entityGradient)"/>
+    <text x="70" y="22" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="600" fill="white">OrderLine</text>
+    <text x="70" y="38" text-anchor="middle" font-family="Monaco, monospace" font-size="8" fill="rgba(255,255,255,0.7)">ProductId, Qty</text>
+    <text x="70" y="50" text-anchor="middle" font-family="system-ui, sans-serif" font-size="7" fill="rgba(255,255,255,0.5)">Entity</text>
+  </g>
+  
+  <g transform="translate(370, 210)">
+    <rect x="0" y="0" width="140" height="60" rx="8" fill="url(#entityGradient)"/>
+    <text x="70" y="22" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="600" fill="white">OrderLine</text>
+    <text x="70" y="38" text-anchor="middle" font-family="Monaco, monospace" font-size="8" fill="rgba(255,255,255,0.7)">ProductId, Qty</text>
+    <text x="70" y="50" text-anchor="middle" font-family="system-ui, sans-serif" font-size="7" fill="rgba(255,255,255,0.5)">Entity</text>
+  </g>
+  
+  <!-- Value Objects -->
+  <g transform="translate(210, 290)">
+    <rect x="0" y="0" width="90" height="45" rx="6" fill="url(#valueGradient)"/>
+    <text x="45" y="18" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" font-weight="600" fill="white">💰 Money</text>
+    <text x="45" y="35" text-anchor="middle" font-family="system-ui, sans-serif" font-size="7" fill="rgba(255,255,255,0.7)">Value Object</text>
+  </g>
+  
+  <g transform="translate(315, 290)">
+    <rect x="0" y="0" width="90" height="45" rx="6" fill="url(#valueGradient)"/>
+    <text x="45" y="18" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" font-weight="600" fill="white">📧 Email</text>
+    <text x="45" y="35" text-anchor="middle" font-family="system-ui, sans-serif" font-size="7" fill="rgba(255,255,255,0.7)">Value Object</text>
+  </g>
+  
+  <g transform="translate(420, 290)">
+    <rect x="0" y="0" width="90" height="45" rx="6" fill="url(#valueGradient)"/>
+    <text x="45" y="18" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" font-weight="600" fill="white">📍 Address</text>
+    <text x="45" y="35" text-anchor="middle" font-family="system-ui, sans-serif" font-size="7" fill="rgba(255,255,255,0.7)">Value Object</text>
+  </g>
+  
+  <!-- External Components -->
+  <g transform="translate(30, 150)">
+    <rect x="0" y="0" width="110" height="50" rx="8" fill="url(#externalGradient)"/>
+    <text x="55" y="22" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="600" fill="white">🔧 Service</text>
+    <text x="55" y="38" text-anchor="middle" font-family="system-ui, sans-serif" font-size="8" fill="rgba(255,255,255,0.7)">External Code</text>
+  </g>
+  
+  <g transform="translate(660, 150)">
+    <rect x="0" y="0" width="110" height="50" rx="8" fill="url(#externalGradient)"/>
+    <text x="55" y="22" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="600" fill="white">📂 Repository</text>
+    <text x="55" y="38" text-anchor="middle" font-family="system-ui, sans-serif" font-size="8" fill="rgba(255,255,255,0.7)">Persistence</text>
+  </g>
+  
+  <!-- Allowed Access Arrow -->
+  <path d="M 140 175 L 290 140" stroke="#22c55e" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+  <text x="180" y="135" font-family="system-ui, sans-serif" font-size="8" fill="#22c55e">✓ Via Root</text>
+  
+  <!-- Blocked Access Arrow -->
+  <path d="M 140 185 L 200 230" stroke="#ef4444" stroke-width="2" fill="none" stroke-dasharray="4,2" marker-end="url(#blockedArrow)"/>
+  <text x="130" y="220" font-family="system-ui, sans-serif" font-size="8" fill="#ef4444">✗ Direct</text>
+  
+  <!-- Connection from root to entities -->
+  <line x1="400" y1="180" x2="280" y2="210" stroke="#64748b" stroke-width="1.5"/>
+  <line x1="400" y1="180" x2="440" y2="210" stroke="#64748b" stroke-width="1.5"/>
+  
+  <!-- Legend -->
+  <g transform="translate(30, 380)">
+    <rect x="0" y="0" width="740" height="55" rx="8" fill="#1e293b" stroke="#334155"/>
+    <text x="20" y="20" font-family="system-ui, sans-serif" font-size="10" font-weight="600" fill="#94a3b8">KEY RULES:</text>
+    <text x="20" y="40" font-family="system-ui, sans-serif" font-size="9" fill="#64748b">• External code only references the Aggregate Root</text>
+    <text x="280" y="40" font-family="system-ui, sans-serif" font-size="9" fill="#64748b">• Root controls all modifications</text>
+    <text x="500" y="40" font-family="system-ui, sans-serif" font-size="9" fill="#64748b">• Invariants enforced within boundary</text>
+  </g>
+</svg>

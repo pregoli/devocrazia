@@ -1,0 +1,160 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a"/>
+      <stop offset="50%" style="stop-color:#1e293b"/>
+      <stop offset="100%" style="stop-color:#0f172a"/>
+    </linearGradient>
+    
+    <linearGradient id="richGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#22c55e"/>
+      <stop offset="100%" style="stop-color:#16a34a"/>
+    </linearGradient>
+    
+    <linearGradient id="entityGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6"/>
+      <stop offset="100%" style="stop-color:#2563eb"/>
+    </linearGradient>
+    
+    <linearGradient id="valueGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8b5cf6"/>
+      <stop offset="100%" style="stop-color:#7c3aed"/>
+    </linearGradient>
+    
+    <linearGradient id="behaviourGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#06b6d4"/>
+      <stop offset="100%" style="stop-color:#0891b2"/>
+    </linearGradient>
+    
+    <linearGradient id="anaemicGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ef4444"/>
+      <stop offset="100%" style="stop-color:#dc2626"/>
+    </linearGradient>
+    
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGradient)"/>
+  
+  <!-- Grid pattern -->
+  <g opacity="0.03">
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" stroke-width="0.5"/>
+    </pattern>
+    <rect width="1200" height="630" fill="url(#grid)"/>
+  </g>
+  
+  <!-- Decorative circles -->
+  <circle cx="100" cy="100" r="150" fill="#3b82f6" opacity="0.05" filter="url(#softGlow)"/>
+  <circle cx="1100" cy="530" r="200" fill="#8b5cf6" opacity="0.05" filter="url(#softGlow)"/>
+  
+  <!-- Title -->
+  <text x="600" y="80" text-anchor="middle" font-family="system-ui, sans-serif" font-size="42" font-weight="700" fill="white">Rich Domain Modelling</text>
+  <text x="600" y="130" text-anchor="middle" font-family="system-ui, sans-serif" font-size="22" fill="#94a3b8">Escaping the Anaemic Model Trap</text>
+  
+  <!-- Main visual: Rich Model Entity -->
+  <g transform="translate(350, 180)">
+    <!-- Aggregate boundary -->
+    <rect x="0" y="0" width="500" height="350" rx="20" fill="none" stroke="#22c55e" stroke-width="3" stroke-dasharray="12,6" opacity="0.6"/>
+    <text x="250" y="30" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="#22c55e">AGGREGATE BOUNDARY</text>
+    
+    <!-- Rich Entity -->
+    <g transform="translate(100, 50)">
+      <rect x="0" y="0" width="300" height="200" rx="12" fill="url(#entityGradient)" filter="url(#glow)"/>
+      <text x="150" y="35" text-anchor="middle" font-family="system-ui, sans-serif" font-size="20" font-weight="700" fill="white">📦 Order</text>
+      <text x="150" y="55" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="rgba(255,255,255,0.7)">AGGREGATE ROOT</text>
+      
+      <!-- Data section -->
+      <rect x="20" y="70" width="260" height="50" rx="6" fill="rgba(255,255,255,0.1)"/>
+      <text x="150" y="88" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="600" fill="rgba(255,255,255,0.9)">DATA</text>
+      <text x="150" y="108" text-anchor="middle" font-family="Monaco, monospace" font-size="9" fill="rgba(255,255,255,0.7)">OrderId Id • Money Total • OrderStatus Status</text>
+      
+      <!-- Behaviour section -->
+      <rect x="20" y="130" width="260" height="55" rx="6" fill="url(#behaviourGradient)" opacity="0.8"/>
+      <text x="150" y="148" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="600" fill="white">BEHAVIOUR</text>
+      <text x="150" y="165" text-anchor="middle" font-family="Monaco, monospace" font-size="9" fill="rgba(255,255,255,0.9)">AddLine() • Submit() • Ship() • Cancel()</text>
+      <text x="150" y="180" text-anchor="middle" font-family="Monaco, monospace" font-size="8" fill="rgba(255,255,255,0.7)">Enforces invariants internally</text>
+    </g>
+    
+    <!-- Value Objects -->
+    <g transform="translate(50, 270)">
+      <rect x="0" y="0" width="100" height="50" rx="8" fill="url(#valueGradient)"/>
+      <text x="50" y="22" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="600" fill="white">💰 Money</text>
+      <text x="50" y="38" text-anchor="middle" font-family="system-ui, sans-serif" font-size="8" fill="rgba(255,255,255,0.7)">Value Object</text>
+    </g>
+    
+    <g transform="translate(170, 270)">
+      <rect x="0" y="0" width="100" height="50" rx="8" fill="url(#valueGradient)"/>
+      <text x="50" y="22" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="600" fill="white">📧 Email</text>
+      <text x="50" y="38" text-anchor="middle" font-family="system-ui, sans-serif" font-size="8" fill="rgba(255,255,255,0.7)">Value Object</text>
+    </g>
+    
+    <g transform="translate(290, 270)">
+      <rect x="0" y="0" width="100" height="50" rx="8" fill="url(#valueGradient)"/>
+      <text x="50" y="22" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="600" fill="white">📊 Quantity</text>
+      <text x="50" y="38" text-anchor="middle" font-family="system-ui, sans-serif" font-size="8" fill="rgba(255,255,255,0.7)">Value Object</text>
+    </g>
+  </g>
+  
+  <!-- Left side: Anaemic crossed out -->
+  <g transform="translate(50, 280)">
+    <rect x="0" y="0" width="180" height="100" rx="10" fill="url(#anaemicGradient)" opacity="0.3"/>
+    <text x="90" y="35" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#ef4444">❌ Anaemic</text>
+    <text x="90" y="55" text-anchor="middle" font-family="Monaco, monospace" font-size="9" fill="rgba(239,68,68,0.7)">Data only</text>
+    <text x="90" y="70" text-anchor="middle" font-family="Monaco, monospace" font-size="9" fill="rgba(239,68,68,0.7)">Logic scattered</text>
+    <text x="90" y="85" text-anchor="middle" font-family="Monaco, monospace" font-size="9" fill="rgba(239,68,68,0.7)">No encapsulation</text>
+    <!-- Cross out -->
+    <line x1="0" y1="0" x2="180" y2="100" stroke="#ef4444" stroke-width="3" opacity="0.5"/>
+    <line x1="180" y1="0" x2="0" y2="100" stroke="#ef4444" stroke-width="3" opacity="0.5"/>
+  </g>
+  
+  <!-- Right side: Rich model benefits -->
+  <g transform="translate(970, 280)">
+    <rect x="0" y="0" width="180" height="100" rx="10" fill="url(#richGradient)" opacity="0.3"/>
+    <text x="90" y="35" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#22c55e">✅ Rich Model</text>
+    <text x="90" y="55" text-anchor="middle" font-family="Monaco, monospace" font-size="9" fill="rgba(34,197,94,0.9)">Data + Behaviour</text>
+    <text x="90" y="70" text-anchor="middle" font-family="Monaco, monospace" font-size="9" fill="rgba(34,197,94,0.9)">Self-validating</text>
+    <text x="90" y="85" text-anchor="middle" font-family="Monaco, monospace" font-size="9" fill="rgba(34,197,94,0.9)">Encapsulated</text>
+  </g>
+  
+  <!-- Tech badges -->
+  <g transform="translate(300, 560)">
+    <rect x="0" y="0" width="80" height="30" rx="4" fill="#22c55e"/>
+    <text x="40" y="20" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="600" fill="white">C#</text>
+  </g>
+  
+  <g transform="translate(400, 560)">
+    <rect x="0" y="0" width="80" height="30" rx="4" fill="#8b5cf6"/>
+    <text x="40" y="20" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="600" fill="white">DDD</text>
+  </g>
+  
+  <g transform="translate(500, 560)">
+    <rect x="0" y="0" width="130" height="30" rx="4" fill="#3b82f6"/>
+    <text x="65" y="20" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="600" fill="white">Value Objects</text>
+  </g>
+  
+  <g transform="translate(650, 560)">
+    <rect x="0" y="0" width="110" height="30" rx="4" fill="#06b6d4"/>
+    <text x="55" y="20" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="600" fill="white">Aggregates</text>
+  </g>
+  
+  <g transform="translate(780, 560)">
+    <rect x="0" y="0" width="120" height="30" rx="4" fill="#f59e0b"/>
+    <text x="60" y="20" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="600" fill="white">Clean Code</text>
+  </g>
+</svg>
