@@ -6,7 +6,7 @@ const About = () => {
   return (
     <Layout
       title="About"
-      description="Learn about Paolo Regoli - Senior Software Engineer & Cloud Architect with almost twenty years of experience building software across Europe and Australia."
+      description="Learn about Paolo Regoli - Software Engineer with almost twenty years of experience building software across Europe and Australia."
     >
       <div className="container mx-auto px-4 py-16">
         <div className="max-w-6xl mx-auto">
@@ -15,7 +15,7 @@ const About = () => {
             <div className="w-full md:w-80 flex-shrink-0 flex justify-center md:justify-start">
               <img
                 src={authorAvatar}
-                alt="Paolo Regoli - Senior Software Engineer"
+                alt="Paolo Regoli - Software Engineer"
                 className="w-40 h-40 md:w-80 md:h-auto object-cover rounded-full md:rounded-md shadow-md"
               />
             </div>
@@ -25,7 +25,7 @@ const About = () => {
               <div>
                 <h1 className="text-5xl font-bold text-foreground mb-3">Paolo Regoli</h1>
                 <h2 className="text-2xl text-primary font-medium">
-                  Senior Software Engineer & Cloud Architect
+                  Software Engineer
                 </h2>
               </div>
 

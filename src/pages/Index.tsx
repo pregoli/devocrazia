@@ -22,14 +22,40 @@ const Index = () => {
       }));
   }, []);
 
-  // Website + Blog Schema for SEO
+  // Organization + Website + Blog Schema for SEO (Organization with logo required for Google favicon)
   const structuredData = [
     {
       "@context": "https://schema.org",
+      "@type": "Organization",
+      "@id": "https://devocrazia.com/#organization",
+      "name": "Devocrazia",
+      "url": "https://devocrazia.com",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://devocrazia.com/favicon-512.png",
+        "width": 512,
+        "height": 512
+      },
+      "image": "https://devocrazia.com/favicon-512.png",
+      "sameAs": [
+        "https://github.com/pregoli",
+        "https://www.linkedin.com/in/pregoli"
+      ],
+      "founder": {
+        "@type": "Person",
+        "name": "Paolo Regoli"
+      }
+    },
+    {
+      "@context": "https://schema.org",
       "@type": "WebSite",
+      "@id": "https://devocrazia.com/#website",
       "name": "Devocrazia",
       "url": "https://devocrazia.com",
       "description": "Software Engineering & Architecture Blog",
+      "publisher": {
+        "@id": "https://devocrazia.com/#organization"
+      },
       "author": {
         "@type": "Person",
         "name": "Paolo Regoli",
@@ -47,6 +73,9 @@ const Index = () => {
       "name": "Devocrazia",
       "url": "https://devocrazia.com",
       "description": "Insights on software architecture, .NET development, Domain-Driven Design, Event Sourcing, and cloud technologies.",
+      "publisher": {
+        "@id": "https://devocrazia.com/#organization"
+      },
       "author": {
         "@type": "Person",
         "name": "Paolo Regoli"
