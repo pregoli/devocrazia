@@ -79,4 +79,15 @@
     </image:image>
   </url>
   
+  <url>
+    <loc>https://devocrazia.com/articles/sse-order-processing-real-time-dotnet</loc>
+    <lastmod>2026-01-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://devocrazia.com/images/sse-order-processing-hero.svg</image:loc>
+      <image:title>Server-Sent Events in .NET 10: Real-Time Order Processing with Clean Architecture</image:title>
+    </image:image>
+  </url>
+  
 </urlset>
