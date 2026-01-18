@@ -1,0 +1,131 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a"/>
+      <stop offset="100%" style="stop-color:#1e293b"/>
+    </linearGradient>
+    
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+      <polygon points="0 0, 10 5, 0 10" fill="#64748b"/>
+    </marker>
+    
+    <marker id="arrowGreen" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+      <polygon points="0 0, 10 5, 0 10" fill="#22c55e"/>
+    </marker>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="800" height="500" fill="url(#bgGradient)"/>
+  
+  <!-- Grid -->
+  <g opacity="0.03">
+    <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M 30 0 L 0 0 0 30" fill="none" stroke="white" stroke-width="0.5"/>
+    </pattern>
+    <rect width="800" height="500" fill="url(#grid)"/>
+  </g>
+  
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" font-family="system-ui, sans-serif" font-size="18" font-weight="600" fill="#94a3b8">SSE Architecture with Clean Architecture</text>
+  
+  <!-- Server boundary -->
+  <rect x="30" y="55" width="540" height="380" rx="12" fill="none" stroke="#334155" stroke-width="2" stroke-dasharray="8,4"/>
+  <text x="50" y="80" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#64748b">SERVER</text>
+  
+  <!-- Domain Layer -->
+  <g transform="translate(50, 95)">
+    <rect x="0" y="0" width="200" height="130" rx="10" fill="#22c55e" filter="url(#glow)"/>
+    <text x="100" y="28" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="700" fill="white">📦 Domain</text>
+    
+    <rect x="15" y="45" width="170" height="35" rx="6" fill="rgba(255,255,255,0.2)"/>
+    <text x="100" y="60" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="600" fill="white">Order Aggregate</text>
+    <text x="100" y="73" text-anchor="middle" font-family="monospace" font-size="8" fill="rgba(255,255,255,0.8)">State Machine</text>
+    
+    <rect x="15" y="88" width="170" height="30" rx="6" fill="rgba(255,255,255,0.15)"/>
+    <text x="100" y="107" text-anchor="middle" font-family="monospace" font-size="9" fill="rgba(255,255,255,0.9)">→ DomainEvents</text>
+  </g>
+  
+  <!-- Infrastructure Layer -->
+  <g transform="translate(50, 250)">
+    <rect x="0" y="0" width="200" height="160" rx="10" fill="#06b6d4" filter="url(#glow)"/>
+    <text x="100" y="28" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="700" fill="white">⚙️ Infrastructure</text>
+    
+    <rect x="15" y="45" width="170" height="50" rx="6" fill="rgba(255,255,255,0.2)"/>
+    <text x="100" y="63" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="600" fill="white">OrderEventHub</text>
+    <text x="100" y="78" text-anchor="middle" font-family="monospace" font-size="8" fill="rgba(255,255,255,0.8)">Subscriptions • Fan-out</text>
+    <text x="100" y="90" text-anchor="middle" font-family="monospace" font-size="7" fill="rgba(255,255,255,0.6)">Bounded Channels</text>
+    
+    <rect x="15" y="105" width="170" height="40" rx="6" fill="rgba(255,255,255,0.15)"/>
+    <text x="100" y="122" text-anchor="middle" font-family="monospace" font-size="9" fill="rgba(255,255,255,0.9)">Event History</text>
+    <text x="100" y="136" text-anchor="middle" font-family="monospace" font-size="8" fill="rgba(255,255,255,0.7)">for replay</text>
+  </g>
+  
+  <!-- API Layer -->
+  <g transform="translate(320, 170)">
+    <rect x="0" y="0" width="230" height="140" rx="10" fill="#3b82f6" filter="url(#glow)"/>
+    <text x="115" y="28" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="700" fill="white">🌐 Presentation</text>
+    
+    <rect x="15" y="45" width="200" height="35" rx="6" fill="rgba(255,255,255,0.2)"/>
+    <text x="115" y="60" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="600" fill="white">PATCH /api/orders/{id}</text>
+    <text x="115" y="73" text-anchor="middle" font-family="monospace" font-size="8" fill="rgba(255,255,255,0.8)">State transitions</text>
+    
+    <rect x="15" y="88" width="200" height="40" rx="6" fill="#22c55e"/>
+    <text x="115" y="105" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="600" fill="white">GET /api/orders/{id}/stream</text>
+    <text x="115" y="120" text-anchor="middle" font-family="monospace" font-size="8" fill="rgba(255,255,255,0.9)">TypedResults.ServerSentEvents()</text>
+  </g>
+  
+  <!-- Browser -->
+  <g transform="translate(610, 130)">
+    <rect x="0" y="0" width="160" height="220" rx="10" fill="#8b5cf6" filter="url(#glow)"/>
+    <text x="80" y="28" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="700" fill="white">🌐 Browser</text>
+    
+    <rect x="15" y="45" width="130" height="40" rx="6" fill="rgba(255,255,255,0.2)"/>
+    <text x="80" y="62" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="600" fill="white">EventSource</text>
+    <text x="80" y="78" text-anchor="middle" font-family="monospace" font-size="7" fill="rgba(255,255,255,0.8)">Auto-reconnect</text>
+    
+    <rect x="15" y="95" width="130" height="110" rx="6" fill="#1e293b"/>
+    <text x="80" y="115" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" font-weight="600" fill="#94a3b8">ORDER TIMELINE</text>
+    
+    <circle cx="35" cy="138" r="6" fill="#22c55e"/>
+    <text x="50" y="141" font-family="system-ui, sans-serif" font-size="8" fill="#22c55e">Submitted ✓</text>
+    
+    <circle cx="35" cy="158" r="6" fill="#22c55e"/>
+    <text x="50" y="161" font-family="system-ui, sans-serif" font-size="8" fill="#22c55e">Validated ✓</text>
+    
+    <circle cx="35" cy="178" r="6" fill="#22c55e"/>
+    <text x="50" y="181" font-family="system-ui, sans-serif" font-size="8" fill="#22c55e">Paid ✓</text>
+    
+    <circle cx="35" cy="198" r="6" fill="#3b82f6"/>
+    <text x="50" y="201" font-family="system-ui, sans-serif" font-size="8" fill="#3b82f6">Shipped...</text>
+  </g>
+  
+  <!-- Connections -->
+  <!-- Domain to Infrastructure -->
+  <path d="M 150 225 L 150 250" stroke="#22c55e" stroke-width="2" fill="none" marker-end="url(#arrowGreen)"/>
+  <text x="165" y="240" font-family="monospace" font-size="8" fill="#22c55e">events</text>
+  
+  <!-- Infrastructure to API -->
+  <path d="M 250 330 L 320 290" stroke="#06b6d4" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+  
+  <!-- API to Browser (SSE stream) -->
+  <path d="M 550 270 L 610 270" stroke="#22c55e" stroke-width="3" fill="none" marker-end="url(#arrowGreen)"/>
+  <text x="575" y="260" font-family="monospace" font-size="9" fill="#22c55e">SSE</text>
+  
+  <!-- Legend -->
+  <g transform="translate(320, 380)">
+    <rect x="0" y="0" width="230" height="50" rx="6" fill="#1e293b" stroke="#334155"/>
+    <text x="115" y="18" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" font-weight="600" fill="#94a3b8">DATA FLOW</text>
+    <line x1="15" y1="33" x2="50" y2="33" stroke="#22c55e" stroke-width="2"/>
+    <text x="60" y="37" font-family="system-ui, sans-serif" font-size="8" fill="#64748b">Domain Events / SSE</text>
+    <line x1="130" y1="33" x2="165" y2="33" stroke="#64748b" stroke-width="2"/>
+    <text x="175" y="37" font-family="system-ui, sans-serif" font-size="8" fill="#64748b">Internal calls</text>
+  </g>
+</svg>

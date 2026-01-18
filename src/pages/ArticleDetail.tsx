@@ -9,6 +9,7 @@ import { Calendar, Clock, ArrowLeft, Github } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
+import rehypeRaw from "rehype-raw";
 import "highlight.js/styles/github-dark.css";
 import { Helmet } from "react-helmet";
 import defaultAuthorAvatar from "@/assets/author-avatar.jpg";
@@ -250,7 +251,7 @@ const ArticleDetail = () => {
               <div className="prose prose-lg dark:prose-invert max-w-none">
                 <ReactMarkdown
                   remarkPlugins={[remarkGfm]}
-                  rehypePlugins={[rehypeHighlight]}
+                  rehypePlugins={[rehypeHighlight, rehypeRaw]}
                   components={{
                     h1: ({ children }) => (
                       <h1 className="text-3xl font-bold mt-8 mb-4 text-foreground">

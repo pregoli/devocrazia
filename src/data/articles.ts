@@ -18,6 +18,22 @@ export interface Article {
 export const articles: Article[] = [
   {
     id: 0,
+    slug: "sse-order-processing-real-time-dotnet",
+    category: "API",
+    categoryColor: "bg-category-api",
+    title: "Server-Sent Events in .NET 10: Real-Time Order Processing with Clean Architecture",
+    description:
+      "Build production-ready SSE streaming with Clean Architecture and DDD. Learn TypedResults.ServerSentEvents, bounded channels for backpressure, and automatic reconnection with Last-Event-ID replay.",
+    authorName: "Paolo Regoli",
+    date: "2026-01-17",
+    image: "/images/sse-order-processing-preview.svg",
+    heroImage: "/images/sse-order-processing-hero.svg",
+    tags: [".NET 10", "SSE", "Clean Architecture", "DDD"],
+    readTime: 12,
+    repositoryUrl: "https://github.com/pregoli/sse-order-processing",
+  },
+  {
+    id: 1,
     slug: "rich-domain-modelling-escape-anaemic-models",
     category: "Patterns",
     categoryColor: "bg-category-patterns",
@@ -33,7 +49,7 @@ export const articles: Article[] = [
     repositoryUrl: "https://github.com/pregoli/RichDomainModelling",
   },
   {
-    id: 1,
+    id: 2,
     slug: "mastering-saga-pattern-distributed-transactions-dotnet",
     category: "Patterns",
     categoryColor: "bg-category-patterns",
@@ -49,7 +65,7 @@ export const articles: Article[] = [
     repositoryUrl: "https://github.com/pregoli/SagaDemo",
   },
   {
-    id: 2,
+    id: 3,
     slug: "building-bank-atm-event-sourcing-cqrs-dotnet",
     category: "Patterns",
     categoryColor: "bg-category-patterns",
@@ -65,7 +81,7 @@ export const articles: Article[] = [
     repositoryUrl: "https://github.com/pregoli/ScratchBankATM",
   },
   {
-    id: 3,
+    id: 4,
     slug: "optimising-llm-inputs-json-vs-toon-explained",
     category: "AI",
     categoryColor: "bg-category-ai",

@@ -54,6 +54,7 @@ export default {
           uiux: "hsl(var(--category-uiux))",
           patterns: "hsl(var(--category-patterns))",
           performance: "hsl(var(--category-performance))",
+          api: "hsl(var(--category-api))",
         },
       },
       borderRadius: {

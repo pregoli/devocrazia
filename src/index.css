@@ -44,6 +44,7 @@ All colors MUST be HSL.
     --category-uiux: 280 70% 60%;
     --category-patterns: 0 64% 58%;
     --category-performance: 330 80% 55%;
+    --category-api: 330 80% 55%;
   }
 
   .dark {
