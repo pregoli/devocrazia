@@ -1,9 +1,3 @@
-# Trailing slash redirects (301 permanent)
-/articles/ /articles 301
-/about/ /about 301
-/contact/ /contact 301
-/privacy/ /privacy 301
-
 # www to non-www (if using custom domain)
 https://www.devocrazia.com/* https://devocrazia.com/:splat 301
 
