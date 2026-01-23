@@ -7,3 +7,6 @@
 
 # www to non-www (if using custom domain)
 https://www.devocrazia.com/* https://devocrazia.com/:splat 301
+
+# SPA fallback
+/* /index.html 200
