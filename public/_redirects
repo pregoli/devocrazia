@@ -1,5 +1,4 @@
 # Trailing slash redirects (301 permanent)
-/articles/:slug/ /articles/:slug 301
 /articles/ /articles 301
 /about/ /about 301
 /contact/ /contact 301
