@@ -6,6 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, Clock, ArrowLeft, Github } from "lucide-react";
+import ShareButton from "@/components/ShareButton";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
@@ -218,6 +219,12 @@ const ArticleDetail = () => {
                     <span className="text-sm font-medium">View Source</span>
                   </a>
                 )}
+
+                <ShareButton
+                  url={articleUrl}
+                  title={article.title}
+                  description={article.description}
+                />
               </div>
             </header>
 
