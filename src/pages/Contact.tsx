@@ -25,19 +25,14 @@ const Contact = () => {
 
           {/* Contact Form */}
           <form
-            action="https://formsubmit.co/contact@devocrazia.com"
+            action="https://api.web3forms.com/submit"
             method="POST"
             className="space-y-6"
           >
-            {/* FormSubmit Configuration */}
-            <input
-              type="hidden"
-              name="_subject"
-              value="New enquiry from Devocrazia website"
-            />
-            <input type="hidden" name="_captcha" value="false" />
-            <input type="hidden" name="_template" value="table" />
-            {/* UPDATE THIS URL WHEN GOING LIVE */}
+            {/* Web3Forms Configuration */}
+            <input type="hidden" name="access_key" value="595afe3c-3aa0-416b-8eb0-accc3f3a0102" />
+            <input type="hidden" name="subject" value="New enquiry from Devocrazia website" />
+            <input type="hidden" name="redirect" value={`${window.location.origin}/thank-you`} />
             <input type="hidden" name="_next" value={`${window.location.origin}/thank-you`} />
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
