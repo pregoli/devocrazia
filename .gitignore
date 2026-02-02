@@ -28,3 +28,7 @@ dist-ssr
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# Claude Code
+.claude/*.json
+# Note: .claude/skills/ IS committed (project-specific article/publishing standards)
