@@ -13,10 +13,12 @@ Before writing, skim one or two existing articles (for example `rich-domain-mode
 
 1. **Gather input**: a topic (required) and optionally a GitHub repository URL.
 2. **If there's a repo, study it** (see below).
-3. **Write the article** following the style, structure, and visuals sections below, and save it to `public/content/articles/{slug}.md`.
-4. **Humanize the draft** (see below).
-5. **Wire it into the site** by following [references/site-integration.md](references/site-integration.md): one metadata entry and the images.
-6. **Run the checklist** at the end of this file.
+3. **Interview the author** (see below).
+4. **Write the article** following the style and structure sections below, and save it to `public/content/articles/{slug}.md`.
+5. **Humanize the draft** (see below).
+6. **Draw the visuals** (see below).
+7. **Wire it into the site** by following [references/site-integration.md](references/site-integration.md).
+8. **Run the checklist** at the end of this file.
 
 ## When a GitHub repository is provided
 
@@ -37,6 +39,22 @@ You can explore the full implementation in the [companion repository](https://gi
 <!-- Or in the closing takeaway -->
 Clone the [reference implementation](https://github.com/user/repo) and trace through it yourself.
 ```
+
+## Interviewing the author
+
+Call the Skill tool with "grilling" before writing anything. A topic alone gives you the subject, not the author's position, and the position is what a Devocrazia article is for. The facts (what the repo does, what the existing articles already cover) are yours to look up; the opinions are the author's.
+
+Cover at least these branches of the design tree, in whatever order the frontier allows:
+
+- **The thesis**: the one opinion the article argues, phrased so a reader could disagree with it.
+- **The pain**: the production story behind it. What broke, what it cost, what the team tried first.
+- **The obvious approach**: what most teams do instead, and exactly where it falls over.
+- **The trade-offs**: when the author's approach is the wrong call, and what it costs even when it's right.
+- **The reader**: what they already know walking in, so the article skips it.
+- **The repo's role** (if there is one): which decisions in it are worth showing, and which are incidental.
+- **Placement**: title, slug, category, and tags, checked against the existing articles so it doesn't repeat one.
+
+Write the article only once the author confirms you share an understanding. Skip the interview only if the author explicitly asks for a draft without one.
 
 ## Humanizing the draft
 
@@ -71,15 +89,25 @@ Every Devocrazia article follows this arc. Readers expect it, and it keeps the f
 6. **Production reality check**: impact on maintainability, debugging, team velocity, and long-term change.
 7. **Closing takeaway**: one strong opinion the reader should act on.
 
-## Visuals and media
+## Visuals
 
-Visuals are a large part of what makes Devocrazia articles readable, so every article needs its own custom visuals in the same visual language as the existing ones. Prefer abstract diagrams over literal UI screenshots, and make each visual explain something the text doesn't already say.
+Diagrams are a large part of what makes Devocrazia articles readable, and the build fails without the hero and preview images, so write every visual yourself as SVG code. Pick a short `{topic}` name for the article's images (for example `saga-pattern` for `mastering-saga-pattern-distributed-transactions-dotnet`); existing images use one rather than the full slug.
 
-**Hero image** (top of the article and social media preview): dark background, minimalist, technical or architectural mood, abstract representations (flows, nodes, boundaries, streams, layers), no text-heavy overlays, serious engineering-first tone. Include a `[HERO IMAGE]` block with a detailed description for generation.
+Before drawing, open the hero, preview, and diagrams of one existing article (for example `public/images/saga-pattern-*.svg` and `public/images/articles/saga-pattern/`) and match their visual language:
 
-**Preview image** (article cards): same visual language as the hero, but a simpler composition built around one strong concept, readable at small sizes. Include a `[PREVIEW IMAGE]` block with a detailed description for generation.
+- **Background**: dark slate gradient from `#0f172a` to `#1e293b`.
+- **Accents**: cyan `#06b6d4`, emerald `#10b981`, violet `#8b5cf6`, amber `#f59e0b`, and red `#ef4444` for failure paths. Muted text in `#94a3b8` and `#64748b`.
+- **Type**: `system-ui, -apple-system, sans-serif` for labels, `monospace` for code names. No web fonts, external images, or links: the SVGs are also rendered standalone to PNG.
+- **Shapes**: rounded boxes, dashed connectors, small arrowheads. Abstract diagrams, not UI screenshots.
 
-**Article GIFs**: 1-3 animated GIFs that visualise flows, state changes, architecture evolution, or cause and effect, for example a request -> domain -> infrastructure flow, state transitions over time, before vs after an architectural change, or event propagation. Use the same palette, keep them clean and minimal, with no stock imagery or emojis. Include `[GIF: description]` blocks inline, at the point where each one should appear.
+The files:
+
+- **Hero**, `public/images/{topic}-hero.svg`, viewBox `0 0 1200 630`: the top of the article and its social preview card. Title and subtitle at the top, one or two diagrams of the core idea, a row of technology badges, and a one-line tagline at the bottom.
+- **Hero PNG**, `public/images/{topic}-hero.png`: social crawlers don't render SVG. Render it from the hero with `node .claude/skills/devocrazia-medium-publish/scripts/svg-to-png.mjs --width 1200 --out-dir public/images public/images/{topic}-hero.svg`.
+- **Preview**, `public/images/{topic}-preview.svg`, viewBox `0 0 400 400`: the article card. A short title, one concept diagram, and badges, readable at card size.
+- **Diagrams**, `public/images/articles/{topic}/{name}.svg`, about 800 wide: 3-7 per article, each placed where it explains something the text doesn't, as `![Alt text](/images/articles/{topic}/{name}.svg)`.
+
+Then look at what you drew: render every SVG to a scratch folder with the same script (`--out-dir /tmp/{topic}-check`) and read the PNGs. Overflowing text, overlapping boxes, and clipped labels are invisible in SVG code. Fix them and render again until each image is clean.
 
 ## Things to avoid
 
@@ -92,8 +120,8 @@ Visuals are a large part of what makes Devocrazia articles readable, so every ar
 ## Checklist
 
 - [ ] Article saved at `public/content/articles/{slug}.md`
-- [ ] `[HERO IMAGE]` and `[PREVIEW IMAGE]` description blocks included
-- [ ] 1-3 `[GIF]` descriptions with placement hints included
+- [ ] Interview done, and the article argues the thesis the author confirmed
+- [ ] Hero SVG and PNG (1200x630), preview SVG (400x400), and 3-7 diagrams drawn, rendered, and checked by eye
 - [ ] GitHub link embedded organically (if repo provided)
 - [ ] All code blocks have language hints
 - [ ] No em dashes anywhere in the article or its metadata
