@@ -42,6 +42,7 @@ This is the main work.
 - Keep at most 3-4 code blocks, choosing the most illustrative.
 - Tighten prose: remove hedging and redundant explanations.
 - Focus on why; reduce how. One strong opinion per section.
+- No em dashes (—), the same house style as the source articles: use a comma, colon, parentheses, or a new sentence. `npm run build` checks `.medium.md` files too and fails on any em dash.
 
 **Complex topics need more, not less.** For Event Sourcing, CQRS, the Saga Pattern, or distributed systems, aggressive cuts make the article incomprehensible. Use all relevant diagrams (they carry most of the understanding), give each architectural concept its diagram, keep the explanatory sections, and treat 50% as a guideline. The goal is a *focused* article, not a *stripped* one: if a reader can't understand the pattern after reading, too much was cut.
 
@@ -92,7 +93,7 @@ If the article has a GitHub repository:
 
 ---
 
-*I explore these patterns in depth on [Devocrazia](https://devocrazia.com/articles/{slug}). The full solution is available on [GitHub](https://github.com/...).*
+*I explore these patterns in depth on [Devocrazia](https://devocrazia.com/articles/{slug}/). The full solution is available on [GitHub](https://github.com/...).*
 ```
 
 If there is no GitHub repository:
@@ -101,11 +102,11 @@ If there is no GitHub repository:
 
 ---
 
-*This article was originally published on [Devocrazia](https://devocrazia.com/articles/{slug}) with additional implementation details and code examples.*
+*This article was originally published on [Devocrazia](https://devocrazia.com/articles/{slug}/) with additional implementation details and code examples.*
 ```
 
 When a repo exists, the footer link is always included. For implementation-heavy articles, also consider early context near the start:
-> "The complete implementation is available on [GitHub](https://github.com/...) — this article focuses on the reasoning behind it."
+> "The complete implementation is available on [GitHub](https://github.com/...). This article focuses on the reasoning behind it."
 
 This sets expectations: Medium for concepts, GitHub for code, Devocrazia for depth.
 
@@ -126,5 +127,6 @@ Before finalising, check:
 - [ ] Every key concept has a diagram (especially for architectural patterns)
 - [ ] No orphaned sections (each section earns its place)
 - [ ] Strong opening and closing
+- [ ] No em dashes
 - [ ] A reader can understand the pattern after reading (the real test)
 - [ ] Canonical URL included

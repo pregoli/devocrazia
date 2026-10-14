@@ -112,6 +112,8 @@ git checkout -b article/your-article-slug
 
 Create markdown file: `public/content/articles/your-article-slug.md`
 
+Don't use em dashes (—) in articles or their metadata; `npm run build` rejects them.
+
 ### 3. Add article metadata
 
 Add entry to `src/data/articles.ts`. This is the only place article metadata lives: the social preview pages and `sitemap.xml` are generated from it at build time.

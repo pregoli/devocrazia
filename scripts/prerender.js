@@ -66,6 +66,29 @@ function validateArticles() {
   }
 }
 
+/** House style: articles never use em dashes. Checks every article markdown file (including Medium versions) and the metadata. */
+function validateNoEmDashes() {
+  const EM_DASH = '—';
+  const errors = [];
+  const contentDir = path.join(publicDir, 'content/articles');
+
+  for (const file of fs.readdirSync(contentDir).filter((f) => f.endsWith('.md'))) {
+    fs.readFileSync(path.join(contentDir, file), 'utf-8').split('\n').forEach((line, i) => {
+      if (line.includes(EM_DASH)) errors.push(`public/content/articles/${file}:${i + 1}`);
+    });
+  }
+
+  for (const article of articles) {
+    for (const [field, value] of Object.entries(article)) {
+      if (JSON.stringify(value).includes(EM_DASH)) errors.push(`src/data/articles.ts: "${article.slug}" ${field}`);
+    }
+  }
+
+  if (errors.length > 0) {
+    throw new Error(`Em dashes are not allowed in articles. Use a comma, colon, parentheses, or a new sentence instead:\n   - ${errors.join('\n   - ')}`);
+  }
+}
+
 function generateMetaTags(article) {
   const articleUrl = `${SITE_URL}/articles/${article.slug}`;
   const ogImageUrl = `${SITE_URL}${socialImage(article)}`;
@@ -242,6 +265,7 @@ async function prerender() {
   console.log('🚀 Starting pre-render...\n');
 
   validateArticles();
+  validateNoEmDashes();
 
   // Read the base HTML from dist
   const baseHtmlPath = path.join(distDir, 'index.html');

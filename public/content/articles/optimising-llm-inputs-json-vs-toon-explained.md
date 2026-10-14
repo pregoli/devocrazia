@@ -1,6 +1,6 @@
 # Understanding JSON vs TOON for LLM Workflows
 
-As AI systems and Large Language Models (LLMs) become core parts of modern applications, developers are rethinking how data is structured and sent to models. While **JSON** has been the standard for decades, a new format called **TOON (Token-Oriented Object Notation)** is emerging—with a focus on efficiency and reduced token usage.
+As AI systems and Large Language Models (LLMs) become core parts of modern applications, developers are rethinking how data is structured and sent to models. While **JSON** has been the standard for decades, a new format called **TOON (Token-Oriented Object Notation)** is emerging, with a focus on efficiency and reduced token usage.
 
 In this article, you'll learn what TOON is, when to use it, and how to convert your own JSON data step by step.
 
@@ -12,10 +12,10 @@ JSON (JavaScript Object Notation) is a widely adopted, human-readable format use
 
 **Why JSON is commonly used:**
 
-- **Readable** — Easy for humans to understand
-- **Universal** — Supported by almost every programming language
-- **Structured** — Great for nested and complex data
-- **Standardised** — Perfect for APIs and web services
+- **Readable**: Easy for humans to understand
+- **Universal**: Supported by almost every programming language
+- **Structured**: Great for nested and complex data
+- **Standardised**: Perfect for APIs and web services
 
 Here's a typical JSON example:
 
@@ -32,14 +32,14 @@ Here's a typical JSON example:
 
 ## What Is TOON?
 
-TOON (Token-Oriented Object Notation) is a modern data format designed specifically for LLM consumption. It's not meant to replace JSON everywhere—only when you feed structured data into AI models.
+TOON (Token-Oriented Object Notation) is a modern data format designed specifically for LLM consumption. It's not meant to replace JSON everywhere, only when you feed structured data into AI models.
 
 **Why use TOON:**
 
-- **Token Efficiency** — Removes repeated field names
-- **Compact Format** — Ideal for large lists of uniform objects
-- **Designed for LLMs** — Built for scenarios where tokens = cost
-- **Faster Processing** — Less noise for the model to parse
+- **Token Efficiency**: Removes repeated field names
+- **Compact Format**: Ideal for large lists of uniform objects
+- **Designed for LLMs**: Built for scenarios where tokens = cost
+- **Faster Processing**: Less noise for the model to parse
 
 Here's the same data in TOON format:
 
@@ -57,10 +57,10 @@ Notice how the field names (`id`, `name`, `role`) appear only once in the header
 
 When working with LLMs, JSON becomes inefficient:
 
-- **Repeated keys waste tokens** — Every object repeats the same field names
-- **Deeply nested structures increase model load** — More tokens to parse
-- **Large arrays lead to exponential token costs** — 1000 objects = 1000× the key names
-- **Tokens directly affect cost and performance** — More tokens = higher API bills
+- **Repeated keys waste tokens**: Every object repeats the same field names
+- **Deeply nested structures increase model load**: More tokens to parse
+- **Large arrays lead to exponential token costs**: 1000 objects = 1000× the key names
+- **Tokens directly affect cost and performance**: More tokens = higher API bills
 
 > **Important**: JSON remains the best choice for APIs, system communication, and configuration files. TOON is specifically for LLM input optimization.
 
@@ -95,9 +95,9 @@ Paste the JSON into the **JSON Input** panel on the left side.
 
 You can customize the output:
 
-- **Delimiter** — Choose between comma (`,`), space, or tab
-- **Indentation** — Set 2 spaces, 4 spaces, or tabs
-- **Show length markers** — Include array length in the output
+- **Delimiter**: Choose between comma (`,`), space, or tab
+- **Indentation**: Set 2 spaces, 4 spaces, or tabs
+- **Show length markers**: Include array length in the output
 
 ### Step 5: View the TOON Output
 
@@ -178,11 +178,11 @@ transactions[3]{date,merchant,amount}:
 
 ## Best Practices
 
-1. **Use JSON for systems** — APIs, configuration, and external communication
-2. **Use TOON for LLMs** — Agents, AI pipelines, and model inputs
-3. **Validate structure first** — Ensure your data is uniform before converting
-4. **Benchmark token counts** — Measure savings on your actual datasets
-5. **Keep both formats** — Store JSON, convert to TOON only when sending to LLMs
+1. **Use JSON for systems**: APIs, configuration, and external communication
+2. **Use TOON for LLMs**: Agents, AI pipelines, and model inputs
+3. **Validate structure first**: Ensure your data is uniform before converting
+4. **Benchmark token counts**: Measure savings on your actual datasets
+5. **Keep both formats**: Store JSON, convert to TOON only when sending to LLMs
 
 ---
 
@@ -190,9 +190,9 @@ transactions[3]{date,merchant,amount}:
 
 Several tools can convert JSON to TOON:
 
-- **ToonifyIt** — [toonifyit.com](https://toonifyit.com)
-- **Scalevise Converter** — [scalevise.com/json-toon-converter](https://scalevise.com/json-toon-converter)
-- **SpeedCoder** — [speedcoder.net/tools/converter/json-to-toon](https://www.speedcoder.net/tools/converter/json-to-toon)
+- **ToonifyIt**: [toonifyit.com](https://toonifyit.com)
+- **Scalevise Converter**: [scalevise.com/json-toon-converter](https://scalevise.com/json-toon-converter)
+- **SpeedCoder**: [speedcoder.net/tools/converter/json-to-toon](https://www.speedcoder.net/tools/converter/json-to-toon)
 
 For automation, TOON libraries exist for Python, TypeScript, and other languages.
 
@@ -200,6 +200,6 @@ For automation, TOON libraries exist for Python, TypeScript, and other languages
 
 ## Conclusion
 
-JSON will continue to power the modern web—but TOON introduces a more efficient way to feed structured data into LLMs.
+JSON will continue to power the modern web, but TOON introduces a more efficient way to feed structured data into LLMs.
 
 **Your next step:** Try converting your own JSON at [toonifyit.com](https://toonifyit.com) and measure the token difference. The savings might surprise you.
