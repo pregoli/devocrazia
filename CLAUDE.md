@@ -55,3 +55,19 @@ Project skills in `.claude/skills/`:
 - Import alias `@/` → `src/`.
 - Contact form posts to Web3Forms (`src/pages/Contact.tsx`) and redirects to `/thank-you`; comments use Giscus (`src/components/Giscus.tsx`).
 - E2E tests live in `e2e/`. Add or update tests when changing navigation or the contact flow.
+
+## Agent skills
+
+`/to-spec` and `/to-tickets` turn a planning conversation (usually after `/grill-me`) into GitHub issues: a spec, then small tickets that each list what blocks them. They are pinned copies from mattpocock/skills, like `setup-matt-pocock-skills`, which wrote the files below; don't edit their `SKILL.md`.
+
+### Issue tracker
+
+Issues and specs live in GitHub Issues, used through `gh`. To implement one, branch and open a PR with `Closes #N`. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+The five default labels (`needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`); the skills apply `ready-for-agent`. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context: a root `GLOSSARY.md` and `docs/adr/`, neither of which exists yet. See `docs/agents/domain.md`.
