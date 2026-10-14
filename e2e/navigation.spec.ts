@@ -87,6 +87,40 @@ test.describe('Articles', () => {
   });
 });
 
+test.describe('SEO tags', () => {
+  // The prerendered HTML and the SPA's Helmet both write these tags, so every copy must agree.
+  // Cloudflare 308-redirects bare paths to the trailing-slash URL, so canonical URLs end in a slash.
+  // The tests request the trailing-slash URL because `vite preview` serves bare paths from the SPA
+  // fallback (the homepage HTML) instead of redirecting like production does.
+  test('article canonical and og tags are absolute and consistent', async ({ page }) => {
+    const slug = 'sse-order-processing-real-time-dotnet';
+    await page.goto(`/articles/${slug}/`);
+    await expect(page.locator('header h1').first()).toBeVisible();
+
+    const expectedUrl = `https://devocrazia.com/articles/${slug}/`;
+    const canonicals = await page.locator('link[rel="canonical"]').evaluateAll(els => els.map(e => e.getAttribute('href')));
+    const ogUrls = await page.locator('meta[property="og:url"]').evaluateAll(els => els.map(e => e.getAttribute('content')));
+    const ogImages = await page.locator('meta[property="og:image"]').evaluateAll(els => els.map(e => e.getAttribute('content')));
+
+    expect(canonicals.length).toBeGreaterThan(0);
+    expect(new Set(canonicals)).toEqual(new Set([expectedUrl]));
+    expect(new Set(ogUrls)).toEqual(new Set([expectedUrl]));
+    for (const image of ogImages) expect(image).toMatch(/^https:\/\/devocrazia\.com\/.+\.png$/);
+  });
+
+  test('static page canonical ends with a slash', async ({ page }) => {
+    await page.goto('/about/');
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://devocrazia.com/about/');
+  });
+
+  test('sitemap URLs end with a slash', async ({ request }) => {
+    const sitemap = await (await request.get('/sitemap.xml')).text();
+    const locs = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1]);
+    expect(locs.length).toBeGreaterThan(0);
+    for (const loc of locs) expect(loc).toMatch(/^https:\/\/devocrazia\.com\/(.*\/)?$/);
+  });
+});
+
 test.describe('No Redirect Loops', () => {
   test('direct article URL works', async ({ page }) => {
     const response = await page.goto('/articles/sse-order-processing-real-time-dotnet');

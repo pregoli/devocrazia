@@ -5,8 +5,8 @@
  * so social media crawlers can see article-specific previews, and
  * generates sitemap.xml.
  *
- * Article data comes from src/data/articles.ts (the single source of truth),
- * imported via Node's TypeScript type stripping.
+ * Article data comes from src/data/articles.ts (the single source of truth) and
+ * URL helpers from src/lib/site.ts, both imported via Node's TypeScript type stripping.
  *
  * Run after build: node --experimental-strip-types scripts/prerender.js
  */
@@ -15,15 +15,11 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { articles } from '../src/data/articles.ts';
+import { SITE_URL, SITE_NAME, DEFAULT_OG_IMAGE, canonicalUrl, socialImage } from '../src/lib/site.ts';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const distDir = path.resolve(__dirname, '../dist');
 const publicDir = path.resolve(__dirname, '../public');
-
-// Site configuration
-const SITE_URL = 'https://devocrazia.com';
-const SITE_NAME = 'Devocrazia';
-const DEFAULT_OG_IMAGE = '/images/og-image.png';
 
 // Static pages to pre-render. Pages without a fixed lastmod use the newest article date.
 const staticPages = [
@@ -33,11 +29,6 @@ const staticPages = [
   { path: '/contact', title: 'Contact | Devocrazia', description: 'Get in touch with Paolo Regoli.', lastmod: '2025-01-01', changefreq: 'monthly', priority: '0.5' },
   { path: '/privacy', title: 'Privacy Policy | Devocrazia', description: 'Privacy Policy for Devocrazia.', lastmod: '2025-01-01', changefreq: 'yearly', priority: '0.3' },
 ];
-
-/** Social crawlers don't render SVG, so previews use the PNG export of the hero image. */
-function socialImage(article) {
-  return article.heroImage ? article.heroImage.replace(/\.svg$/i, '.png') : DEFAULT_OG_IMAGE;
-}
 
 /** Fail the build early if an article references files that don't exist. */
 function validateArticles() {
@@ -52,7 +43,7 @@ function validateArticles() {
     const required = [
       [`/content/articles/${article.slug}.md`, 'article markdown'],
       [article.image, 'preview image'],
-      [socialImage(article), 'social preview PNG'],
+      [socialImage(article.heroImage), 'social preview PNG'],
     ];
     if (article.heroImage) required.push([article.heroImage, 'hero image']);
 
@@ -89,17 +80,30 @@ function validateNoEmDashes() {
   }
 }
 
+/** Escapes text for HTML attribute values and XML text, so a quote or ampersand in a title can't break the markup. */
+function escapeMarkup(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+}
+
 function generateMetaTags(article) {
-  const articleUrl = `${SITE_URL}/articles/${article.slug}`;
-  const ogImageUrl = `${SITE_URL}${socialImage(article)}`;
+  const articleUrl = canonicalUrl(`/articles/${article.slug}`);
+  const ogImageUrl = `${SITE_URL}${socialImage(article.heroImage)}`;
+  const title = escapeMarkup(article.title);
+  const description = escapeMarkup(article.description);
+  const author = escapeMarkup(article.authorName);
 
   return `
     <!-- Primary Meta Tags -->
-    <title>${article.title} | ${SITE_NAME}</title>
-    <meta name="title" content="${article.title} | ${SITE_NAME}" />
-    <meta name="description" content="${article.description}" />
-    <meta name="author" content="${article.authorName}" />
-    <meta name="keywords" content="${article.tags.join(', ')}" />
+    <title>${title} | ${SITE_NAME}</title>
+    <meta name="title" content="${title} | ${SITE_NAME}" />
+    <meta name="description" content="${description}" />
+    <meta name="author" content="${author}" />
+    <meta name="keywords" content="${escapeMarkup(article.tags.join(', '))}" />
 
     <!-- Canonical URL -->
     <link rel="canonical" href="${articleUrl}" />
@@ -107,8 +111,8 @@ function generateMetaTags(article) {
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="article" />
     <meta property="og:url" content="${articleUrl}" />
-    <meta property="og:title" content="${article.title}" />
-    <meta property="og:description" content="${article.description}" />
+    <meta property="og:title" content="${title}" />
+    <meta property="og:description" content="${description}" />
     <meta property="og:image" content="${ogImageUrl}" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
@@ -118,29 +122,31 @@ function generateMetaTags(article) {
     <!-- Article-specific OG tags -->
     <meta property="article:published_time" content="${article.date}" />
     <meta property="article:modified_time" content="${article.date}" />
-    <meta property="article:author" content="${article.authorName}" />
-    <meta property="article:section" content="${article.category}" />
-    ${article.tags.map(tag => `<meta property="article:tag" content="${tag}" />`).join('\n    ')}
+    <meta property="article:author" content="${author}" />
+    <meta property="article:section" content="${escapeMarkup(article.category)}" />
+    ${article.tags.map(tag => `<meta property="article:tag" content="${escapeMarkup(tag)}" />`).join('\n    ')}
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content="${articleUrl}" />
-    <meta name="twitter:title" content="${article.title}" />
-    <meta name="twitter:description" content="${article.description}" />
+    <meta name="twitter:title" content="${title}" />
+    <meta name="twitter:description" content="${description}" />
     <meta name="twitter:image" content="${ogImageUrl}" />
     <meta name="twitter:label1" content="Reading time" />
     <meta name="twitter:data1" content="${article.readTime} min read" />`;
 }
 
 function generateStaticMetaTags(page) {
-  const pageUrl = `${SITE_URL}${page.path}`;
+  const pageUrl = canonicalUrl(page.path);
   const ogImageUrl = `${SITE_URL}${DEFAULT_OG_IMAGE}`;
+  const title = escapeMarkup(page.title);
+  const description = escapeMarkup(page.description);
 
   return `
     <!-- Primary Meta Tags -->
-    <title>${page.title}</title>
-    <meta name="title" content="${page.title}" />
-    <meta name="description" content="${page.description}" />
+    <title>${title}</title>
+    <meta name="title" content="${title}" />
+    <meta name="description" content="${description}" />
     <meta name="author" content="Paolo Regoli" />
 
     <!-- Canonical URL -->
@@ -149,8 +155,8 @@ function generateStaticMetaTags(page) {
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="${pageUrl}" />
-    <meta property="og:title" content="${page.title}" />
-    <meta property="og:description" content="${page.description}" />
+    <meta property="og:title" content="${title}" />
+    <meta property="og:description" content="${description}" />
     <meta property="og:image" content="${ogImageUrl}" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
@@ -160,25 +166,16 @@ function generateStaticMetaTags(page) {
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content="${pageUrl}" />
-    <meta name="twitter:title" content="${page.title}" />
-    <meta name="twitter:description" content="${page.description}" />
+    <meta name="twitter:title" content="${title}" />
+    <meta name="twitter:description" content="${description}" />
     <meta name="twitter:image" content="${ogImageUrl}" />`;
-}
-
-function escapeXml(value) {
-  return String(value)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&apos;');
 }
 
 function generateSitemap() {
   const newestArticleDate = articles.map((a) => a.date).sort().at(-1);
 
   const pageEntries = staticPages.map((page) => `  <url>
-    <loc>${SITE_URL}${page.path}</loc>
+    <loc>${canonicalUrl(page.path)}</loc>
     <lastmod>${page.lastmod ?? newestArticleDate}</lastmod>
     <changefreq>${page.changefreq}</changefreq>
     <priority>${page.priority}</priority>
@@ -188,11 +185,11 @@ function generateSitemap() {
     const image = article.heroImage ? `
     <image:image>
       <image:loc>${SITE_URL}${article.heroImage}</image:loc>
-      <image:title>${escapeXml(article.title)}</image:title>
+      <image:title>${escapeMarkup(article.title)}</image:title>
     </image:image>` : '';
 
     return `  <url>
-    <loc>${SITE_URL}/articles/${article.slug}</loc>
+    <loc>${canonicalUrl(`/articles/${article.slug}`)}</loc>
     <lastmod>${article.date}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>${image}
@@ -213,52 +210,19 @@ ${articleEntries.join('\n  \n')}
 `;
 }
 
-function createHtmlForArticle(baseHtml, article) {
-  const metaTags = generateMetaTags(article);
-
-  // Replace the meta tags section in the base HTML
-  // Find the closing </head> and insert our meta tags before it
-  // Also remove any existing meta tags that we're replacing
-
-  let html = baseHtml;
-
-  // Remove existing primary meta tags (we'll replace them)
-  html = html.replace(/<title>.*?<\/title>/s, '');
-  html = html.replace(/<meta name="title"[^>]*>/g, '');
-  html = html.replace(/<meta name="description"[^>]*>/g, '');
-  html = html.replace(/<meta name="author"[^>]*>/g, '');
-  html = html.replace(/<meta name="keywords"[^>]*>/g, '');
-  html = html.replace(/<link rel="canonical"[^>]*>/g, '');
-  html = html.replace(/<meta property="og:[^>]*>/g, '');
-  html = html.replace(/<meta property="article:[^>]*>/g, '');
-  html = html.replace(/<meta name="twitter:[^>]*>/g, '');
-
-  // Insert new meta tags before </head>
-  html = html.replace('</head>', `${metaTags}\n  </head>`);
-
-  return html;
-}
-
-function createHtmlForStaticPage(baseHtml, page) {
-  const metaTags = generateStaticMetaTags(page);
-
-  let html = baseHtml;
-
-  // Remove existing primary meta tags
-  html = html.replace(/<title>.*?<\/title>/s, '');
-  html = html.replace(/<meta name="title"[^>]*>/g, '');
-  html = html.replace(/<meta name="description"[^>]*>/g, '');
-  html = html.replace(/<meta name="author"[^>]*>/g, '');
-  html = html.replace(/<meta name="keywords"[^>]*>/g, '');
-  html = html.replace(/<link rel="canonical"[^>]*>/g, '');
-  html = html.replace(/<meta property="og:[^>]*>/g, '');
-  html = html.replace(/<meta property="article:[^>]*>/g, '');
-  html = html.replace(/<meta name="twitter:[^>]*>/g, '');
-
-  // Insert new meta tags before </head>
-  html = html.replace('</head>', `${metaTags}\n  </head>`);
-
-  return html;
+/** Replaces the default meta tags from index.html with page-specific ones. */
+function injectMetaTags(baseHtml, metaTags) {
+  return baseHtml
+    .replace(/<title>.*?<\/title>/s, '')
+    .replace(/<meta name="title"[^>]*>/g, '')
+    .replace(/<meta name="description"[^>]*>/g, '')
+    .replace(/<meta name="author"[^>]*>/g, '')
+    .replace(/<meta name="keywords"[^>]*>/g, '')
+    .replace(/<link rel="canonical"[^>]*>/g, '')
+    .replace(/<meta property="og:[^>]*>/g, '')
+    .replace(/<meta property="article:[^>]*>/g, '')
+    .replace(/<meta name="twitter:[^>]*>/g, '')
+    .replace('</head>', `${metaTags}\n  </head>`);
 }
 
 async function prerender() {
@@ -282,7 +246,7 @@ async function prerender() {
     const articleDir = path.join(distDir, 'articles', article.slug);
     fs.mkdirSync(articleDir, { recursive: true });
 
-    const html = createHtmlForArticle(baseHtml, article);
+    const html = injectMetaTags(baseHtml, generateMetaTags(article));
     fs.writeFileSync(path.join(articleDir, 'index.html'), html);
 
     console.log(`   ✓ /articles/${article.slug}`);
@@ -299,7 +263,7 @@ async function prerender() {
       fs.mkdirSync(path.dirname(pagePath), { recursive: true });
     }
 
-    const html = createHtmlForStaticPage(baseHtml, page);
+    const html = injectMetaTags(baseHtml, generateStaticMetaTags(page));
     fs.writeFileSync(pagePath, html);
 
     console.log(`   ✓ ${page.path}`);

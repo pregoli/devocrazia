@@ -16,12 +16,8 @@ import { Helmet } from "react-helmet";
 import defaultAuthorAvatar from "@/assets/author-avatar.jpg";
 import { CodeBlock } from "@/components/CodeBlock";
 import { formatDateLong } from "@/lib/utils";
+import { SITE_URL, SITE_NAME, canonicalUrl, socialImage } from "@/lib/site";
 import Giscus from "@/components/Giscus";
-
-// Site configuration
-const SITE_URL = import.meta.env.VITE_SITE_URL || "";
-const SITE_NAME = import.meta.env.VITE_SITE_NAME || "Devocrazia";
-const DEFAULT_OG_IMAGE = `${SITE_URL}/images/og-image.png`;
 
 const ArticleDetail = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -82,11 +78,11 @@ const ArticleDetail = () => {
   const formattedDate = formatDateLong(article.date);
   const heroImageSrc = article.heroImage || article.image;
   
-  // Build absolute URLs for SEO
-  const articleUrl = `${SITE_URL}/articles/${article.slug}`;
-  const ogImageUrl = heroImageSrc.startsWith("http") 
-    ? heroImageSrc 
-    : `${SITE_URL}${heroImageSrc}`;
+  // SEO tags must match the prerendered ones (scripts/prerender.js), so both use src/lib/site.ts.
+  // The share button gets a relative path instead and resolves it against the current host.
+  const articlePath = `/articles/${article.slug}`;
+  const articleUrl = canonicalUrl(articlePath);
+  const ogImageUrl = `${SITE_URL}${socialImage(article.heroImage)}`;
 
   // JSON-LD Structured Data for Article
   const structuredData = {
@@ -100,12 +96,12 @@ const ArticleDetail = () => {
     "author": {
       "@type": "Person",
       "name": article.authorName,
-      "url": `${SITE_URL}/about`
+      "url": canonicalUrl("/about")
     },
     "publisher": {
       "@type": "Organization",
       "name": SITE_NAME,
-      "url": SITE_URL
+      "url": canonicalUrl("/")
     },
     "mainEntityOfPage": {
       "@type": "WebPage",
@@ -221,7 +217,7 @@ const ArticleDetail = () => {
                 )}
 
                 <ShareButton
-                  url={articleUrl}
+                  url={articlePath}
                   title={article.title}
                   description={article.description}
                 />

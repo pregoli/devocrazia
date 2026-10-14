@@ -47,7 +47,8 @@ Project skills in `.claude/skills/`:
 
 - Routes are defined in `src/App.tsx` (`/`, `/about`, `/articles`, `/articles/:slug`, `/contact`, `/privacy`, `/thank-you`).
 - `public/_redirects` provides the SPA fallback (`/* /index.html 200`) and www → apex redirect. Do not add trailing-slash redirects; they caused redirect loops before.
-- `scripts/prerender.js` imports `src/data/articles.ts` directly (Node type stripping, hence Node 22, pinned in `.node-version`) and writes `dist/articles/{slug}/index.html`, static-page HTML, and `dist/sitemap.xml`, so link previews show the correct meta tags; the SPA takes over after load. Keep `articles.ts` free of imports and non-erasable TypeScript (enums, namespaces) so Node can load it.
+- `scripts/prerender.js` imports `src/data/articles.ts` and `src/lib/site.ts` directly (Node type stripping, hence Node 22, pinned in `.node-version`) and writes `dist/articles/{slug}/index.html`, static-page HTML, and `dist/sitemap.xml`, so link previews show the correct meta tags; the SPA takes over after load. Keep both files free of imports and non-erasable TypeScript (enums, namespaces) so Node can load them.
+- SEO URLs (canonical, `og:url`, sitemap) come from `canonicalUrl()` in `src/lib/site.ts`: always the production host, always with a trailing slash, because Cloudflare 308-redirects bare paths to it. The prerendered HTML and the SPA's Helmet tags both use it, so they must stay identical (covered by the "SEO tags" e2e tests).
 - `src/components/ui/` is generated shadcn/ui code. Add components with the shadcn CLI (`components.json`) rather than hand-writing them, and avoid editing them unless necessary.
 - Import alias `@/` → `src/`.
 - Contact form posts to Web3Forms (`src/pages/Contact.tsx`) and redirects to `/thank-you`; comments use Giscus (`src/components/Giscus.tsx`).
