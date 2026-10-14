@@ -8,6 +8,7 @@ Devocrazia is a personal software-engineering blog (devocrazia.com). React 18 + 
 - PRs are squash-merged; the PR title becomes the commit message.
 - **Never use em dashes (—)** in PR titles, PR bodies, commit messages, or review replies, just as in articles (see below). Nothing checks these automatically, so check before every `git commit` and `gh pr create`.
 - CI (`.github/workflows/ci.yml`) runs `npm ci`, `npm run lint`, `npm run build`, and `npm test` on the Node version in `.node-version` for every PR to `main`.
+- The `main` ruleset requires a PR, squash merges, and the `Lint, build, test` check (job `test` in the `CI` workflow; the ruleset matches the job's display name, so rename both together); no approval (authors can't approve their own PRs). PRs that only touch `.claude/**`, `CLAUDE.md`, or `README.md` skip that job's steps, and the skipped job still counts as passed. Don't reintroduce `paths-ignore`: a workflow that never starts never reports the check, and the PR waits forever.
 - Merging to `main` auto-deploys to production via Cloudflare Pages. There is no staging.
 
 ## Commands
