@@ -29,8 +29,8 @@ npm test          # Playwright e2e (chromium) against `npm run preview` on :4173
 1. `public/content/articles/{slug}.md`: article body (fetched at runtime by `src/pages/ArticleDetail.tsx`).
 2. An entry in `src/data/articles.ts`. `id` is sequential starting at 0; use the next unused number.
 3. Images:
-   - `public/images/{slug}-hero.svg` + `{slug}-hero.png` (1200x630). The PNG is used for social previews, because crawlers don't render SVG; its path is derived from `heroImage`.
-   - `public/images/{slug}-preview.svg`
+   - `public/images/{topic}-hero.svg` + `{topic}-hero.png` (1200x630), where `{topic}` is a short image name like `saga-pattern`. The PNG is used for social previews, because crawlers don't render SVG; its path is derived from `heroImage`.
+   - `public/images/{topic}-preview.svg`
    - diagrams in `public/images/articles/{topic}/`
 
 `npm run build` fails if an article's markdown file or images are missing, or if a slug or id is duplicated. Don't hand-edit a sitemap: it is generated into `dist/sitemap.xml`.
@@ -40,9 +40,13 @@ npm test          # Playwright e2e (chromium) against `npm run preview` on :4173
 Medium versions live alongside the original as `{slug}.medium.md`, with PNG diagrams under `public/images/articles/{topic}/medium/`.
 
 Project skills in `.claude/skills/`:
-- `devocrazia-article-author`: writing new articles in the Devocrazia style.
+- `devocrazia-article-author`: writing new articles in the Devocrazia style. It interviews the author with `grilling` first, and draws the SVGs itself.
 - `devocrazia-medium-publish`: adapting an existing article for Medium.
-- `humanizer`: removes AI writing patterns from prose. Both article skills run it on their drafts. It is a pinned third-party copy (see `UPSTREAM.md`), so don't edit its `SKILL.md`.
+- `humanizer`: removes AI writing patterns from prose. Both article skills run it on their drafts.
+- `grilling` / `grill-me`: interviews the user about a plan until nothing is left assumed. `/grill-me` runs it on demand, for example before a site change.
+- `pr`: the shape of a PR body (summary visual, evidence, merge danger).
+
+`humanizer`, `grilling`, `grill-me`, and `pr` are pinned third-party copies (see each `UPSTREAM.md`), so don't edit their `SKILL.md`.
 
 ## Architecture notes
 

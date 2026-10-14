@@ -5,15 +5,17 @@
  * Renders each SVG in Playwright's Chromium (already a dev dependency), so text,
  * fonts, and symbols look exactly as they do on devocrazia.com.
  *
- * Each PNG is written to a `medium/` folder next to its source SVG:
+ * By default each PNG is written to a `medium/` folder next to its source SVG:
  *   public/images/articles/event-sourcing/architecture.svg
  *   -> public/images/articles/event-sourcing/medium/architecture.png
+ * Pass --out-dir to write the PNGs to another folder instead.
  *
  * Usage (from the repo root):
- *   node .claude/skills/devocrazia-medium-publish/scripts/svg-to-png.mjs [--width 1400] <file.svg>...
+ *   node .claude/skills/devocrazia-medium-publish/scripts/svg-to-png.mjs [--width 1400] [--out-dir <dir>] <file.svg>...
  *
  * Width defaults to 1400px: Medium's content column is ~700px, so 2x keeps
- * diagrams sharp on retina screens.
+ * diagrams sharp on retina screens. Social preview images use
+ * `--width 1200 --out-dir public/images` instead (see devocrazia-article-author).
  *
  * Requires `npm install` and `npx playwright install chromium`.
  */
@@ -28,6 +30,7 @@ const DEFAULT_WIDTH = 1400;
 function parseArgs(argv) {
   const files = [];
   let width = DEFAULT_WIDTH;
+  let outDir = null;
 
   for (let i = 0; i < argv.length; i++) {
     if (argv[i] === '--width') {
@@ -35,12 +38,17 @@ function parseArgs(argv) {
       if (!Number.isInteger(width) || width <= 0) {
         throw new Error(`--width must be a positive integer, got "${argv[i]}"`);
       }
+    } else if (argv[i] === '--out-dir') {
+      outDir = argv[++i];
+      if (!outDir) {
+        throw new Error('--out-dir needs a directory');
+      }
     } else {
       files.push(argv[i]);
     }
   }
 
-  return { files, width };
+  return { files, width, outDir };
 }
 
 /** Intrinsic size of the SVG, from its viewBox or width/height attributes. */
@@ -65,7 +73,7 @@ function readSvgSize(svgText) {
   throw new Error('SVG has no viewBox or pixel width/height, so its size is unknown');
 }
 
-async function convert(browser, svgPath, targetWidth) {
+async function convert(browser, svgPath, targetWidth, outDirOverride) {
   if (!fs.existsSync(svgPath)) {
     throw new Error(`File not found: ${svgPath}`);
   }
@@ -84,7 +92,7 @@ async function convert(browser, svgPath, targetWidth) {
   try {
     await page.goto(pathToFileURL(path.resolve(svgPath)).href);
 
-    const outDir = path.join(path.dirname(svgPath), 'medium');
+    const outDir = outDirOverride ?? path.join(path.dirname(svgPath), 'medium');
     const outPath = path.join(outDir, `${path.basename(svgPath, '.svg')}.png`);
     fs.mkdirSync(outDir, { recursive: true });
     // Transparent page background, so scaling rounding never adds a white edge.
@@ -107,7 +115,7 @@ async function main() {
   }
 
   if (args.files.length === 0) {
-    console.error('Usage: node svg-to-png.mjs [--width 1400] <file.svg>...');
+    console.error('Usage: node svg-to-png.mjs [--width 1400] [--out-dir <dir>] <file.svg>...');
     process.exit(1);
   }
 
@@ -123,7 +131,7 @@ async function main() {
   try {
     for (const file of args.files) {
       try {
-        const { outPath, width, height } = await convert(browser, file, args.width);
+        const { outPath, width, height } = await convert(browser, file, args.width, args.outDir);
         console.log(`✅ ${outPath} (${width}x${height})`);
       } catch (error) {
         console.error(`❌ ${file}: ${error.message}`);

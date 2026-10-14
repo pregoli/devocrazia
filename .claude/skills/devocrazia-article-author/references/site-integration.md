@@ -16,8 +16,8 @@ Add an entry matching the `Article` interface:
   description: "{150-200 char description for SEO}",
   authorName: "Paolo Regoli",
   date: "{YYYY-MM-DD}",
-  image: "/images/{slug}-preview.svg",
-  heroImage: "/images/{slug}-hero.svg",
+  image: "/images/{topic}-preview.svg",
+  heroImage: "/images/{topic}-hero.svg",
   tags: ["{tag1}", "{tag2}", "{tag3}"],
   readTime: {X}, // number of minutes
   repositoryUrl: "{https://github.com/user/repo}", // optional, if provided
@@ -26,10 +26,14 @@ Add an entry matching the `Article` interface:
 
 `categoryColor` has to be one of the `category-*` colours defined in `tailwind.config.ts`, otherwise the category badge renders without a colour.
 
+`{topic}` is the short image name chosen in the skill's Visuals section.
+
 ## 2. Images
 
-- `public/images/{slug}-hero.svg` and `public/images/{slug}-hero.png` (both 1200x630). Social media crawlers don't render SVG, so the prerendered page uses the PNG; its path is derived from `heroImage` by swapping the extension, so the two files must share a name.
-- `public/images/{slug}-preview.svg`
+The skill's Visuals section draws these; check they all exist:
+
+- `public/images/{topic}-hero.svg` and `public/images/{topic}-hero.png` (both 1200x630). Social media crawlers don't render SVG, so the prerendered page uses the PNG; its path is derived from `heroImage` by swapping the extension, so the two files must share a name.
+- `public/images/{topic}-preview.svg`
 - Article diagrams in `public/images/articles/{topic}/`
 
 ## 3. Verify
