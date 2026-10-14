@@ -1,10 +1,10 @@
 # Building a Bank ATM System with Event Sourcing and CQRS in .NET 9
 
-Every bank transaction tells a story. A customer opens an account, deposits their first paycheck, withdraws cash for the weekend, maybe closes the account years later. Traditional databases store only the final chapter—the current balance. But what if you need to understand the entire journey? What if an auditor asks exactly what happened at 3:47 PM last Tuesday?
+Every bank transaction tells a story. A customer opens an account, deposits their first paycheck, withdraws cash for the weekend, maybe closes the account years later. Traditional databases store only the final chapter: the current balance. But what if you need to understand the entire journey? What if an auditor asks exactly what happened at 3:47 PM last Tuesday?
 
 This is where **Event Sourcing** changes the game.
 
-Instead of overwriting data with each change, Event Sourcing preserves every state transition as an immutable record. The current state becomes a natural consequence of replaying history—not something stored directly. For financial systems, this isn't just a nice-to-have; it's often a regulatory requirement.
+Instead of overwriting data with each change, Event Sourcing preserves every state transition as an immutable record. The current state becomes a natural consequence of replaying history, not something stored directly. For financial systems, this isn't just a nice-to-have; it's often a regulatory requirement.
 
 In this article, I'll walk through a production-style banking system built with Event Sourcing, CQRS, and Domain-Driven Design in .NET 9. We'll examine real code, explore the architectural trade-offs, and see how these patterns work together to create a robust, auditable system.
 
@@ -24,10 +24,10 @@ CashWithdrawn     → -£250
 
 The current balance (£1,250) emerges naturally by replaying these events. This approach delivers several powerful capabilities:
 
-- **Complete audit trail** — Every change is preserved with full context and timestamp
-- **Time travel** — Reconstruct the account state at any historical moment
-- **Root cause analysis** — Debug production issues by replaying exact event sequences
-- **Regulatory compliance** — Immutable logs satisfy financial audit requirements
+- **Complete audit trail**: Every change is preserved with full context and timestamp
+- **Time travel**: Reconstruct the account state at any historical moment
+- **Root cause analysis**: Debug production issues by replaying exact event sequences
+- **Regulatory compliance**: Immutable logs satisfy financial audit requirements
 
 ---
 
@@ -45,7 +45,7 @@ This structure ensures that business logic remains framework-agnostic. You could
 
 ### The BankAccount Aggregate
 
-In Domain-Driven Design, an *aggregate* is a cluster of related objects treated as a transactional unit. The `BankAccount` aggregate encapsulates all banking rules—overdraft prevention, account status validation, and balance calculations:
+In Domain-Driven Design, an *aggregate* is a cluster of related objects treated as a transactional unit. The `BankAccount` aggregate encapsulates all banking rules, including overdraft prevention, account status validation, and balance calculations:
 
 ```csharp
 public class BankAccount : AggregateRoot
@@ -102,7 +102,7 @@ public class BankAccount : AggregateRoot
 }
 ```
 
-Notice something important: methods like `DepositMoney` don't directly modify `Balance`. Instead, they record a `MoneyDepositedEvent`. The actual state change happens when the event is applied. This separation is fundamental to Event Sourcing—**commands produce events, and events produce state**.
+Notice something important: methods like `DepositMoney` don't directly modify `Balance`. Instead, they record a `MoneyDepositedEvent`. The actual state change happens when the event is applied. This separation is fundamental to Event Sourcing. **Commands produce events, and events produce state**.
 
 ### Value Objects: Self-Validating Data
 
@@ -130,7 +130,7 @@ public record Money
 }
 ```
 
-Once created, a `Money` instance is guaranteed valid—currency is never empty, amounts are always rounded to two decimal places. You cannot accidentally pass raw decimals around and hope someone validates them later.
+Once created, a `Money` instance is guaranteed valid: currency is never empty, amounts are always rounded to two decimal places. You cannot accidentally pass raw decimals around and hope someone validates them later.
 
 ### Domain Events: Immutable Facts
 
@@ -157,7 +157,7 @@ public record CashWithdrawnEvent(
     decimal NewBalance) : DomainEvent;
 ```
 
-Each event is immutable (using C# records), versioned for concurrency control, and timestamped for temporal ordering. Once persisted, events never change—they represent facts about what happened.
+Each event is immutable (using C# records), versioned for concurrency control, and timestamped for temporal ordering. Once persisted, events never change. They represent facts about what happened.
 
 ---
 
@@ -167,7 +167,7 @@ The Event Store is the heart of this architecture. Unlike traditional databases 
 
 ![Append-Only Event Store](/images/articles/event-sourcing/append-only.svg)
 
-Each write operation adds a new event to the stream with an incrementing version number. This append-only constraint is what makes the audit trail trustworthy—if events could be modified, you'd lose the guarantee that history is accurate.
+Each write operation adds a new event to the stream with an incrementing version number. This append-only constraint is what makes the audit trail trustworthy. If events could be modified, you'd lose the guarantee that history is accurate.
 
 ```csharp
 public class EfEventStore : IEventStore
@@ -213,7 +213,7 @@ CREATE UNIQUE INDEX IX_Events_Stream_Version
 ON Events (AggregateType, AggregateId, Version);
 ```
 
-Imagine two ATMs processing withdrawals for the same account simultaneously. Both load version 5, both try to append version 6. The database constraint ensures only one succeeds—the other receives a concurrency exception and must retry with fresh data. For financial operations, this optimistic concurrency control is essential.
+Imagine two ATMs processing withdrawals for the same account simultaneously. Both load version 5, both try to append version 6. The database constraint ensures only one succeeds, and the other receives a concurrency exception and must retry with fresh data. For financial operations, this optimistic concurrency control is essential.
 
 ---
 
@@ -290,7 +290,7 @@ public record DepositMoneyCommand(
     string Currency) : ScratchBankATMCommand;
 ```
 
-Command handlers coordinate the operation—loading the aggregate, invoking domain logic, and persisting results:
+Command handlers coordinate the operation by loading the aggregate, invoking domain logic, and persisting results:
 
 ```csharp
 public class DepositMoneyCommandHandler : RequestHandlerAsync<DepositMoneyCommand>
@@ -352,7 +352,7 @@ One of Event Sourcing's most powerful features is building multiple read-optimis
 
 ![Projections](/images/articles/event-sourcing/projection.svg)
 
-Different consumers build different views—a Balance projection for instant lookups, a Monthly Cash Flow projection for financial reports—all from the same underlying events.
+Different consumers build different views (a Balance projection for instant lookups, a Monthly Cash Flow projection for financial reports), all from the same underlying events.
 
 ### Balance Projection
 
@@ -397,7 +397,7 @@ Response:
 ]
 ```
 
-Same events, different perspectives—no data duplication required.
+Same events, different perspectives, no data duplication required.
 
 ---
 
@@ -422,7 +422,7 @@ public class SnapshotLoadingStrategy : IAggregateLoadingStrategy<BankAccount>
 
         if (aggregate == null)
         {
-            // No snapshot available—replay everything
+            // No snapshot available: replay everything
             return AggregateRoot.ReplayEvents<BankAccount>(partialStream.Events);
         }
 
@@ -617,10 +617,10 @@ Content-Type: application/json
 ## When to Use This Architecture
 
 Event Sourcing excels in domains where:
-- **Audit requirements are strict** — Financial services, healthcare, legal systems
-- **History matters** — Understanding "how we got here" is valuable
-- **Events are natural** — The domain already thinks in terms of things that happened
-- **Collaboration is complex** — Multiple actors may conflict and need resolution
+- **Audit requirements are strict**: Financial services, healthcare, legal systems
+- **History matters**: Understanding "how we got here" is valuable
+- **Events are natural**: The domain already thinks in terms of things that happened
+- **Collaboration is complex**: Multiple actors may conflict and need resolution
 
 It's likely overkill when:
 - Simple CRUD operations suffice

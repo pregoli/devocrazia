@@ -28,7 +28,7 @@ The repository is evidence for the article, not its subject. Readers should come
 
 ```markdown
 <!-- Near the end of the introduction or after the mental model shift -->
-The complete implementation is available on [GitHub](https://github.com/user/repo) — but this article will walk you through the reasoning that shaped it.
+The complete implementation is available on [GitHub](https://github.com/user/repo), but this article will walk you through the reasoning that shaped it.
 
 <!-- Or in the "What This Looks Like in Practice" section -->
 You can explore the full implementation in the [companion repository](https://github.com/user/repo). Here, I'll highlight the decisions that matter most.
@@ -45,6 +45,7 @@ The audience is senior engineers, tech leads, and architects. They already know 
 - Not a tutorial: focus on reasoning and consequences, not syntax
 - No buzzwords without substance
 - Short paragraphs, sharp transitions
+- No em dashes (—). Use a comma, colon, parentheses, or a new sentence instead. It is the author's house style (heavy em dash use reads as machine-written), and `npm run build` fails if an em dash appears in any article markdown file or in `src/data/articles.ts`.
 
 **Tone reference:**
 > "This is what you only realise after shipping this to production."
@@ -86,6 +87,7 @@ Visuals are a large part of what makes Devocrazia articles readable, so every ar
 - [ ] 1-3 `[GIF]` descriptions with placement hints included
 - [ ] GitHub link embedded organically (if repo provided)
 - [ ] All code blocks have language hints
+- [ ] No em dashes anywhere in the article or its metadata
 - [ ] Internal links use relative paths (`/articles/...`)
 - [ ] Every step in [references/site-integration.md](references/site-integration.md) done
 - [ ] `npm run build && npm test` passes

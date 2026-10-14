@@ -1,10 +1,10 @@
 # Rich Domain Modelling: Escaping the Anaemic Model Trap
 
-Most enterprise codebases share a dirty secret: their domain models are little more than data containers with getters and setters. Business logic scatters across services, controllers, and utility classes. Validation lives everywhere and nowhere. The objects that should represent the heart of your business are hollow shells—**anaemic models**.
+Most enterprise codebases share a dirty secret: their domain models are little more than data containers with getters and setters. Business logic scatters across services, controllers, and utility classes. Validation lives everywhere and nowhere. The objects that should represent the heart of your business are hollow shells: **anaemic models**.
 
 This isn't just an aesthetic problem. Anaemic models create maintenance nightmares, breed bugs, and make it nearly impossible to reason about business rules. When behaviour lives separately from the data it operates on, you lose the core benefit of object-oriented design: **encapsulation**.
 
-In this article, I'll show you how to build **Rich Domain Models**—objects that combine data and behaviour, enforce their own invariants, and make invalid states unrepresentable. We'll explore value objects, entities, aggregates, and domain services through practical C# examples that you can apply immediately.
+In this article, I'll show you how to build **Rich Domain Models**: objects that combine data and behaviour, enforce their own invariants, and make invalid states unrepresentable. We'll explore value objects, entities, aggregates, and domain services through practical C# examples that you can apply immediately.
 
 ---
 
@@ -13,7 +13,7 @@ In this article, I'll show you how to build **Rich Domain Models**—objects tha
 Consider a typical e-commerce Order in most codebases:
 
 ```csharp
-// ❌ Anaemic Model — a glorified data structure
+// ❌ Anaemic Model: a glorified data structure
 public class Order
 {
     public Guid Id { get; set; }
@@ -59,11 +59,11 @@ public class OrderService
 
 **Problems with this approach:**
 
-- **Exposed internals** — Anyone can set `Status = "Banana"` or `TotalAmount = -500`
-- **Scattered validation** — Business rules duplicated across multiple services
-- **Primitive obsession** — `CustomerEmail` is just a string, `Status` is magic strings
-- **No encapsulation** — The model can't protect its own integrity
-- **Testing complexity** — Must test services in isolation from the models they manipulate
+- **Exposed internals**: Anyone can set `Status = "Banana"` or `TotalAmount = -500`
+- **Scattered validation**: Business rules duplicated across multiple services
+- **Primitive obsession**: `CustomerEmail` is just a string, `Status` is magic strings
+- **No encapsulation**: The model can't protect its own integrity
+- **Testing complexity**: Must test services in isolation from the models they manipulate
 
 ---
 
@@ -74,7 +74,7 @@ A rich domain model **owns its behaviour**. It validates inputs, enforces invari
 ![Rich vs Anaemic Model](/images/articles/rich-domain-model/comparison.svg)
 
 ```csharp
-// ✅ Rich Domain Model — behaviour lives with data
+// ✅ Rich Domain Model: behaviour lives with data
 public class Order
 {
     private readonly List<OrderLine> _lines = new();
@@ -146,19 +146,19 @@ public class Order
 
 **Key improvements:**
 
-- **Private constructor + factory method** — Controlled creation via `Order.Create()`
-- **Private setters** — State changes only through controlled methods
-- **Value objects** — `Email`, `Money`, `Quantity`, `OrderId` enforce their own rules
-- **Strongly-typed status** — `OrderStatus` enum, not magic strings
-- **Invariant enforcement** — `EnsureDraft()` called before any modification
-- **Encapsulated collection** — `Lines` exposed as read-only
-- **Domain events** — `OrderCreatedEvent` raised at creation, `OrderShippedEvent` on shipping
+- **Private constructor + factory method**: Controlled creation via `Order.Create()`
+- **Private setters**: State changes only through controlled methods
+- **Value objects**: `Email`, `Money`, `Quantity`, `OrderId` enforce their own rules
+- **Strongly-typed status**: `OrderStatus` enum, not magic strings
+- **Invariant enforcement**: `EnsureDraft()` called before any modification
+- **Encapsulated collection**: `Lines` exposed as read-only
+- **Domain events**: `OrderCreatedEvent` raised at creation, `OrderShippedEvent` on shipping
 
 ---
 
 ## Building Blocks: Value Objects
 
-Value objects are the foundation of rich models. They represent concepts defined entirely by their attributes—two value objects with the same values are interchangeable.
+Value objects are the foundation of rich models. They represent concepts defined entirely by their attributes: two value objects with the same values are interchangeable.
 
 ![Value Object Characteristics](/images/articles/rich-domain-model/value-objects.svg)
 
@@ -198,7 +198,7 @@ public abstract class ValueObject
 }
 ```
 
-This base class provides structural equality—two value objects are equal if all their components match.
+This base class provides structural equality: two value objects are equal if all their components match.
 
 ### Email Value Object
 
@@ -237,14 +237,14 @@ public sealed class Email : ValueObject
 
 **Why this matters:**
 
-- **Validation at creation** — Invalid emails cannot exist in your system
-- **Normalisation** — Always lowercase, always trimmed
-- **Immutability** — Once created, cannot be changed
-- **Self-documenting** — Method signatures using `Email` are clearer than `string`
+- **Validation at creation**: Invalid emails cannot exist in your system
+- **Normalisation**: Always lowercase, always trimmed
+- **Immutability**: Once created, cannot be changed
+- **Self-documenting**: Method signatures using `Email` are clearer than `string`
 
 ### Money Value Object
 
-Money is notoriously tricky—mixing currencies, precision errors, and arithmetic bugs are common. A `Money` value object solves all of these:
+Money is notoriously tricky: mixing currencies, precision errors, and arithmetic bugs are common. A `Money` value object solves all of these:
 
 ```csharp
 public enum Currency
@@ -342,7 +342,7 @@ public sealed class Money : ValueObject
 }
 ```
 
-**Currency mixing is now impossible** at compile time. You simply cannot add GBP to USD—the type system prevents it.
+**Currency mixing is now impossible** at compile time. You simply cannot add GBP to USD. The type system prevents it.
 
 ---
 
@@ -357,7 +357,7 @@ Unlike value objects, entities have identity that persists across time. Two orde
 Avoid primitive obsession for identifiers:
 
 ```csharp
-// ❌ Primitive obsession — easy to mix up parameters
+// ❌ Primitive obsession: easy to mix up parameters
 public void ProcessOrder(Guid orderId, Guid customerId, Guid productId) { }
 
 // Easy to call incorrectly:
@@ -406,7 +406,7 @@ public sealed record CustomerId
     }
 }
 
-// ✅ Type-safe — cannot mix up parameters
+// ✅ Type-safe: cannot mix up parameters
 public void ProcessOrder(OrderId orderId, CustomerId customerId, ProductId productId) { }
 
 // This won't compile:
@@ -489,7 +489,7 @@ public abstract class Entity<TId> where TId : notnull
 
 ## Aggregates: Consistency Boundaries
 
-An aggregate is a cluster of entities and value objects treated as a single unit for data changes. The **aggregate root** is the entry point—external code should only reference and modify the aggregate through its root.
+An aggregate is a cluster of entities and value objects treated as a single unit for data changes. The **aggregate root** is the entry point: external code should only reference and modify the aggregate through its root.
 
 ![Aggregate Boundary](/images/articles/rich-domain-model/aggregate.svg)
 
@@ -765,7 +765,7 @@ public class OrderLine : Entity<OrderLineId>
 }
 ```
 
-**Notice the `internal` modifier** on `OrderLine` methods. Only the `Order` aggregate can modify its lines—external code cannot tamper with order contents directly.
+**Notice the `internal` modifier** on `OrderLine` methods. Only the `Order` aggregate can modify its lines. External code cannot tamper with order contents directly.
 
 ---
 
@@ -812,7 +812,7 @@ public class PricingService : IPricingService
 
 ## The Specification Pattern
 
-Complex business rules can be encapsulated in specifications—composable, reusable predicates:
+Complex business rules can be encapsulated in specifications, which are composable, reusable predicates:
 
 ```csharp
 public abstract class Specification<T>
@@ -873,7 +873,7 @@ public interface IOrderRepository
 The repository interface lives in your Domain or Application layer. Implementations using EF Core, Dapper, Marten, or any other persistence technology belong in Infrastructure.
 
 ```csharp
-// Application layer — uses the abstraction
+// Application layer: uses the abstraction
 public class SubmitOrderHandler
 {
     private readonly IOrderRepository _orders;
@@ -892,7 +892,7 @@ public class SubmitOrderHandler
 }
 ```
 
-**Key principle:** The domain doesn't care how data is stored. Whether you're using SQL Server, PostgreSQL, MongoDB, or event sourcing—the domain code remains unchanged.
+**Key principle:** The domain doesn't care how data is stored. Whether you're using SQL Server, PostgreSQL, MongoDB, or event sourcing, the domain code remains unchanged.
 
 > **Note:** Mapping value objects, strongly-typed IDs, and owned collections to your ORM requires specific configuration. EF Core, for example, needs value converters and owned type mappings. I'll cover persistence patterns in a dedicated article.
 
@@ -900,7 +900,7 @@ public class SubmitOrderHandler
 
 ## Testing Rich Domain Models
 
-Rich models are a joy to test—no mocking required, just create objects and verify behaviour:
+Rich models are a joy to test, with no mocking required. Just create objects and verify behaviour:
 
 ```csharp
 public class OrderTests
@@ -1019,11 +1019,11 @@ public class OrderTests
 
 **Rich Domain Models provide:**
 
-- **Encapsulation** — Objects protect their own invariants
-- **Discoverability** — Behaviour lives where you expect it
-- **Type safety** — Value objects prevent primitive obsession bugs
-- **Testability** — Domain logic tests without infrastructure
-- **Maintainability** — Changes isolated to relevant aggregates
+- **Encapsulation**: Objects protect their own invariants
+- **Discoverability**: Behaviour lives where you expect it
+- **Type safety**: Value objects prevent primitive obsession bugs
+- **Testability**: Domain logic tests without infrastructure
+- **Maintainability**: Changes isolated to relevant aggregates
 
 **When to use rich models:**
 
@@ -1045,7 +1045,7 @@ public class OrderTests
 
 Escaping the anaemic model trap requires a mindset shift. Instead of thinking about data and operations separately, think about objects that **own their behaviour**. Value objects enforce rules at the point of creation. Entities maintain identity and raise events. Aggregates define consistency boundaries.
 
-The code becomes more expressive, safer, and easier to maintain. Business rules live in one place—the domain—rather than scattered across services, controllers, and utilities. Invalid states become unrepresentable.
+The code becomes more expressive, safer, and easier to maintain. Business rules live in one place (the domain) rather than scattered across services, controllers, and utilities. Invalid states become unrepresentable.
 
 Start small. Identify one entity in your codebase that's really just a data bag. Extract a value object. Add a behaviour method. Move validation inside. Watch your domain come alive.
 

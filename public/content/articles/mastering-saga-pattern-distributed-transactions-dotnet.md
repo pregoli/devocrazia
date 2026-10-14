@@ -4,7 +4,7 @@ When a customer clicks "Place Order" on an e-commerce site, a cascade of operati
 
 This is where the **Saga Pattern** becomes essential.
 
-Instead of trying to force distributed transactions (which are brittle and don't scale), sagas decompose a long-running process into a sequence of local transactions, each publishing events that trigger the next step. If any step fails, compensating transactions undo the work of previous steps—automatically and reliably.
+Instead of trying to force distributed transactions (which are brittle and don't scale), sagas decompose a long-running process into a sequence of local transactions, each publishing events that trigger the next step. If any step fails, compensating transactions undo the work of previous steps, automatically and reliably.
 
 In this article, I'll walk through a production-style implementation of the Saga Pattern using .NET 10, MassTransit, RabbitMQ, and SQL Server. We'll examine the architecture, explore real code, and see how orchestration, compensation, and the Outbox pattern work together to create bulletproof distributed workflows.
 
@@ -52,11 +52,11 @@ Each service owns its data and communicates exclusively through messages. The Sa
 
 **Key Components:**
 
-- **API** — Accepts order requests, initiates saga instances
-- **Orchestrator** — The state machine coordinating the multi-step workflow
-- **Stock Service** — Reserves and releases inventory
-- **Payment Service** — Processes and refunds payments
-- **Shipping Service** — Arranges delivery
+- **API**: Accepts order requests, initiates saga instances
+- **Orchestrator**: The state machine coordinating the multi-step workflow
+- **Stock Service**: Reserves and releases inventory
+- **Payment Service**: Processes and refunds payments
+- **Shipping Service**: Arranges delivery
 
 ---
 
@@ -66,7 +66,7 @@ At the heart of this architecture sits a MassTransit state machine that models t
 
 ![Saga State Flow](/images/articles/saga-pattern/state-machine.svg)
 
-The state machine is declarative—you define states, events, and transitions, and MassTransit handles the mechanics of persistence, correlation, and message routing.
+The state machine is declarative: you define states, events, and transitions, and MassTransit handles the mechanics of persistence, correlation, and message routing.
 
 ```csharp
 public class OrderStateMachine : MassTransitStateMachine<OrderState>
@@ -127,7 +127,7 @@ public class OrderStateMachine : MassTransitStateMachine<OrderState>
 }
 ```
 
-Notice the explicit modelling of the `Compensating` state. When payment fails, the saga doesn't simply stop—it actively reverses the stock reservation before transitioning to `Failed`. This ensures the system never ends up in an inconsistent state.
+Notice the explicit modelling of the `Compensating` state. When payment fails, the saga doesn't simply stop. It actively reverses the stock reservation before transitioning to `Failed`. This ensures the system never ends up in an inconsistent state.
 
 ---
 
@@ -175,7 +175,7 @@ The saga waits for `StockReleased` confirmation before transitioning to `Failed`
 
 ## The Outbox Pattern: Reliable Message Delivery
 
-What happens if your service crashes between writing to the database and publishing a message? Without precautions, you end up with inconsistent state—the local transaction committed, but downstream services never received the notification.
+What happens if your service crashes between writing to the database and publishing a message? Without precautions, you end up with inconsistent state: the local transaction committed, but downstream services never received the notification.
 
 The **Outbox Pattern** solves this by storing outgoing messages in the same database transaction as the business data:
 
@@ -207,7 +207,7 @@ services.AddMassTransit(x =>
 
 With the Outbox enabled, messages are written to an outbox table within the same transaction as the saga state update. A background process then delivers these messages to RabbitMQ. If the message broker is temporarily unavailable, messages accumulate in the outbox and are delivered once connectivity resumes.
 
-This guarantees **exactly-once processing semantics**—the holy grail of distributed systems.
+This guarantees **exactly-once processing semantics**, the holy grail of distributed systems.
 
 ---
 
@@ -230,7 +230,7 @@ src/
 
 **Why this structure matters:**
 
-- **Domain** has zero dependencies—pure C# with business rules
+- **Domain** has zero dependencies: pure C# with business rules
 - **Contracts** are shared across services but contain only message definitions
 - **Infrastructure** implements the abstractions defined in Application
 - Each **service** can be deployed, scaled, and evolved independently
@@ -369,11 +369,11 @@ Open RabbitMQ Management at http://localhost:15672 to watch messages flow throug
 
 **Queues you'll see:**
 
-- `order-submitted` — Initial order commands
-- `reserve-stock` / `stock-reserved` — Stock service communication
-- `process-payment` / `payment-completed` — Payment service communication
-- `arrange-shipping` / `shipping-arranged` — Shipping service communication
-- `release-stock` / `stock-released` — Compensation messages
+- `order-submitted`: Initial order commands
+- `reserve-stock` / `stock-reserved`: Stock service communication
+- `process-payment` / `payment-completed`: Payment service communication
+- `arrange-shipping` / `shipping-arranged`: Shipping service communication
+- `release-stock` / `stock-released`: Compensation messages
 
 Each exchange follows a consistent pattern: commands go to specific service queues, events are published to topic exchanges for interested subscribers.
 
@@ -409,24 +409,24 @@ Each exchange follows a consistent pattern: commands go to specific service queu
 
 The Saga Pattern excels when:
 
-- **Multiple services must coordinate** — Each service owns its data
-- **Operations are naturally sequential** — Step A must complete before step B
-- **Rollback is meaningful** — Compensation can logically undo previous steps
-- **Availability trumps consistency** — Brief inconsistency is acceptable
+- **Multiple services must coordinate**: Each service owns its data
+- **Operations are naturally sequential**: Step A must complete before step B
+- **Rollback is meaningful**: Compensation can logically undo previous steps
+- **Availability trumps consistency**: Brief inconsistency is acceptable
 
 Consider alternatives when:
 
-- All data lives in one database—use regular transactions
-- Operations are truly independent—use simple event-driven patterns
-- Strict consistency is required—consider synchronous orchestration
-- The team is unfamiliar with messaging—start simpler
+- All data lives in one database: use regular transactions
+- Operations are truly independent: use simple event-driven patterns
+- Strict consistency is required: consider synchronous orchestration
+- The team is unfamiliar with messaging: start simpler
 
 ---
 
 ## Conclusion
 
-Building reliable distributed systems is hard. The Saga Pattern doesn't eliminate that complexity—it gives you a structured way to manage it. By modelling workflows as state machines, defining explicit compensation, and leveraging the Outbox pattern for reliable messaging, you can create microservices that handle failures gracefully and maintain consistency across boundaries.
+Building reliable distributed systems is hard. The Saga Pattern doesn't eliminate that complexity. It gives you a structured way to manage it. By modelling workflows as state machines, defining explicit compensation, and leveraging the Outbox pattern for reliable messaging, you can create microservices that handle failures gracefully and maintain consistency across boundaries.
 
 The SagaDemo project demonstrates that these patterns are practical with modern .NET tooling. MassTransit handles the heavy lifting of message routing, state persistence, and delivery guarantees. Docker Compose makes running the entire system trivial.
 
-**Next steps:** Clone the repository, run the demo, and experiment with different failure scenarios. Break things intentionally. Watch how the saga compensates. The best way to understand distributed systems is to observe them fail—and recover.
+**Next steps:** Clone the repository, run the demo, and experiment with different failure scenarios. Break things intentionally. Watch how the saga compensates. The best way to understand distributed systems is to observe them fail and then recover.

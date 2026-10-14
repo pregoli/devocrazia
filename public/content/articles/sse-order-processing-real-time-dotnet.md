@@ -2,7 +2,7 @@
 
 SignalR is overkill for 80% of real-time use cases.
 
-That's a bold claim. But after years of reaching for SignalR by default—debugging WebSocket upgrades through corporate proxies, managing hub connection state, watching simple dashboards balloon into complex bidirectional messaging systems—I've come to a conclusion:
+That's a bold claim. But after years of reaching for SignalR by default (debugging WebSocket upgrades through corporate proxies, managing hub connection state, watching simple dashboards balloon into complex bidirectional messaging systems), I've come to a conclusion:
 
 **If your data flows one direction (server → client), you're overengineering.**
 
@@ -86,7 +86,7 @@ Some aggressive proxies buffer SSE responses or kill idle connections despite ke
 Here's what SSE implementation looked like before .NET 10:
 
 ```csharp
-// ❌ Pre-.NET 10 — manual and error-prone
+// ❌ Pre-.NET 10: manual and error-prone
 app.MapGet("/stream", async (HttpContext context, CancellationToken ct) =>
 {
     context.Response.ContentType = "text/event-stream";
@@ -109,7 +109,7 @@ Manual content types. Manual newline formatting. Manual flushing. No type safety
 Here's .NET 10:
 
 ```csharp
-// ✅ .NET 10 — the framework handles everything
+// ✅ .NET 10: the framework handles everything
 app.MapGet("/stream", (CancellationToken ct) =>
     TypedResults.ServerSentEvents(GenerateEvents(ct)));
 
@@ -130,7 +130,7 @@ The `SseItem<T>` struct maps directly to SSE protocol fields:
 
 | Property | SSE Field | Purpose |
 |----------|-----------|---------|
-| `Data` (constructor) | `data:` | The payload—serialized to JSON automatically |
+| `Data` (constructor) | `data:` | The payload, serialized to JSON automatically |
 | `EventType` (constructor) | `event:` | Lets clients filter with `addEventListener` |
 | `EventId` | `id:` | Enables reconnection via `Last-Event-ID` |
 | `ReconnectionInterval` | `retry:` | Hint for client retry timing |
@@ -141,7 +141,7 @@ The `SseItem<T>` struct maps directly to SSE protocol fields:
 
 To demonstrate SSE properly, I built an Order Processing system. Not a toy counter. A real domain with state machines, business rules, and event-driven architecture.
 
-If you've read my [Rich Domain Modelling](/articles/rich-domain-modelling-escape-anaemic-models) article, this builds on those patterns. If you've worked through my [Saga Pattern](/articles/mastering-saga-pattern-distributed-transactions-dotnet) guide, you'll recognize the event-driven approach. SSE becomes the final mile—getting domain events to the browser in real-time.
+If you've read my [Rich Domain Modelling](/articles/rich-domain-modelling-escape-anaemic-models) article, this builds on those patterns. If you've worked through my [Saga Pattern](/articles/mastering-saga-pattern-distributed-transactions-dotnet) guide, you'll recognize the event-driven approach. SSE becomes the final mile: getting domain events to the browser in real-time.
 
 ![SSE Architecture Overview](/images/articles/sse-order-processing/architecture.svg)
 *Browser clients connect via EventSource, server uses TypedResults.ServerSentEvents, Event Hub handles fan-out with bounded channels*
@@ -212,11 +212,11 @@ public sealed class Order
 }
 ```
 
-The state machine pattern here prevents invalid transitions at the domain level. The UI can't show a "Ship" button until the order is paid—not because of UI logic, but because the domain enforces it.
+The state machine pattern here prevents invalid transitions at the domain level. The UI can't show a "Ship" button until the order is paid, not because of UI logic, but because the domain enforces it.
 
 ### Domain Events
 
-Each event carries its resulting status. This matters for the SSE layer—we don't reconstruct status from event types, we include it explicitly:
+Each event carries its resulting status. This matters for the SSE layer. We don't reconstruct status from event types; we include it explicitly:
 
 ```csharp
 public abstract record DomainEvent
@@ -290,7 +290,7 @@ public static class OrderStreamEndpoints
 }
 ```
 
-The `Last-Event-ID` header is SSE's killer feature. When the browser reconnects (and it will—networks are unreliable), it sends the last event ID it received. The server replays everything since. Zero client-side reconnection logic.
+The `Last-Event-ID` header is SSE's killer feature. When the browser reconnects (and it will, because networks are unreliable), it sends the last event ID it received. The server replays everything since. Zero client-side reconnection logic.
 
 ---
 
@@ -358,7 +358,7 @@ A client on a poor 3G connection can't consume events as fast as you produce the
 
 With `BoundedChannelFullMode.DropOldest`, old events get pushed out. The client misses some updates, but on reconnect, `Last-Event-ID` catches them up. The server stays healthy.
 
-This is the same backpressure pattern you'd use in a [Saga orchestrator](/articles/mastering-saga-pattern-distributed-transactions-dotnet)—bounded queues, graceful degradation, recovery mechanisms.
+This is the same backpressure pattern you'd use in a [Saga orchestrator](/articles/mastering-saga-pattern-distributed-transactions-dotnet): bounded queues, graceful degradation, recovery mechanisms.
 
 ---
 
@@ -375,7 +375,7 @@ This is SSE's superpower. The browser handles reconnection automatically:
 4. Server replays missed events
 5. Stream continues
 
-**Zero client-side code.** Compare that to WebSocket reconnection logic—exponential backoff, state reconciliation, duplicate detection. I've written that code. I don't want to write it again.
+**Zero client-side code.** Compare that to WebSocket reconnection logic: exponential backoff, state reconciliation, duplicate detection. I've written that code. I don't want to write it again.
 
 ---
 
@@ -502,7 +502,7 @@ yield return new SseItem<HeartbeatPayload>(
 
 **2. Event history limits**
 
-Don't keep event history forever. Cap it by count or time. 1000 events or 1 hour—whatever fits your domain.
+Don't keep event history forever. Cap it by count or time. 1000 events or 1 hour, whatever fits your domain.
 
 **3. Graceful shutdown**
 
@@ -514,7 +514,7 @@ SSE connections are long-lived. If you're not using sticky sessions, ensure your
 
 **5. Monitoring**
 
-Track active SSE connections per server. Alert on unusual patterns—connection storms often indicate client-side bugs.
+Track active SSE connections per server. Alert on unusual patterns: connection storms often indicate client-side bugs.
 
 ---
 
@@ -522,7 +522,7 @@ Track active SSE connections per server. Alert on unusual patterns—connection 
 
 Mistakes I made so you don't have to:
 
-**Enum serialization** — `OrderStatus` serialized as `0`, `1`, `2`. JavaScript exploded.
+**Enum serialization**: `OrderStatus` serialized as `0`, `1`, `2`. JavaScript exploded.
 
 ```csharp
 builder.Services.ConfigureHttpJsonOptions(options =>
@@ -531,13 +531,13 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 });
 ```
 
-**Locale-sensitive event IDs** — `sequence.ToString()` uses current culture. Some locales format numbers differently.
+**Locale-sensitive event IDs**: `sequence.ToString()` uses current culture. Some locales format numbers differently.
 
 ```csharp
 EventId = sequence.ToString(CultureInfo.InvariantCulture)
 ```
 
-**OperationCanceledException** — When clients disconnect, the cancellation token fires. You can't catch exceptions around `yield return`. Complete the channel gracefully instead:
+**OperationCanceledException**: When clients disconnect, the cancellation token fires. You can't catch exceptions around `yield return`. Complete the channel gracefully instead:
 
 ```csharp
 ct.Register(() => subscription.Channel.Writer.TryComplete());
@@ -554,7 +554,7 @@ SSE isn't an isolated feature. It's the real-time layer of an event-driven archi
 - **[Saga orchestrators](/articles/mastering-saga-pattern-distributed-transactions-dotnet)** coordinate distributed workflows and emit progress events
 - **SSE** delivers those events to the browser in real-time
 
-The Order Processing demo connects all of these: the domain raises `OrderPaidEvent`, the infrastructure broadcasts it, the browser receives it via SSE, the UI updates. No polling. No manual refresh. The UI is eventually consistent with the domain—and "eventually" is measured in milliseconds.
+The Order Processing demo connects all of these: the domain raises `OrderPaidEvent`, the infrastructure broadcasts it, the browser receives it via SSE, the UI updates. No polling. No manual refresh. The UI is eventually consistent with the domain, and "eventually" is measured in milliseconds.
 
 ---
 
@@ -562,7 +562,7 @@ The Order Processing demo connects all of these: the domain raises `OrderPaidEve
 
 SSE is the right choice more often than most teams realize. The mental model is simpler. The browser handles reconnection. The infrastructure is standard HTTP.
 
-.NET 10's `TypedResults.ServerSentEvents` removes the last excuse—implementation friction. Now you can choose SSE because it's the right tool, not avoid it because it's tedious.
+.NET 10's `TypedResults.ServerSentEvents` removes the last excuse: implementation friction. Now you can choose SSE because it's the right tool, not avoid it because it's tedious.
 
 **Use SSE when data flows one direction.** Use WebSockets when it doesn't. Use SignalR when you need both and want one abstraction.
 

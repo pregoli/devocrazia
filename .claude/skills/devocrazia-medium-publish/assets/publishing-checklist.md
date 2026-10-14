@@ -22,7 +22,7 @@ Word count: ~{count} (condensed from ~{original})
 {tag1}, {tag2}, {tag3}, {tag4}, {tag5}
 
 ### Canonical URL
-https://devocrazia.com/articles/{slug}
+https://devocrazia.com/articles/{slug}/
 
 ### Publishing Steps
 1. Create new Medium story
