@@ -51,13 +51,18 @@ function readSvgSize(svgText) {
     return { width: viewBox[2], height: viewBox[3] };
   }
 
-  const width = parseFloat(root.match(/\bwidth="([\d.]+)/i)?.[1]);
-  const height = parseFloat(root.match(/\bheight="([\d.]+)/i)?.[1]);
+  // Only unitless or px values are pixel sizes; "100%" or "10cm" would give the wrong size.
+  const pixels = (attr) => {
+    const value = root.match(new RegExp(`\\b${attr}="\\s*([\\d.]+)\\s*(px)?\\s*"`, 'i'))?.[1];
+    return value === undefined ? NaN : Number(value);
+  };
+  const width = pixels('width');
+  const height = pixels('height');
   if (width > 0 && height > 0) {
     return { width, height };
   }
 
-  throw new Error('SVG has no viewBox or width/height, so its size is unknown');
+  throw new Error('SVG has no viewBox or pixel width/height, so its size is unknown');
 }
 
 async function convert(browser, svgPath, targetWidth) {

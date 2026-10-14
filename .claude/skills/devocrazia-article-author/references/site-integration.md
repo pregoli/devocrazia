@@ -17,8 +17,8 @@ Add an entry matching the `Article` interface:
 {
   id: {next_id}, // sequential, starting at 0
   slug: "{url-friendly-slug}",
-  category: "{API|Patterns|AI|DevOps|Performance}",
-  categoryColor: "bg-category-{api|patterns|ai|devops|performance}",
+  category: "{API|Patterns|AI|DevOps|Performance|CSS|UI/UX}",
+  categoryColor: "bg-category-{api|patterns|ai|devops|performance|css|uiux}",
   title: "{Full Article Title}",
   description: "{150-200 char description for SEO}",
   authorName: "Paolo Regoli",
