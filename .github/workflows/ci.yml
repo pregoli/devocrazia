@@ -1,9 +1,10 @@
-name: Tests
+name: CI
 
-# `test` is a required status check on main, so it must report on every PR. Changes that only
-# touch Claude Code config or root docs skip its steps instead of skipping the workflow: a job
-# skipped by `if:` counts as passed, while a workflow skipped by `paths-ignore` never reports
-# and leaves the PR waiting forever.
+# "Lint, build, test" is a required status check on main, so it must report on every PR.
+# The ruleset matches the job's `name`, so rename both together.
+# Changes that only touch Claude Code config or root docs skip its steps instead of skipping
+# the workflow: a job skipped by `if:` counts as passed, while a workflow skipped by
+# `paths-ignore` never reports and leaves the PR waiting forever.
 on:
   push:
     branches: [main]
@@ -12,6 +13,7 @@ on:
 
 jobs:
   changes:
+    name: Detect changes
     runs-on: ubuntu-latest
     outputs:
       code: ${{ steps.filter.outputs.code }}
@@ -43,6 +45,7 @@ jobs:
           echo "code=$code" >> "$GITHUB_OUTPUT"
 
   test:
+    name: Lint, build, test
     needs: changes
     # Also runs if `changes` failed: a skipped `test` counts as passed, so a broken detector must not skip it.
     if: ${{ !cancelled() && (needs.changes.result != 'success' || needs.changes.outputs.code == 'true') }}

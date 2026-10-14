@@ -55,7 +55,7 @@ npm run preview
 
 ## Development Workflow
 
-This project uses a PR-based workflow: `main` only accepts squash-merged pull requests, and the `test` CI check must pass. No approval is required, since GitHub does not let authors approve their own PRs.
+This project uses a PR-based workflow: `main` only accepts squash-merged pull requests, and the `Lint, build, test` CI check must pass. No approval is required, since GitHub does not let authors approve their own PRs.
 
 ### Making Changes
 
@@ -87,7 +87,7 @@ git push -u origin feature/your-feature-name
 2. Click **Compare & pull request**
 3. Add a descriptive title (this becomes the commit message)
 4. Click **Create pull request**
-5. Wait for the `test` check to pass (green checkmark)
+5. Wait for the `Lint, build, test` check to pass (green checkmark)
 6. Click **Squash and merge**
 
 ### After Merge
