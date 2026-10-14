@@ -1,95 +1,75 @@
 /**
  * Pre-render script for Devocrazia
- * 
+ *
  * Generates static HTML files for each article with correct meta tags
- * so social media crawlers can see article-specific previews.
- * 
- * Run after build: node scripts/prerender.js
+ * so social media crawlers can see article-specific previews, and
+ * generates sitemap.xml.
+ *
+ * Article data comes from src/data/articles.ts (the single source of truth),
+ * imported via Node's TypeScript type stripping.
+ *
+ * Run after build: node --experimental-strip-types scripts/prerender.js
  */
 
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { articles } from '../src/data/articles.ts';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const distDir = path.resolve(__dirname, '../dist');
+const publicDir = path.resolve(__dirname, '../public');
 
 // Site configuration
 const SITE_URL = 'https://devocrazia.com';
 const SITE_NAME = 'Devocrazia';
+const DEFAULT_OG_IMAGE = '/images/og-image.png';
 
-// Articles data (mirrored from src/data/articles.ts)
-const articles = [
-  {
-    slug: "sse-order-processing-real-time-dotnet",
-    category: "API",
-    title: "Server-Sent Events in .NET 10: Real-Time Order Processing with Clean Architecture",
-    description: "Build production-ready SSE streaming with Clean Architecture and DDD. Learn TypedResults.ServerSentEvents, bounded channels for backpressure, and automatic reconnection with Last-Event-ID replay.",
-    authorName: "Paolo Regoli",
-    date: "2026-01-17",
-    heroImage: "/images/sse-order-processing-hero.png",
-    tags: [".NET 10", "SSE", "Clean Architecture", "DDD"],
-    readTime: 12,
-  },
-  {
-    slug: "rich-domain-modelling-escape-anaemic-models",
-    category: "Patterns",
-    title: "Rich Domain Modelling: Escaping the Anaemic Model Trap",
-    description: "Learn how to build domain models that combine data and behaviour, enforce invariants, and make invalid states unrepresentable. Covers value objects, entities, aggregates, and the specification pattern.",
-    authorName: "Paolo Regoli",
-    date: "2025-12-25",
-    heroImage: "/images/rich-domain-model-hero.png",
-    tags: ["C#", "DDD", "Clean Code", "OOP"],
-    readTime: 12,
-  },
-  {
-    slug: "mastering-saga-pattern-distributed-transactions-dotnet",
-    category: "Patterns",
-    title: "Mastering the Saga Pattern for Distributed Transactions in .NET 10",
-    description: "A comprehensive guide to implementing the Saga Pattern with MassTransit, RabbitMQ, and SQL Server. Learn orchestration, automatic compensation, and the Outbox pattern for reliable distributed workflows.",
-    authorName: "Paolo Regoli",
-    date: "2025-12-23",
-    heroImage: "/images/saga-pattern-hero.png",
-    tags: [".NET", "Saga Pattern", "MassTransit", "Microservices"],
-    readTime: 12,
-  },
-  {
-    slug: "building-bank-atm-event-sourcing-cqrs-dotnet",
-    category: "Patterns",
-    title: "Building a Bank ATM System with Event Sourcing and CQRS in .NET 9",
-    description: "A deep dive into implementing Event Sourcing, CQRS, and Domain-Driven Design for a production-ready banking system. Covers aggregates, projections, snapshotting, and multiple query strategies.",
-    authorName: "Paolo Regoli",
-    date: "2025-07-20",
-    heroImage: "/images/event-sourcing-cqrs-hero.png",
-    tags: [".NET", "Event Sourcing", "CQRS", "DDD"],
-    readTime: 15,
-  },
-  {
-    slug: "optimising-llm-inputs-json-vs-toon-explained",
-    category: "AI",
-    title: "Optimizing LLM Inputs: JSON vs TOON Explained",
-    description: "Learn how TOON offers a more token-efficient alternative to JSON when sending structured data to LLMs. This article breaks down real-world use cases, conversion methods, and best practices for optimizing AI workflows.",
-    authorName: "Paolo Regoli",
-    date: "2025-11-15",
-    heroImage: "/images/json-vs-toon-hero.png",
-    tags: ["AI", "Optimization"],
-    readTime: 7,
-  },
-];
-
-// Static pages to pre-render
+// Static pages to pre-render. Pages without a fixed lastmod use the newest article date.
 const staticPages = [
-  { path: '/', title: 'Devocrazia - Software Engineering & Architecture Blog', description: 'Insights on software architecture, .NET development, Domain-Driven Design, Event Sourcing, and cloud technologies by Paolo Regoli.' },
-  { path: '/articles', title: 'All Articles | Devocrazia', description: 'Browse all articles about software architecture, .NET development, and cloud technologies.' },
-  { path: '/about', title: 'About | Devocrazia', description: 'Learn about Paolo Regoli, the author behind Devocrazia.' },
-  { path: '/contact', title: 'Contact | Devocrazia', description: 'Get in touch with Paolo Regoli.' },
-  { path: '/privacy', title: 'Privacy Policy | Devocrazia', description: 'Privacy Policy for Devocrazia.' },
+  { path: '/', title: 'Devocrazia - Software Engineering & Architecture Blog', description: 'Insights on software architecture, .NET development, Domain-Driven Design, Event Sourcing, and cloud technologies by Paolo Regoli.', changefreq: 'weekly', priority: '1.0' },
+  { path: '/about', title: 'About | Devocrazia', description: 'Learn about Paolo Regoli, the author behind Devocrazia.', lastmod: '2025-01-01', changefreq: 'monthly', priority: '0.8' },
+  { path: '/articles', title: 'All Articles | Devocrazia', description: 'Browse all articles about software architecture, .NET development, and cloud technologies.', changefreq: 'weekly', priority: '0.9' },
+  { path: '/contact', title: 'Contact | Devocrazia', description: 'Get in touch with Paolo Regoli.', lastmod: '2025-01-01', changefreq: 'monthly', priority: '0.5' },
+  { path: '/privacy', title: 'Privacy Policy | Devocrazia', description: 'Privacy Policy for Devocrazia.', lastmod: '2025-01-01', changefreq: 'yearly', priority: '0.3' },
 ];
+
+/** Social crawlers don't render SVG, so previews use the PNG export of the hero image. */
+function socialImage(article) {
+  return article.heroImage ? article.heroImage.replace(/\.svg$/i, '.png') : DEFAULT_OG_IMAGE;
+}
+
+/** Fail the build early if an article references files that don't exist. */
+function validateArticles() {
+  const errors = [];
+  const publicFileExists = (urlPath) => fs.existsSync(path.join(publicDir, urlPath));
+
+  const duplicates = (values) => values.filter((value, i) => values.indexOf(value) !== i);
+  for (const slug of duplicates(articles.map((a) => a.slug))) errors.push(`duplicate slug "${slug}"`);
+  for (const id of duplicates(articles.map((a) => a.id))) errors.push(`duplicate id ${id}`);
+
+  for (const article of articles) {
+    const required = [
+      [`/content/articles/${article.slug}.md`, 'article markdown'],
+      [article.image, 'preview image'],
+      [socialImage(article), 'social preview PNG'],
+    ];
+    if (article.heroImage) required.push([article.heroImage, 'hero image']);
+
+    for (const [urlPath, label] of required) {
+      if (!publicFileExists(urlPath)) errors.push(`${article.slug}: ${label} not found at public${urlPath}`);
+    }
+  }
+
+  if (errors.length > 0) {
+    throw new Error(`Invalid article data in src/data/articles.ts:\n   - ${errors.join('\n   - ')}`);
+  }
+}
 
 function generateMetaTags(article) {
   const articleUrl = `${SITE_URL}/articles/${article.slug}`;
-  const ogImageUrl = `${SITE_URL}${article.heroImage}`;
-  
+  const ogImageUrl = `${SITE_URL}${socialImage(article)}`;
+
   return `
     <!-- Primary Meta Tags -->
     <title>${article.title} | ${SITE_NAME}</title>
@@ -97,10 +77,10 @@ function generateMetaTags(article) {
     <meta name="description" content="${article.description}" />
     <meta name="author" content="${article.authorName}" />
     <meta name="keywords" content="${article.tags.join(', ')}" />
-    
+
     <!-- Canonical URL -->
     <link rel="canonical" href="${articleUrl}" />
-    
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="article" />
     <meta property="og:url" content="${articleUrl}" />
@@ -111,14 +91,14 @@ function generateMetaTags(article) {
     <meta property="og:image:height" content="630" />
     <meta property="og:site_name" content="${SITE_NAME}" />
     <meta property="og:locale" content="en_GB" />
-    
+
     <!-- Article-specific OG tags -->
     <meta property="article:published_time" content="${article.date}" />
     <meta property="article:modified_time" content="${article.date}" />
     <meta property="article:author" content="${article.authorName}" />
     <meta property="article:section" content="${article.category}" />
     ${article.tags.map(tag => `<meta property="article:tag" content="${tag}" />`).join('\n    ')}
-    
+
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content="${articleUrl}" />
@@ -131,18 +111,18 @@ function generateMetaTags(article) {
 
 function generateStaticMetaTags(page) {
   const pageUrl = `${SITE_URL}${page.path}`;
-  const ogImageUrl = `${SITE_URL}/images/og-image.png`;
-  
+  const ogImageUrl = `${SITE_URL}${DEFAULT_OG_IMAGE}`;
+
   return `
     <!-- Primary Meta Tags -->
     <title>${page.title}</title>
     <meta name="title" content="${page.title}" />
     <meta name="description" content="${page.description}" />
     <meta name="author" content="Paolo Regoli" />
-    
+
     <!-- Canonical URL -->
     <link rel="canonical" href="${pageUrl}" />
-    
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="${pageUrl}" />
@@ -153,7 +133,7 @@ function generateStaticMetaTags(page) {
     <meta property="og:image:height" content="630" />
     <meta property="og:site_name" content="${SITE_NAME}" />
     <meta property="og:locale" content="en_GB" />
-    
+
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content="${pageUrl}" />
@@ -162,15 +142,63 @@ function generateStaticMetaTags(page) {
     <meta name="twitter:image" content="${ogImageUrl}" />`;
 }
 
+function escapeXml(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+}
+
+function generateSitemap() {
+  const newestArticleDate = articles.map((a) => a.date).sort().at(-1);
+
+  const pageEntries = staticPages.map((page) => `  <url>
+    <loc>${SITE_URL}${page.path}</loc>
+    <lastmod>${page.lastmod ?? newestArticleDate}</lastmod>
+    <changefreq>${page.changefreq}</changefreq>
+    <priority>${page.priority}</priority>
+  </url>`);
+
+  const articleEntries = articles.map((article) => {
+    const image = article.heroImage ? `
+    <image:image>
+      <image:loc>${SITE_URL}${article.heroImage}</image:loc>
+      <image:title>${escapeXml(article.title)}</image:title>
+    </image:image>` : '';
+
+    return `  <url>
+    <loc>${SITE_URL}/articles/${article.slug}</loc>
+    <lastmod>${article.date}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>${image}
+  </url>`;
+  });
+
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+  <!-- Main Pages -->
+${pageEntries.join('\n  \n')}
+
+  <!-- Articles -->
+${articleEntries.join('\n  \n')}
+
+</urlset>
+`;
+}
+
 function createHtmlForArticle(baseHtml, article) {
   const metaTags = generateMetaTags(article);
-  
+
   // Replace the meta tags section in the base HTML
   // Find the closing </head> and insert our meta tags before it
   // Also remove any existing meta tags that we're replacing
-  
+
   let html = baseHtml;
-  
+
   // Remove existing primary meta tags (we'll replace them)
   html = html.replace(/<title>.*?<\/title>/s, '');
   html = html.replace(/<meta name="title"[^>]*>/g, '');
@@ -181,18 +209,18 @@ function createHtmlForArticle(baseHtml, article) {
   html = html.replace(/<meta property="og:[^>]*>/g, '');
   html = html.replace(/<meta property="article:[^>]*>/g, '');
   html = html.replace(/<meta name="twitter:[^>]*>/g, '');
-  
+
   // Insert new meta tags before </head>
   html = html.replace('</head>', `${metaTags}\n  </head>`);
-  
+
   return html;
 }
 
 function createHtmlForStaticPage(baseHtml, page) {
   const metaTags = generateStaticMetaTags(page);
-  
+
   let html = baseHtml;
-  
+
   // Remove existing primary meta tags
   html = html.replace(/<title>.*?<\/title>/s, '');
   html = html.replace(/<meta name="title"[^>]*>/g, '');
@@ -203,58 +231,66 @@ function createHtmlForStaticPage(baseHtml, page) {
   html = html.replace(/<meta property="og:[^>]*>/g, '');
   html = html.replace(/<meta property="article:[^>]*>/g, '');
   html = html.replace(/<meta name="twitter:[^>]*>/g, '');
-  
+
   // Insert new meta tags before </head>
   html = html.replace('</head>', `${metaTags}\n  </head>`);
-  
+
   return html;
 }
 
 async function prerender() {
   console.log('🚀 Starting pre-render...\n');
-  
+
+  validateArticles();
+
   // Read the base HTML from dist
   const baseHtmlPath = path.join(distDir, 'index.html');
-  
+
   if (!fs.existsSync(baseHtmlPath)) {
-    console.error('❌ dist/index.html not found. Run "npm run build" first.');
-    process.exit(1);
+    throw new Error('dist/index.html not found. Run "npm run build" first.');
   }
-  
+
   const baseHtml = fs.readFileSync(baseHtmlPath, 'utf-8');
-  
+
   // Pre-render article pages
   console.log('📝 Pre-rendering articles...');
   for (const article of articles) {
     const articleDir = path.join(distDir, 'articles', article.slug);
     fs.mkdirSync(articleDir, { recursive: true });
-    
+
     const html = createHtmlForArticle(baseHtml, article);
     fs.writeFileSync(path.join(articleDir, 'index.html'), html);
-    
+
     console.log(`   ✓ /articles/${article.slug}`);
   }
-  
+
   // Pre-render static pages
   console.log('\n📄 Pre-rendering static pages...');
   for (const page of staticPages) {
-    const pagePath = page.path === '/' 
+    const pagePath = page.path === '/'
       ? path.join(distDir, 'index.html')
       : path.join(distDir, page.path.slice(1), 'index.html');
-    
+
     if (page.path !== '/') {
       fs.mkdirSync(path.dirname(pagePath), { recursive: true });
     }
-    
+
     const html = createHtmlForStaticPage(baseHtml, page);
     fs.writeFileSync(pagePath, html);
-    
+
     console.log(`   ✓ ${page.path}`);
   }
-  
+
+  // Generate sitemap
+  fs.writeFileSync(path.join(distDir, 'sitemap.xml'), generateSitemap());
+  console.log('\n🗺️  Generated sitemap.xml');
+
   console.log('\n✅ Pre-render complete!');
   console.log(`   Generated ${articles.length} article pages`);
   console.log(`   Generated ${staticPages.length} static pages`);
 }
 
-prerender().catch(console.error);
+prerender().catch((error) => {
+  console.error(`\n❌ ${error.message}`);
+  process.exit(1);
+});

@@ -14,7 +14,7 @@ Before writing, skim one or two existing articles (for example `rich-domain-mode
 1. **Gather input**: a topic (required) and optionally a GitHub repository URL.
 2. **If there's a repo, study it** (see below).
 3. **Write the article** following the style, structure, and visuals sections below, and save it to `public/content/articles/{slug}.md`.
-4. **Wire it into the site** by following [references/site-integration.md](references/site-integration.md): metadata, prerender, sitemap, and images.
+4. **Wire it into the site** by following [references/site-integration.md](references/site-integration.md): one metadata entry and the images.
 5. **Run the checklist** at the end of this file.
 
 ## When a GitHub repository is provided
