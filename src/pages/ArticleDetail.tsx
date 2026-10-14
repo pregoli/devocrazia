@@ -16,12 +16,8 @@ import { Helmet } from "react-helmet";
 import defaultAuthorAvatar from "@/assets/author-avatar.jpg";
 import { CodeBlock } from "@/components/CodeBlock";
 import { formatDateLong } from "@/lib/utils";
+import { SITE_URL, SITE_NAME, canonicalUrl, socialImage, articlePageMeta, noindexPageMeta } from "@/lib/site";
 import Giscus from "@/components/Giscus";
-
-// Site configuration
-const SITE_URL = import.meta.env.VITE_SITE_URL || "";
-const SITE_NAME = import.meta.env.VITE_SITE_NAME || "Devocrazia";
-const DEFAULT_OG_IMAGE = `${SITE_URL}/images/og-image.png`;
 
 const ArticleDetail = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -62,7 +58,7 @@ const ArticleDetail = () => {
 
   if (!article) {
     return (
-      <Layout title="Article Not Found">
+      <Layout meta={noindexPageMeta("Article Not Found", "Sorry, we couldn't find the article you're looking for.")}>
         <div className="container mx-auto px-4 py-16">
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-4xl font-bold mb-4">Article Not Found</h1>
@@ -82,11 +78,11 @@ const ArticleDetail = () => {
   const formattedDate = formatDateLong(article.date);
   const heroImageSrc = article.heroImage || article.image;
   
-  // Build absolute URLs for SEO
-  const articleUrl = `${SITE_URL}/articles/${article.slug}`;
-  const ogImageUrl = heroImageSrc.startsWith("http") 
-    ? heroImageSrc 
-    : `${SITE_URL}${heroImageSrc}`;
+  // Head tags come from articlePageMeta() via Layout; these URLs are for the JSON-LD below.
+  // The share button gets a relative path instead and resolves it against the current host.
+  const articlePath = `/articles/${article.slug}`;
+  const articleUrl = canonicalUrl(articlePath);
+  const ogImageUrl = `${SITE_URL}${socialImage(article.heroImage)}`;
 
   // JSON-LD Structured Data for Article
   const structuredData = {
@@ -100,12 +96,12 @@ const ArticleDetail = () => {
     "author": {
       "@type": "Person",
       "name": article.authorName,
-      "url": `${SITE_URL}/about`
+      "url": canonicalUrl("/about")
     },
     "publisher": {
       "@type": "Organization",
       "name": SITE_NAME,
-      "url": SITE_URL
+      "url": canonicalUrl("/")
     },
     "mainEntityOfPage": {
       "@type": "WebPage",
@@ -120,52 +116,13 @@ const ArticleDetail = () => {
   return (
     <>
       <Helmet>
-        {/* Primary Meta Tags */}
-        <title>{article.title} | {SITE_NAME}</title>
-        <meta name="title" content={`${article.title} | ${SITE_NAME}`} />
-        <meta name="description" content={article.description} />
-        <meta name="author" content={article.authorName} />
-        <meta name="keywords" content={article.tags.join(", ")} />
-        
-        {/* Canonical URL */}
-        <link rel="canonical" href={articleUrl} />
-        
-        {/* Open Graph / Facebook */}
-        <meta property="og:type" content="article" />
-        <meta property="og:url" content={articleUrl} />
-        <meta property="og:title" content={article.title} />
-        <meta property="og:description" content={article.description} />
-        <meta property="og:image" content={ogImageUrl} />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
-        <meta property="og:site_name" content={SITE_NAME} />
-        <meta property="og:locale" content="en_GB" />
-        
-        {/* Article-specific OG tags */}
-        <meta property="article:published_time" content={article.date} />
-        <meta property="article:modified_time" content={article.date} />
-        <meta property="article:author" content={article.authorName} />
-        <meta property="article:section" content={article.category} />
-        {article.tags.map((tag, index) => (
-          <meta key={index} property="article:tag" content={tag} />
-        ))}
-        
-        {/* Twitter */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:url" content={articleUrl} />
-        <meta name="twitter:title" content={article.title} />
-        <meta name="twitter:description" content={article.description} />
-        <meta name="twitter:image" content={ogImageUrl} />
-        <meta name="twitter:label1" content="Reading time" />
-        <meta name="twitter:data1" content={`${article.readTime} min read`} />
-        
         {/* JSON-LD Structured Data */}
         <script type="application/ld+json">
           {JSON.stringify(structuredData)}
         </script>
       </Helmet>
 
-      <Layout showFooter={true}>
+      <Layout meta={articlePageMeta(article)} showFooter={true}>
         <div className="container mx-auto px-4 py-8">
           <article className="max-w-6xl mx-auto">
             {/* Back button */}
@@ -221,7 +178,7 @@ const ArticleDetail = () => {
                 )}
 
                 <ShareButton
-                  url={articleUrl}
+                  url={articlePath}
                   title={article.title}
                   description={article.description}
                 />

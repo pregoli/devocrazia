@@ -1,13 +1,13 @@
 import { Link } from "react-router-dom";
 import Layout from "@/components/Layout";
+import { noindexPageMeta } from "@/lib/site";
 import { Button } from "@/components/ui/button";
 import { Home, FileText } from "lucide-react";
 
 const NotFound = () => {
   return (
     <Layout
-      title="404 - Page Not Found"
-      description="Sorry, the page you are looking for doesn't exist or has been moved."
+      meta={noindexPageMeta("404 - Page Not Found", "Sorry, the page you are looking for doesn't exist or has been moved.")}
       mainClassName="flex items-center justify-center px-4 py-16"
     >
       <div className="max-w-2xl w-full text-center space-y-8">

@@ -1,11 +1,11 @@
 import Layout from "@/components/Layout";
+import { staticPageMeta } from "@/lib/site";
 import { Link } from "react-router-dom";
 
 const PrivacyPolicy = () => {
   return (
     <Layout
-      title="Privacy Policy"
-      description="Privacy Policy for Devocrazia - how we handle your data and protect your privacy."
+      meta={staticPageMeta("/privacy")}
     >
       <div className="container mx-auto px-4 py-16">
         <div className="max-w-4xl mx-auto">
