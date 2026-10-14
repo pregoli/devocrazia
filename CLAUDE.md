@@ -41,6 +41,7 @@ Medium versions live alongside the original as `{slug}.medium.md`, with PNG diag
 Project skills in `.claude/skills/`:
 - `devocrazia-article-author`: writing new articles in the Devocrazia style.
 - `devocrazia-medium-publish`: adapting an existing article for Medium.
+- `humanizer`: removes AI writing patterns from prose. Both article skills run it on their drafts. It is a pinned third-party copy (see `UPSTREAM.md`), so don't edit its `SKILL.md`.
 
 ## Architecture notes
 

@@ -87,6 +87,8 @@ If Chromium is missing, the script says so; run `npx playwright install chromium
 
 Save it to `public/content/articles/{slug}.medium.md`, ending with a footer that links back to Devocrazia.
 
+Then run the `humanizer` skill in file mode on the `.medium.md` file, with the source article as the voice sample. Condensing tends to introduce one-line closers and forced triads, and the Medium audience reads quickly enough to notice them. Keep the `**Label**: explanation` list items and Title Case headings, for consistency with the source article (the Medium version already drops the `---` dividers).
+
 If the article has a GitHub repository:
 ```markdown
 {Condensed article content}
@@ -128,5 +130,6 @@ Before finalising, check:
 - [ ] No orphaned sections (each section earns its place)
 - [ ] Strong opening and closing
 - [ ] No em dashes
+- [ ] Humanizer pass done, with house formatting kept
 - [ ] A reader can understand the pattern after reading (the real test)
 - [ ] Canonical URL included
