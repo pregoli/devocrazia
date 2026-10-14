@@ -98,7 +98,63 @@ git pull
 git branch -d feature/your-feature-name  # Delete local branch
 ```
 
+## Working with Claude Code
+
+The repo ships project skills in `.claude/skills/`. Type them as slash commands in Claude Code; the text after the command is the input.
+
+### Write a new article
+
+Start on a branch first (`git checkout -b article/your-article-slug`), then:
+
+```
+/devocrazia-article-author Why most teams don't need microservices
+/devocrazia-article-author Idempotent consumers in .NET https://github.com/pregoli/some-repo
+```
+
+A topic is required; a repo URL is optional and is used as evidence, not retold. The skill:
+
+1. Studies the repo, if there is one.
+2. Interviews you in rounds: your thesis, the production story behind it, what most teams do instead, the trade-offs, the reader, and the title and tags. Each question comes with a recommended answer, worded so that "yes" accepts it. Say "skip the interview" if you want a quick draft.
+3. Writes the article, then runs `humanizer` on it to strip AI writing patterns.
+4. Draws the hero, preview, and diagram SVGs in the house style, and renders the hero PNG.
+5. Adds the `src/data/articles.ts` entry and runs `npm run build && npm test`.
+
+Read the draft, edit what doesn't sound like you, and open a PR.
+
+### Publish an article on Medium
+
+Once the article is merged and live (the Medium version links back to it):
+
+```
+/devocrazia-medium-publish rich-domain-modelling-escape-anaemic-models
+```
+
+The slug or the title both work. It writes a shorter `{slug}.medium.md` with a Medium title and subtitle, renders the diagrams to PNG, and prints a checklist. Posting is manual: create the story, paste the content, upload the PNGs from `public/images/articles/{topic}/medium/`, fill in the `[LINK: ...]` placeholders, set the canonical URL, and add the tags. The checklist walks you through it.
+
+### Plan a site change
+
+```
+/grill-me add an RSS feed
+```
+
+The agent interviews you until nothing about the change is left assumed. It doesn't write anything: the agreement lives in the conversation. From there, either build it right away, or turn it into issues:
+
+```
+/to-spec       # turns the conversation into a spec issue on GitHub
+/to-tickets    # splits the spec into small ticket issues, each listing what blocks it
+```
+
+Later, in any session: "implement #14". The agent reads the issue, works on a branch, and opens a PR with `Closes #14`, so merging closes it. The open issues are the backlog.
+
+### What happens without asking
+
+- Both article skills run `humanizer` on their drafts.
+- The `pr` skill shapes PR bodies: a summary visual, before and after evidence, and a merge danger call.
+- `npm run build` fails on any em dash in an article or its metadata.
+
 ## Adding a New Article
+
+These are the manual steps; `/devocrazia-article-author` does all of them for you except the branch.
 
 ### 1. Create feature branch
 
