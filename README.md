@@ -118,10 +118,10 @@ Add entry to `src/data/articles.ts`:
 
 ```typescript
 {
-  id: 5,  // Next available ID
+  id: 5,  // Next available ID (IDs are sequential, starting at 0)
   slug: "your-article-slug",
   category: "Patterns",  // or "API", "AI", etc.
-  categoryColor: "bg-category-patterns",
+  categoryColor: "bg-category-patterns",  // must match a category-* colour in tailwind.config.ts
   title: "Your Article Title",
   description: "Brief description for previews and SEO.",
   authorName: "Paolo Regoli",
@@ -136,15 +136,34 @@ Add entry to `src/data/articles.ts`:
 
 ### 4. Add images
 
-- Hero image (1200x630): `public/images/your-article-hero.svg`
+- Hero image (1200x630): `public/images/your-article-hero.svg` **and** `public/images/your-article-hero.png`
 - Preview image: `public/images/your-article-preview.svg`
 - Article diagrams: `public/images/articles/your-article/`
 
+The PNG hero is required for social media previews, since crawlers do not render SVG.
+
 ### 5. Update prerender script
 
-Add article to `scripts/prerender.js` articles array.
+Add article to `scripts/prerender.js` articles array. Use the **PNG** hero image here (`heroImage: "/images/your-article-hero.png"`).
 
-### 6. Test, commit, and create PR
+### 6. Update sitemap
+
+Add a `<url>` entry to `public/sitemap.xml`:
+
+```xml
+<url>
+  <loc>https://devocrazia.com/articles/your-article-slug</loc>
+  <lastmod>2025-01-24</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.9</priority>
+  <image:image>
+    <image:loc>https://devocrazia.com/images/your-article-hero.svg</image:loc>
+    <image:title>Your Article Title</image:title>
+  </image:image>
+</url>
+```
+
+### 7. Test, commit, and create PR
 
 ```bash
 npm run build
