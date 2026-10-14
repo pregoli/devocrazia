@@ -16,7 +16,7 @@ A personal blog about software engineering, architecture, and modern development
 
 ### Prerequisites
 
-- Node.js 20+
+- Node.js 22+ (see `.node-version`)
 
 ### Installation
 
@@ -114,7 +114,7 @@ Create markdown file: `public/content/articles/your-article-slug.md`
 
 ### 3. Add article metadata
 
-Add entry to `src/data/articles.ts`:
+Add entry to `src/data/articles.ts`. This is the only place article metadata lives: the social preview pages and `sitemap.xml` are generated from it at build time.
 
 ```typescript
 {
@@ -140,30 +140,11 @@ Add entry to `src/data/articles.ts`:
 - Preview image: `public/images/your-article-preview.svg`
 - Article diagrams: `public/images/articles/your-article/`
 
-The PNG hero is required for social media previews, since crawlers do not render SVG.
+The PNG hero is required for social media previews, since crawlers do not render SVG. It must have the same name as the SVG, because its path is derived from `heroImage`.
 
-### 5. Update prerender script
+`npm run build` fails with a clear error if the markdown file or any of these images is missing.
 
-Add article to `scripts/prerender.js` articles array. Use the **PNG** hero image here (`heroImage: "/images/your-article-hero.png"`).
-
-### 6. Update sitemap
-
-Add a `<url>` entry to `public/sitemap.xml`:
-
-```xml
-<url>
-  <loc>https://devocrazia.com/articles/your-article-slug</loc>
-  <lastmod>2025-01-24</lastmod>
-  <changefreq>monthly</changefreq>
-  <priority>0.9</priority>
-  <image:image>
-    <image:loc>https://devocrazia.com/images/your-article-hero.svg</image:loc>
-    <image:title>Your Article Title</image:title>
-  </image:image>
-</url>
-```
-
-### 7. Test, commit, and create PR
+### 5. Test, commit, and create PR
 
 ```bash
 npm run build
@@ -185,7 +166,7 @@ Then create PR on GitHub.
 │   ├── images/              # Images and diagrams
 │   └── ...
 ├── scripts/
-│   └── prerender.js     # SEO pre-rendering
+│   └── prerender.js     # SEO pre-rendering and sitemap generation
 ├── src/
 │   ├── components/      # React components
 │   ├── pages/           # Page components
