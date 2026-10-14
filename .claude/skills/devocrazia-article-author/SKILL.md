@@ -14,8 +14,9 @@ Before writing, skim one or two existing articles (for example `rich-domain-mode
 1. **Gather input**: a topic (required) and optionally a GitHub repository URL.
 2. **If there's a repo, study it** (see below).
 3. **Write the article** following the style, structure, and visuals sections below, and save it to `public/content/articles/{slug}.md`.
-4. **Wire it into the site** by following [references/site-integration.md](references/site-integration.md): one metadata entry and the images.
-5. **Run the checklist** at the end of this file.
+4. **Humanize the draft** (see below).
+5. **Wire it into the site** by following [references/site-integration.md](references/site-integration.md): one metadata entry and the images.
+6. **Run the checklist** at the end of this file.
 
 ## When a GitHub repository is provided
 
@@ -36,6 +37,14 @@ You can explore the full implementation in the [companion repository](https://gi
 <!-- Or in the closing takeaway -->
 Clone the [reference implementation](https://github.com/user/repo) and trace through it yourself.
 ```
+
+## Humanizing the draft
+
+Run the `humanizer` skill in file mode on `public/content/articles/{slug}.md`. A draft written in one pass picks up AI writing habits (staged "not X but Y" contrasts, one-line closers, forced triads, inflated words), and readers of a publication built on the author's own experience notice them.
+
+- Give it one published article as the voice sample, for example `rich-domain-modelling-escape-anaemic-models.md`, so it matches the author's sentence length and rhythm instead of a generic neutral voice.
+- Apply its prose patterns (sections A, B, C, and E), but keep the Devocrazia formatting conventions it would otherwise flag in section D: Title Case headings, `---` dividers between sections, and `**Label**: explanation` list items where the label carries information. Every published article uses them, and the publication should look consistent.
+- Keep the article's opinions and its 7-part structure. Humanizer may cut a sentence that only restates the point, but not a claim, a trade-off, or a code example.
 
 ## Writing style
 
@@ -88,6 +97,7 @@ Visuals are a large part of what makes Devocrazia articles readable, so every ar
 - [ ] GitHub link embedded organically (if repo provided)
 - [ ] All code blocks have language hints
 - [ ] No em dashes anywhere in the article or its metadata
+- [ ] Humanizer pass done, with house formatting kept
 - [ ] Internal links use relative paths (`/articles/...`)
 - [ ] Every step in [references/site-integration.md](references/site-integration.md) done
 - [ ] `npm run build && npm test` passes
