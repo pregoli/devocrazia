@@ -1,4 +1,5 @@
 import Layout from "@/components/Layout";
+import { staticPageMeta } from "@/lib/site";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -7,8 +8,7 @@ import { SocialLinks } from "@/components/SocialLinks";
 const Contact = () => {
   return (
     <Layout
-      title="Contact"
-      description="Get in touch with me. Have a question, project proposal, or just want to say hi? I'd love to hear from you."
+      meta={staticPageMeta("/contact")}
     >
       <div className="container mx-auto px-4 py-16">
         <div className="max-w-3xl mx-auto">

@@ -4,6 +4,7 @@ import ArticleCard from "@/components/ArticleCard";
 import AuthorCard from "@/components/AuthorCard";
 import Categories from "@/components/Categories";
 import Layout from "@/components/Layout";
+import { staticPageMeta } from "@/lib/site";
 import Hero from "@/components/Hero";
 import { Button } from "@/components/ui/button";
 import { articles } from "@/data/articles";
@@ -102,8 +103,7 @@ const Index = () => {
       </Helmet>
       
       <Layout
-        title="Home"
-        description="Devocrazia - A blog about software engineering, architecture, and cloud technologies."
+        meta={staticPageMeta("/")}
       >
         <Hero />
 

@@ -2,6 +2,7 @@ import { useState, useMemo, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Search } from "lucide-react";
 import Layout from "@/components/Layout";
+import { staticPageMeta } from "@/lib/site";
 import ArticleCard from "@/components/ArticleCard";
 import { Input } from "@/components/ui/input";
 import {
@@ -208,8 +209,7 @@ const Articles = () => {
 
   return (
     <Layout
-      title="Articles"
-      description="Browse all articles about software engineering, architecture, and cloud technologies."
+      meta={staticPageMeta("/articles")}
     >
       <div className="container mx-auto px-4 py-12">
         <h1 className="text-4xl font-bold text-foreground mb-8">All Articles</h1>

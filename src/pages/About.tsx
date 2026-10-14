@@ -1,12 +1,12 @@
 import Layout from "@/components/Layout";
+import { staticPageMeta } from "@/lib/site";
 import SocialLinks from "@/components/SocialLinks";
 import authorAvatar from "@/assets/author-avatar.jpg";
 
 const About = () => {
   return (
     <Layout
-      title="About"
-      description="Learn about Paolo Regoli - Software Engineer with almost twenty years of experience building software across Europe and Australia."
+      meta={staticPageMeta("/about")}
     >
       <div className="container mx-auto px-4 py-16">
         <div className="max-w-6xl mx-auto">

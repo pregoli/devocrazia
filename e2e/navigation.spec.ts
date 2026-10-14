@@ -88,7 +88,8 @@ test.describe('Articles', () => {
 });
 
 test.describe('SEO tags', () => {
-  // The prerendered HTML and the SPA's Helmet both write these tags, so every copy must agree.
+  // The prerendered HTML carries the tags for crawlers that don't run JavaScript; once the SPA loads,
+  // Helmet replaces them, so a page must never end up with two canonicals or a stale one.
   // Cloudflare 308-redirects bare paths to the trailing-slash URL, so canonical URLs end in a slash.
   // The tests request the trailing-slash URL because `vite preview` serves bare paths from the SPA
   // fallback (the homepage HTML) instead of redirecting like production does.
@@ -102,10 +103,39 @@ test.describe('SEO tags', () => {
     const ogUrls = await page.locator('meta[property="og:url"]').evaluateAll(els => els.map(e => e.getAttribute('content')));
     const ogImages = await page.locator('meta[property="og:image"]').evaluateAll(els => els.map(e => e.getAttribute('content')));
 
-    expect(canonicals.length).toBeGreaterThan(0);
-    expect(new Set(canonicals)).toEqual(new Set([expectedUrl]));
-    expect(new Set(ogUrls)).toEqual(new Set([expectedUrl]));
-    for (const image of ogImages) expect(image).toMatch(/^https:\/\/devocrazia\.com\/.+\.png$/);
+    expect(canonicals).toEqual([expectedUrl]);
+    expect(ogUrls).toEqual([expectedUrl]);
+    expect(ogImages).toHaveLength(1);
+    expect(ogImages[0]).toMatch(/^https:\/\/devocrazia\.com\/.+\.png$/);
+    await expect(page).toHaveTitle(/Server-Sent Events|SSE/);
+    await expect(page).not.toHaveTitle(/^Devocrazia$/);
+  });
+
+  test('client-side navigation updates the canonical instead of adding one', async ({ page }) => {
+    const canonical = page.locator('link[rel="canonical"]');
+    await page.goto('/');
+    await expect(canonical).toHaveAttribute('href', 'https://devocrazia.com/');
+
+    const articleLink = page.locator('main a[href^="/articles/"]').first();
+    const href = await articleLink.getAttribute('href');
+    await articleLink.click();
+    await expect(page.locator('header h1').first()).toBeVisible();
+    await expect(canonical).toHaveCount(1);
+    await expect(canonical).toHaveAttribute('href', `https://devocrazia.com${href}/`);
+    await expect(page.locator('meta[property="og:url"]')).toHaveCount(1);
+    await expect(page.locator('meta[property="og:type"]')).toHaveAttribute('content', 'article');
+
+    await page.click('nav >> text=About');
+    await expect(page).toHaveTitle('About | Devocrazia');
+    await expect(canonical).toHaveCount(1);
+    await expect(canonical).toHaveAttribute('href', 'https://devocrazia.com/about/');
+    await expect(page.locator('meta[property^="article:"]')).toHaveCount(0);
+  });
+
+  test('404 page is noindex and has no canonical', async ({ page }) => {
+    await page.goto('/this-page-does-not-exist');
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex');
+    await expect(page.locator('link[rel="canonical"]')).toHaveCount(0);
   });
 
   test('static page canonical ends with a slash', async ({ page }) => {

@@ -2,11 +2,12 @@ import { ReactNode } from "react";
 import { Helmet } from "react-helmet";
 import Header from "./Header";
 import Footer from "./Footer";
+import type { PageMeta } from "@/lib/site";
 
 interface LayoutProps {
   children: ReactNode;
-  title?: string;
-  description?: string;
+  /** Title and head tags, from staticPageMeta(), articlePageMeta() or noindexPageMeta() in src/lib/site.ts */
+  meta: PageMeta;
   /** Additional class names for the main element */
   mainClassName?: string;
   /** Whether to show the footer (default: true) */
@@ -15,20 +16,18 @@ interface LayoutProps {
 
 const Layout = ({
   children,
-  title,
-  description,
+  meta,
   mainClassName = "",
   showFooter = true,
 }: LayoutProps) => {
-  const pageTitle = title ? `${title} | Devocrazia` : "Devocrazia";
-
   return (
     <div className="min-h-screen bg-background flex flex-col">
+      {/* The prerendered HTML has the same tags marked as Helmet's, so Helmet replaces them on load and on every navigation. */}
       <Helmet>
-        <title>{pageTitle}</title>
-        {description && <meta name="description" content={description} />}
-        {title && <meta property="og:title" content={pageTitle} />}
-        {description && <meta property="og:description" content={description} />}
+        <title>{meta.title}</title>
+        {meta.tags.map(({ tag: Tag, attrs }, i) => (
+          <Tag key={i} {...attrs} />
+        ))}
       </Helmet>
 
       <Header />
