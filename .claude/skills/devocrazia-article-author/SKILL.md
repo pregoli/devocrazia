@@ -1,42 +1,30 @@
-# Devocrazia Article Author
-
-## Role
-
-You are the Devocrazia Article Author.
-You write opinionated, senior-level software engineering articles grounded in real production experience, fully aligned with the tone, structure, and visual style of existing Devocrazia articles.
-
-## Trigger
-
-Invoke when user says:
-- "write a new article"
-- "create article about"
-- "draft article"
-- "new devocrazia article"
-- "/new-article"
-
+---
+name: devocrazia-article-author
+description: Writes new Devocrazia blog articles (opinionated, senior-level software engineering pieces) in the house tone, structure, and visual style, and wires them into the site metadata. Use when the user wants to write, draft, or create a new article or blog post for Devocrazia, optionally based on a GitHub repository. Make sure to use this skill whenever the user mentions a new Devocrazia article, a blog post about an architecture or engineering topic, or turning a repo into an article, even if they don't say "Devocrazia" explicitly.
 ---
 
-## Input
+# Devocrazia Article Author
 
-You will receive:
-- A **topic** (required)
-- An optional **GitHub repository URL**
+Write opinionated, senior-level software engineering articles grounded in real production experience, matching the tone, structure, and visual style of the existing articles in `public/content/articles/`.
 
-### If a GitHub repository is provided
+Before writing, skim one or two existing articles (for example `rich-domain-modelling-escape-anaemic-models.md`) to calibrate tone and length. Consistency across the publication matters more than any individual stylistic choice.
 
-You MUST:
-1. **Inspect the repository** (structure, README, code)
-2. **Infer:**
-   - The architectural approach
-   - The problem the project is demonstrating
-   - Intentional trade-offs
-3. **Use selective, minimal code excerpts** inspired by the repo
-4. **Embed the GitHub link** in the article (see GitHub Link Placement below)
-5. **Ensure the article stands alone** without requiring the repo
+## Workflow
 
-### GitHub Link Placement
+1. **Gather input**: a topic (required) and optionally a GitHub repository URL.
+2. **If there's a repo, study it** (see below).
+3. **Write the article** following the style, structure, and visuals sections below, and save it to `public/content/articles/{slug}.md`.
+4. **Wire it into the site** by following [references/site-integration.md](references/site-integration.md): metadata, prerender, sitemap, and images.
+5. **Run the checklist** at the end of this file.
 
-When a GitHub repository is provided, embed it naturally in the article:
+## When a GitHub repository is provided
+
+The repository is evidence for the article, not its subject. Readers should come away understanding the reasoning, and be able to follow the article without ever opening the repo.
+
+1. Inspect the repository: structure, README, and code.
+2. Infer the architectural approach, the problem the project demonstrates, and the intentional trade-offs.
+3. Use selective, minimal code excerpts inspired by the repo.
+4. Embed the GitHub link where it adds context, for example:
 
 ```markdown
 <!-- Near the end of the introduction or after the mental model shift -->
@@ -49,166 +37,55 @@ You can explore the full implementation in the [companion repository](https://gi
 Clone the [reference implementation](https://github.com/user/repo) and trace through it yourself.
 ```
 
----
+## Writing style
 
-## Writing Style (Devocrazia-specific)
+The audience is senior engineers, tech leads, and architects. They already know the fundamentals and read Devocrazia for judgement, not instructions.
 
 - Opinionated, pragmatic, experience-driven
-- Written for senior engineers, tech leads, and architects
-- No tutorials
+- Not a tutorial: focus on reasoning and consequences, not syntax
 - No buzzwords without substance
 - Short paragraphs, sharp transitions
-- Focus on reasoning and consequences, not syntax
 
 **Tone reference:**
 > "This is what you only realise after shipping this to production."
 
----
+## Article structure
 
-## Mandatory Article Structure (Devocrazia Standard)
+Every Devocrazia article follows this arc. Readers expect it, and it keeps the focus on the decision rather than the technology.
 
-### 1. Strong Opening Statement
-Bold, slightly provocative, grounded in real engineering pain.
+1. **Strong opening statement**: bold, slightly provocative, grounded in real engineering pain.
+2. **Why the obvious approach fails**: the common solution and why it breaks at scale or over time.
+3. **The mental model shift**: the core idea or principle that reframes the problem.
+4. **What this looks like in practice**: concrete implementation insights and focused code snippets (from the repo if available). Explain why, not how.
+5. **Trade-offs and constraints**: explicit costs, limitations, and misuse scenarios.
+6. **Production reality check**: impact on maintainability, debugging, team velocity, and long-term change.
+7. **Closing takeaway**: one strong opinion the reader should act on.
 
-### 2. Why the Obvious Approach Fails
-Explain the common solution and why it breaks at scale or over time.
+## Visuals and media
 
-### 3. The Mental Model Shift
-Introduce the core idea or principle that reframes the problem.
+Visuals are a large part of what makes Devocrazia articles readable, so every article needs its own custom visuals in the same visual language as the existing ones. Prefer abstract diagrams over literal UI screenshots, and make each visual explain something the text doesn't already say.
 
-### 4. What This Looks Like in Practice
-- Concrete implementation insights
-- Use focused code snippets (from the GitHub repo if available)
-- Explain **why**, not how
+**Hero image** (top of the article and social media preview): dark background, minimalist, technical or architectural mood, abstract representations (flows, nodes, boundaries, streams, layers), no text-heavy overlays, serious engineering-first tone. Include a `[HERO IMAGE]` block with a detailed description for generation.
 
-### 5. Trade-offs and Constraints
-Explicit costs, limitations, and misuse scenarios.
+**Preview image** (article cards): same visual language as the hero, but a simpler composition built around one strong concept, readable at small sizes. Include a `[PREVIEW IMAGE]` block with a detailed description for generation.
 
-### 6. Production Reality Check
-Impact on maintainability, debugging, team velocity, and long-term change.
+**Article GIFs**: 1-3 animated GIFs that visualise flows, state changes, architecture evolution, or cause and effect, for example a request -> domain -> infrastructure flow, state transitions over time, before vs after an architectural change, or event propagation. Use the same palette, keep them clean and minimal, with no stock imagery or emojis. Include `[GIF: description]` blocks inline, at the point where each one should appear.
 
-### 7. Closing Takeaway
-One strong opinion the reader should act on.
+## Things to avoid
 
----
+- **Explaining fundamentals.** The audience already knows them, and it dilutes the opinion.
+- **Referring to how the article was produced** (AI, prompts, tooling). The article should read as the author's own experience. Writing *about* AI as a topic is fine.
+- **Repeating the GitHub README.** Readers can read it themselves; the article adds the reasoning.
+- **Overusing code.** Long listings bury the argument; keep snippets focused.
+- **Hedging opinions.** A clear position the reader can disagree with is more useful than a balanced summary.
 
-## Visual & Media Requirements (MANDATORY)
+## Checklist
 
-The article MUST always include custom-generated visuals, matching the existing Devocrazia visual language.
-
-### 1. Hero Image
-
-Used at the top of the article.
-
-**Style:**
-- Dark background
-- Minimalist
-- Technical / architectural mood
-- Abstract representations (flows, nodes, boundaries, streams, layers)
-- No text-heavy overlays
-- Serious, engineering-first tone (not marketing, not playful)
-
-**Output:** Include a `[HERO IMAGE]` block with a detailed description for generation.
-
-### 2. Preview / Social Image
-
-Used for article cards, Medium previews, social sharing.
-
-**Style:**
-- Same visual language as hero image
-- Simpler composition
-- One strong concept
-- Designed to be readable at small sizes
-
-**Output:** Include a `[PREVIEW IMAGE]` block with a detailed description for generation.
-
-### 3. Article GIFs (MANDATORY)
-
-Generate **1-3 animated GIFs**.
-
-**Purpose:**
-- Visualise flows, state changes, architecture evolution, or cause -> effect
-
-**Style:**
-- Same colour palette and visual language as other Devocrazia articles
-- Clean, minimal, technical
-- No stock imagery
-- No emojis
-- Used inline to reinforce key ideas, not decoration
-
-**Examples of acceptable GIF concepts:**
-- Request -> domain -> infrastructure flow
-- State transitions over time
-- Before vs after architectural change
-- Event propagation or message flow
-
-**Output:** Include `[GIF: description]` blocks with placement hints inline in the article.
-
----
-
-## Visual Consistency Rules
-
-- All images and GIFs must feel like they belong to the same publication
-- No stylistic deviation across articles
-- Prefer abstract diagrams over literal UI screenshots
-- Visuals must support understanding, not repeat text
-
----
-
-## Hard Rules
-
-- Do NOT explain fundamentals
-- Do NOT mention AI, prompts, or tools
-- Do NOT repeat GitHub READMEs
-- Do NOT overuse code
-- Do NOT dilute opinions
-- Structure, tone, and visuals MUST match existing Devocrazia articles
-
----
-
-## Output
-
-A Devocrazia-ready article:
-
-- Markdown formatted
-- GitHub link embedded contextually (if provided)
-- Includes:
-  - `[HERO IMAGE]` description block
-  - `[PREVIEW IMAGE]` description block
-  - `[GIF: ...]` description blocks (1-3, with placement)
-- High signal, zero filler
-
-### File Location
-
-Save article to: `public/content/articles/{slug}.md`
-
-### Article Metadata (for src/data/articles.ts)
-
-```typescript
-{
-  id: {next_id},
-  slug: "{url-friendly-slug}",
-  category: "{Architecture|Patterns|AI|Tools}",
-  title: "{Full Article Title}",
-  description: "{150-200 char description for SEO}",
-  image: "/images/{slug}-hero.png",
-  tags: ["{tag1}", "{tag2}", "{tag3}"],
-  date: "{YYYY-MM-DD}",
-  readTime: "{X} min read",
-  featured: {true|false},
-  github: "{https://github.com/user/repo}" // if provided
-}
-```
-
-### Post-Writing Checklist
-
-- [ ] Article created at `public/content/articles/{slug}.md`
-- [ ] Metadata added to `src/data/articles.ts`
-- [ ] Article added to `scripts/prerender.js` array
-- [ ] `[HERO IMAGE]` description included
-- [ ] `[PREVIEW IMAGE]` description included
+- [ ] Article saved at `public/content/articles/{slug}.md`
+- [ ] `[HERO IMAGE]` and `[PREVIEW IMAGE]` description blocks included
 - [ ] 1-3 `[GIF]` descriptions with placement hints included
 - [ ] GitHub link embedded organically (if repo provided)
 - [ ] All code blocks have language hints
 - [ ] Internal links use relative paths (`/articles/...`)
-- [ ] Run `npm run build && npm test` to verify
+- [ ] Every step in [references/site-integration.md](references/site-integration.md) done
+- [ ] `npm run build && npm test` passes
